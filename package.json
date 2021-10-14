@@ -1,0 +1,17 @@
+{
+  "name": "wcom",
+  "version": "1.0.0",
+  "description": "",
+  "license": "ISC",
+  "author": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "parcel serve docs/index.html"
+  },
+  "devDependencies": {
+    "parcel": "^2.0.0-rc.0"
+  },
+  "dependencies": {
+    "htm": "^3.1.0"
+  }
+}
