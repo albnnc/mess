@@ -1,4 +1,3 @@
-import { lifecycle } from "..";
 import { EFFECT_DATA_KEY } from "../constants";
 import { HookCaller } from "../types";
 import { ensureKey } from "../utils";
