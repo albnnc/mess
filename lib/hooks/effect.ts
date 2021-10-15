@@ -7,8 +7,13 @@ import { element } from "./element";
 export const effect = ($: HookCaller) => {
   return (fn: () => void | (() => void), deps: any[]) => {
     const el = $(element);
-    const { addUpdateCallback } = $(lifecycle);
     const data = ensureKey(el, EFFECT_DATA_KEY, initializeData);
+    if (!data.listening) {
+      el.addEventListener("update", () => {
+        data.index = 0;
+      });
+      data.listening = true;
+    }
     const record = ensureKey(data.records, data.index, initializeRecord);
     if (
       Array.isArray(deps) &&
@@ -22,15 +27,13 @@ export const effect = ($: HookCaller) => {
       clean: fn(),
     });
     data.index++;
-    addUpdateCallback(() => {
-      data.index = 0;
-    });
   };
 };
 
 const initializeData = () => ({
   records: {},
   index: 0,
+  listening: false,
 });
 
 const initializeRecord = () => ({
