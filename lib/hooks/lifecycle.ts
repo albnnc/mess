@@ -6,33 +6,40 @@ import { CustomElement } from "../CustomElement";
 
 export const lifecycle = ($: HookCaller) => {
   const el = $(element);
-  return ensureKey(el, LIFECYCLE_DATA_KEY, getDataInitializer(el));
+  return ensureKey(el, LIFECYCLE_DATA_KEY, () => getData(el));
 };
 
-const getDataInitializer = (el: CustomElement) => () => {
+const getData = (el: CustomElement) => {
   const data = {
-    updateIncoming: false,
-    updateCallbacks: new Array<() => void | (() => void)>(0),
+    updating: false,
     update: () => {
-      const cleanups = data.updateCallbacks.map((fn) => fn());
-      data.updateCallbacks.splice(0, data.updateCallbacks.length);
       const content = el.render();
       el.shadowRoot.innerHTML = "";
       el.shadowRoot.appendChild(content);
-      cleanups.forEach((fn) => fn && fn());
     },
     requestUpdate: () => {
-      if (data.updateIncoming) {
+      if (data.updating) {
         return;
       }
-      data.updateIncoming = true;
+      data.updating = true;
       requestAnimationFrame(() => {
-        data.update();
-        data.updateIncoming = false;
+        el.addEventListener(
+          "update",
+          () => {
+            data.update();
+            data.updating = false;
+          },
+          { once: true }
+        );
+        el.dispatchEvent(
+          new CustomEvent("update", {
+            bubbles: false,
+            composed: false,
+            cancelable: false,
+          })
+        );
       });
     },
-    addUpdateCallback: (fn: () => void | (() => void)) =>
-      data.updateCallbacks.push(fn),
   };
   return data;
 };
