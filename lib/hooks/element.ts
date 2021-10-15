@@ -1,5 +1,5 @@
 import { ELEMENT_KEY } from "../constants";
+import { HookCaller } from "../types";
 import { CustomElement } from "../CustomElement";
-import { Hook } from "../types";
 
-export const element: Hook<CustomElement> = ($) => $[ELEMENT_KEY];
+export const element = ($: HookCaller) => $[ELEMENT_KEY] as CustomElement;

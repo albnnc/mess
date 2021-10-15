@@ -2,7 +2,7 @@ import { STATE_DATA_KEY } from "../constants";
 import { HookCaller } from "../types";
 import { ensureKey } from "../utils";
 import { element } from "./element";
-import { lifecycle } from "..";
+import { lifecycle } from "./lifecycle";
 
 export const state = ($: HookCaller) => {
   return <T>(initializer: T | (() => T)) => {

@@ -1,8 +1,8 @@
-import { HookCaller } from "../types";
-import { element } from "./element";
-import { ensureKey } from "../utils";
 import { LIFECYCLE_DATA_KEY } from "../constants";
+import { HookCaller } from "../types";
+import { ensureKey } from "../utils";
 import { CustomElement } from "../CustomElement";
+import { element } from "./element";
 
 export const lifecycle = ($: HookCaller) => {
   const el = $(element);
