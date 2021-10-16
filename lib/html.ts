@@ -17,11 +17,11 @@ const h = (
   const props: TemplateNode["props"] = {};
   Object.entries(options ?? {}).forEach(([key, value]) => {
     if (key.startsWith("@")) {
-      events[key.slice(1)] = options[key];
+      events[key.slice(1)] = value;
     } else if (key.startsWith(".")) {
-      props[key.slice(1)] = options[key];
+      props[key.slice(1)] = value;
     } else {
-      attributes[key] = options[key];
+      attributes[key] = value;
     }
   });
   return {
