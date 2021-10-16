@@ -1,11 +1,11 @@
 import { STATE_DATA_KEY } from "../constants";
-import { HookCaller } from "../types";
+import { HookCaller, Initializer } from "../types";
 import { ensureKey } from "../utils";
 import { element } from "./element";
 import { lifecycle } from "./lifecycle";
 
 export const state = ($: HookCaller) => {
-  return <T>(initializer: T | (() => T)) => {
+  return <T>(initializer: Initializer<T>) => {
     const el = $(element);
     const { requestUpdate } = $(lifecycle);
     const data = ensureKey(el, STATE_DATA_KEY, initializeData);

@@ -1,10 +1,10 @@
 import { EFFECT_DATA_KEY } from "../constants";
-import { HookCaller } from "../types";
+import { HookCaller, EffectCallback, Deps } from "../types";
 import { ensureKey } from "../utils";
 import { element } from "./element";
 
 export const effect = ($: HookCaller) => {
-  return (fn: () => void | (() => void), deps: any[]) => {
+  return (fn: EffectCallback, deps: Deps) => {
     const el = $(element);
     const data = ensureKey(el, EFFECT_DATA_KEY, initializeData);
     if (!data.listening) {
