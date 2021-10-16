@@ -15,7 +15,10 @@ const getData = (el: CustomElement) => {
     update: () => {
       const content = el.render();
       el.shadowRoot.innerHTML = "";
-      el.shadowRoot.appendChild(content);
+      console.log(content);
+      // here on should update shadowRoot
+      // using edit distance definition
+      // el.shadowRoot.appendChild(content);
     },
     requestUpdate: () => {
       if (data.updating) {

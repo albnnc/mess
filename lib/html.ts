@@ -1,4 +1,5 @@
 import htm from "htm";
+import { TemplateNode } from "./types";
 
 export interface Node {
   type: any;
@@ -6,24 +7,30 @@ export interface Node {
   children: any[];
 }
 
-const h = (type: any, props: Record<string, any>, ...children: any[]) => {
-  const tag = type === "object" ? type.tag : type;
-  const element = document.createElement(tag);
-
-  Object.entries(props).forEach(([key, value]) => {
+const h = (
+  tag: string,
+  options: Record<string, any>,
+  ...children: TemplateNode[]
+): TemplateNode => {
+  const attributes: TemplateNode["attributes"] = {};
+  const events: TemplateNode["events"] = {};
+  const props: TemplateNode["props"] = {};
+  Object.entries(options ?? {}).forEach(([key, value]) => {
     if (key.startsWith("@")) {
-      const eventType = key.replace("@", "");
-      element.addEventListener(eventType, value);
+      events[key.slice(1)] = options[key];
+    } else if (key.startsWith(".")) {
+      props[key.slice(1)] = options[key];
     } else {
-      element[key] = value;
+      attributes[key] = options[key];
     }
   });
-
-  children
-    .map((v) => (typeof v !== "object" ? document.createTextNode(v) : v))
-    .forEach((v) => element.appendChild(v));
-
-  return element;
+  return {
+    tag,
+    attributes,
+    events,
+    props,
+    children,
+  };
 };
 
 export const html = htm.bind(h);

@@ -1,6 +1,6 @@
 import { ELEMENT_KEY } from "./constants";
 import { lifecycle } from "./hooks";
-import { Hook } from "./types";
+import { Hook, TemplateNode } from "./types";
 
 export class CustomElement extends HTMLElement {
   constructor() {
@@ -15,7 +15,7 @@ export class CustomElement extends HTMLElement {
     return hook(this.use);
   }
 
-  render(): HTMLElement | null {
+  render(): TemplateNode | TemplateNode[] {
     return null;
   }
 }
