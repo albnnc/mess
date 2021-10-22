@@ -1,6 +1,6 @@
 import { LIFECYCLE_DATA_KEY } from "../constants";
-import { HookCaller } from "../types";
-import { ensureKey } from "../utils";
+import { HookCaller, TemplateNode } from "../types";
+import { ensureKey, updateNode } from "../utils";
 import { CustomElement } from "../CustomElement";
 import { element } from "./element";
 
@@ -13,12 +13,18 @@ const getData = (el: CustomElement) => {
   const data = {
     updating: false,
     update: () => {
-      const content = el.render();
-      el.shadowRoot.innerHTML = "";
-      console.log(content);
-      // here on should update shadowRoot
-      // using edit distance definition
-      // el.shadowRoot.appendChild(content);
+      const templateOutput = el.render();
+      const templateNode: TemplateNode = {
+        tag: "",
+        events: {},
+        attributes: {},
+        props: {},
+        children: Array.isArray(templateOutput)
+          ? templateOutput
+          : [templateOutput],
+      };
+      console.log(templateNode);
+      updateNode(el.shadowRoot, templateNode);
     },
     requestUpdate: () => {
       if (data.updating) {

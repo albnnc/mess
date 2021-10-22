@@ -19,10 +19,12 @@ export type Deps = any[];
 export type EffectCleanup = () => void;
 export type EffectCallback = (() => void) | (() => EffectCleanup);
 
-export interface TemplateNode {
+export interface TemplateNodeObject {
   tag: string;
   attributes: Record<string, string>;
   events: Record<string, (e: Event) => void>;
   props: Record<string, any>;
   children: TemplateNode[];
 }
+export type TemplateNodePrimitive = number | string;
+export type TemplateNode = TemplateNodeObject | TemplateNodePrimitive;
