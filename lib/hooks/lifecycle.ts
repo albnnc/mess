@@ -23,7 +23,6 @@ const getData = (el: CustomElement) => {
           ? templateOutput
           : [templateOutput],
       };
-      console.log(templateNode);
       updateNode(el.shadowRoot, templateNode);
     },
     requestUpdate: () => {

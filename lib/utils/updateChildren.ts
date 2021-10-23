@@ -3,7 +3,6 @@ import { TemplateNode } from "../types";
 import { updateNode } from "./updateNode";
 
 export const updateChildren = (parent: Node, templateNodes: TemplateNode[]) => {
-  // console.log("updateChildren", parent, templateNodes);
   const nodeCounts = {};
   const tokenNodeMap = new Map<string, Node>();
   const nodeTokenMap = new Map<Node, string>();
@@ -26,9 +25,13 @@ export const updateChildren = (parent: Node, templateNodes: TemplateNode[]) => {
 
   node = parent.firstChild;
   for (const templateNode of templateNodes) {
+    // console.log("[updateChildren] node", node, "templateNode", templateNode);
     if (node) {
+      // console.log("[updateChildren] node exists");
       const nodeToken = nodeTokenMap.get(node);
       const templateNodeToken = templateNodeTokenMap.get(templateNode);
+      // console.log("[updateChildren] nodeToken", nodeToken);
+      // console.log("[updateChildren] templateNodeToken", templateNodeToken);
       if (nodeToken === templateNodeToken) {
         // Since current tokens are equal,
         // we can just update it and continue looping.
@@ -57,6 +60,7 @@ export const updateChildren = (parent: Node, templateNodes: TemplateNode[]) => {
         }
       }
     } else {
+      // console.log("[updateChildren] clean creation");
       // Since we're here, we've already reached the last parent element,
       // so the only thing we can do with new template nodes is just to create
       // a new DOM node.
@@ -85,7 +89,10 @@ const getNodeToken = (node: Node, counts: Record<string, number>) => {
   if (node.nodeType === NODE_TYPE_ELEMENT) {
     const element = node as Element;
     const key = element.getAttribute("key");
-    return indexToken(element.tagName + (key ? "-" + key : ""), counts);
+    return indexToken(
+      element.tagName.toLocaleLowerCase() + (key ? "-" + key : ""),
+      counts
+    );
   }
   return "non-element-type-" + node.nodeType.toString();
 };
@@ -99,7 +106,7 @@ const getTemplateNodeToken = (
       tag,
       attributes: { key },
     } = templateNode;
-    return indexToken(tag + "-" + (key ? "-" + key : ""), counts);
+    return indexToken(tag + (key ? "-" + key : ""), counts);
   }
   return templateNode.toString();
 };

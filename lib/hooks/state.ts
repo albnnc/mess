@@ -19,6 +19,7 @@ export const state = ($: HookCaller) => {
     }
     const { records, updates, index } = data;
     const record = ensureKey(records, index, initializer);
+    // TODO: Prevent setter recreation on each render.
     const setRecord = (update: T | ((v: T) => T)) => {
       updates[index] =
         update instanceof Function
