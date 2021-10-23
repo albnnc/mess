@@ -69,8 +69,8 @@ export const updateChildren = (parent: Node, templateNodes: TemplateNode[]) => {
     }
   }
   while (node) {
+    parent.removeChild(node);
     node = node.nextSibling;
-    node && parent.removeChild(node);
   }
 };
 
