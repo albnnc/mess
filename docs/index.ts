@@ -5,6 +5,7 @@ import {
   defineCustomElement,
   prop,
   memo,
+  effect,
 } from "../lib";
 
 defineCustomElement(
@@ -41,3 +42,23 @@ defineCustomElement(
   },
   { tag: "app-root" }
 );
+
+// defineCustomElement(
+//   ($) => {
+//     const [x, setX] = $(state)(1);
+//     // $(effect)(() => {
+//     //   console.log("x changed:", x);
+//     // }, [x]);
+//     return html`<div>
+//       <button
+//         @click=${() => {
+//           console.log("@click");
+//           setX((v) => v + 1);
+//         }}
+//       >
+//         Click ${x}
+//       </button>
+//     </div>`;
+//   },
+//   { tag: "app-root" }
+// );

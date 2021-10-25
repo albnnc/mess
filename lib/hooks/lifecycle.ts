@@ -24,6 +24,8 @@ const getData = (el: CustomElement) => {
           : [templateOutput],
       };
       updateNode(el.shadowRoot, templateNode);
+      dispatchLocalEvent(el, "updated");
+      data.updating = false;
     },
     requestUpdate: () => {
       if (data.updating) {
@@ -31,23 +33,20 @@ const getData = (el: CustomElement) => {
       }
       data.updating = true;
       requestAnimationFrame(() => {
-        el.addEventListener(
-          "update",
-          () => {
-            data.update();
-            data.updating = false;
-          },
-          { once: true }
-        );
-        el.dispatchEvent(
-          new CustomEvent("update", {
-            bubbles: false,
-            composed: false,
-            cancelable: false,
-          })
-        );
+        el.addEventListener("update", data.update, { once: true });
+        dispatchLocalEvent(el, "update");
       });
     },
   };
   return data;
+};
+
+const dispatchLocalEvent = (el: HTMLElement, event: string) => {
+  el.dispatchEvent(
+    new CustomEvent(event, {
+      bubbles: false,
+      composed: false,
+      cancelable: false,
+    })
+  );
 };

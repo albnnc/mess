@@ -1,42 +1,49 @@
 import { STATE_DATA_KEY } from "../constants";
 import { HookCaller, Initializer } from "../types";
-import { ensureKey } from "../utils";
+import { ensureKey, getInitialValue } from "../utils";
 import { element } from "./element";
 import { lifecycle } from "./lifecycle";
 
 export const state = ($: HookCaller) => {
   return <T>(initializer: Initializer<T>) => {
-    const el = $(element);
     const { requestUpdate } = $(lifecycle);
-    const data = ensureKey(el, STATE_DATA_KEY, initializeData);
-    if (!data.listening) {
+    const el = $(element);
+    const db = ensureKey(el, STATE_DATA_KEY, initializeData);
+    if (!db.listening) {
+      db.listening = true;
       el.addEventListener("update", () => {
-        Object.assign(data.records, data.updates);
-        data.updates = {};
-        data.index = 0;
+        db.updates.forEach((v, k) => db.records.set(k, v));
       });
-      data.listening = true;
+      el.addEventListener("updated", () => {
+        db.updates.clear();
+        db.index = 0;
+      });
     }
-    const { records, updates, index } = data;
-    const record = ensureKey(records, index, initializer);
+    const currentIndex = db.index;
+    if (!db.records.has(currentIndex)) {
+      db.records.set(currentIndex, getInitialValue(initializer));
+    }
     // TODO: Prevent setter recreation on each render.
     const setRecord = (update: T | ((v: T) => T)) => {
-      updates[index] =
+      db.updates.set(
+        currentIndex,
         update instanceof Function
-          ? Object.prototype.hasOwnProperty.call(updates, index)
-            ? update(updates[index])
-            : update(record)
-          : record;
+          ? db.updates.has(currentIndex)
+            ? update(db.updates.get(currentIndex))
+            : db.records.has(currentIndex)
+            ? update(db.records.get(currentIndex))
+            : update(getInitialValue(initializer))
+          : update
+      );
       requestUpdate();
     };
-    data.index++;
-    return [record, setRecord] as const;
+    return [db.records.get(db.index++), setRecord] as const;
   };
 };
 
 const initializeData = () => ({
-  records: {},
-  updates: {},
+  records: new Map<number, any>(),
+  updates: new Map<number, any>(),
   index: 0,
   listening: false,
 });

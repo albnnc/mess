@@ -19,7 +19,7 @@ export const updateNode = (node: Node, templateNode: TemplateNode) => {
     const el = node as Element;
     // shouldLog && console.log("el", el);
     Object.entries(events).forEach(([k, v]) => {
-      el.addEventListener(k, v);
+      el.addEventListener(k, v, { once: true });
     });
     Object.entries(attributes).forEach(([k, v]) => {
       if (el.getAttribute(k) !== v) {

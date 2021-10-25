@@ -1,4 +1,5 @@
-import { Initializer } from "..";
+import { Initializer } from "../types";
+import { getInitialValue } from "./getInitialValue";
 
 export const ensureKey = <T>(
   target: Record<keyof any, any>,
@@ -6,7 +7,7 @@ export const ensureKey = <T>(
   initializer: Initializer<T>
 ): T => {
   if (!Object.prototype.hasOwnProperty.call(target, key)) {
-    target[key] = initializer instanceof Function ? initializer() : initializer;
+    target[key] = getInitialValue(initializer);
   }
   return target[key];
 };
