@@ -26,5 +26,5 @@ export interface TemplateNodeObject {
   props: Record<string, any>;
   children: TemplateNode[];
 }
-export type TemplateNodePrimitive = number | string;
+export type TemplateNodePrimitive = string | number | null | false;
 export type TemplateNode = TemplateNodeObject | TemplateNodePrimitive;

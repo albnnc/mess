@@ -13,7 +13,7 @@ defineCustomElement(
     const id = $(memo)(() => Math.random().toString().slice(-4), []);
     const [x, setX] = $(state)(0);
     const [y] = $(prop)(0, { name: "y" });
-    console.log("[app-button] render, x =", x, ", y =", y);
+    // console.log("[app-button] render, x =", x, ", y =", y);
     return html`<button
       name="foo"
       @click=${() => {
@@ -38,6 +38,7 @@ defineCustomElement(
           setY((v) => v + 1);
         }}
       ></app-button>
+      ${y % 2 ? html`<div>is odd</div>` : null}
     </div>`;
   },
   { tag: "app-root" }

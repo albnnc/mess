@@ -1,3 +1,4 @@
+import { NODE_TYPE_TEXT } from "..";
 import { NODE_TYPE_ELEMENT } from "../constants";
 import { TemplateNode } from "../types";
 import { updateNode } from "./updateNode";
@@ -25,6 +26,9 @@ export const updateChildren = (parent: Node, templateNodes: TemplateNode[]) => {
 
   node = parent.firstChild;
   for (const templateNode of templateNodes) {
+    if (templateNode === null || templateNode === false) {
+      continue;
+    }
     // console.log("[updateChildren] node", node, "templateNode", templateNode);
     if (node) {
       // console.log("[updateChildren] node exists");
@@ -75,13 +79,12 @@ export const updateChildren = (parent: Node, templateNodes: TemplateNode[]) => {
 };
 
 const initializeTemplateNode = (templateNode: TemplateNode) => {
-  if (typeof templateNode === "object") {
+  if (templateNode && typeof templateNode === "object") {
     const node = document.createElement(templateNode.tag);
     updateNode(node, templateNode);
     return node;
-  } else {
-    return document.createTextNode(templateNode.toString());
   }
+  return document.createTextNode(templateNode?.toString() ?? "");
 };
 
 const indexToken = (token: string, counts: Record<string, number>) => {
@@ -97,20 +100,22 @@ const getNodeToken = (node: Node, counts: Record<string, number>) => {
       element.tagName.toLocaleLowerCase() + (key ? "-" + key : ""),
       counts
     );
+  } else if (node.nodeType === NODE_TYPE_TEXT) {
+    return "text-" + node.nodeValue;
   }
-  return "non-element-type-" + node.nodeType.toString();
+  return "unknown-type-" + node.nodeType.toString();
 };
 
 const getTemplateNodeToken = (
   templateNode: TemplateNode,
   counts: Record<string, number>
 ) => {
-  if (typeof templateNode === "object") {
+  if (templateNode && typeof templateNode === "object") {
     const {
       tag,
       attributes: { key },
     } = templateNode;
     return indexToken(tag + (key ? "-" + key : ""), counts);
   }
-  return templateNode.toString();
+  return templateNode ? "text-" + templateNode.toString : "";
 };
