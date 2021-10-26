@@ -1,3 +1,5 @@
+import { ensureKey } from ".";
+import { EVENT_LISTENERS_KEY } from "..";
 import {
   NODE_TYPE_FRAGMENT,
   NODE_TYPE_ELEMENT,
@@ -18,8 +20,17 @@ export const updateNode = (node: Node, templateNode: TemplateNode) => {
     const { events, attributes, props, children } = templateNode;
     const el = node as Element;
     // shouldLog && console.log("el", el);
+    const eventListeners = ensureKey(
+      el,
+      EVENT_LISTENERS_KEY,
+      () => new Map<string, EventListenerOrEventListenerObject>()
+    );
     Object.entries(events).forEach(([k, v]) => {
-      el.addEventListener(k, v, { once: true });
+      if (eventListeners.has(k)) {
+        el.removeEventListener(k, eventListeners.get(k));
+      }
+      el.addEventListener(k, v);
+      eventListeners.set(k, v);
     });
     Object.entries(attributes).forEach(([k, v]) => {
       if (el.getAttribute(k) !== v) {
