@@ -1,6 +1,6 @@
 export * from "./constants";
+export * from "./createCustomElement";
 export * from "./CustomElement";
-export * from "./defineCustomElement";
 export * from "./hooks";
 export * from "./html";
 export * from "./types";

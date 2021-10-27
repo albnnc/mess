@@ -1,5 +1,4 @@
-import { NODE_TYPE_TEXT } from "..";
-import { NODE_TYPE_ELEMENT } from "../constants";
+import { NODE_TYPE_TEXT, NODE_TYPE_ELEMENT } from "../constants";
 import { TemplateNode } from "../types";
 import { updateNode } from "./updateNode";
 
@@ -26,16 +25,16 @@ export const updateChildren = (parent: Node, templateNodes: TemplateNode[]) => {
 
   node = parent.firstChild;
   for (const templateNode of templateNodes) {
-    if (templateNode === null || templateNode === false) {
+    if (
+      templateNode === null ||
+      templateNode === undefined ||
+      typeof templateNode === "boolean"
+    ) {
       continue;
     }
-    // console.log("[updateChildren] node", node, "templateNode", templateNode);
     if (node) {
-      // console.log("[updateChildren] node exists");
       const nodeToken = nodeTokenMap.get(node);
       const templateNodeToken = templateNodeTokenMap.get(templateNode);
-      // console.log("[updateChildren] nodeToken", nodeToken);
-      // console.log("[updateChildren] templateNodeToken", templateNodeToken);
       if (nodeToken === templateNodeToken) {
         // Since current tokens are equal,
         // we can just update it and continue looping.
@@ -64,7 +63,6 @@ export const updateChildren = (parent: Node, templateNodes: TemplateNode[]) => {
         }
       }
     } else {
-      // console.log("[updateChildren] clean creation");
       // Since we're here, we've already reached the last parent element,
       // so the only thing we can do with new template nodes is just to create
       // a new DOM node.

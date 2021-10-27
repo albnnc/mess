@@ -22,10 +22,15 @@
       "source": "lib/index.ts",
       "distDir": "dist",
       "outputFormat": "esmodule",
-      "optimize": true,
+      "optimize": false,
       "includeNodeModules": {
         "htm": false
       }
+    },
+    "docs": {
+      "source": "docs/index.html",
+      "distDir": "dist/docs",
+      "optimize": true
     }
   }
 }

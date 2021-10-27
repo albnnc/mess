@@ -1,20 +1,15 @@
 import htm from "htm";
+import { TemplateNodeObject } from ".";
 import { TemplateNode } from "./types";
-
-export interface Node {
-  type: any;
-  props: Record<string, any>;
-  children: any[];
-}
 
 const h = (
   tag: string,
   options: Record<string, any>,
   ...children: TemplateNode[]
 ): TemplateNode => {
-  const attributes: TemplateNode["attributes"] = {};
-  const events: TemplateNode["events"] = {};
-  const props: TemplateNode["props"] = {};
+  const attributes: TemplateNodeObject["attributes"] = {};
+  const events: TemplateNodeObject["events"] = {};
+  const props: TemplateNodeObject["props"] = {};
   Object.entries(options ?? {}).forEach(([key, value]) => {
     if (key.startsWith("@")) {
       events[key.slice(1)] = value;

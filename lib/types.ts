@@ -10,12 +10,10 @@ export interface RenderFn {
   ($: HookCaller): TemplateNode | TemplateNode[];
 }
 
-export interface DefineOptions {
-  tag: string;
-}
-
 export type Initializer<T> = T | (() => T);
 export type Deps = any[];
+export type StateUpdate<T> = T | ((v: T) => T);
+export type StateSetter<T> = (update: StateUpdate<T>) => void;
 export type EffectCleanup = () => void;
 export type EffectCallback = (() => void) | (() => EffectCleanup);
 
