@@ -30,5 +30,13 @@ const AppRoot = createCustomElement(($) => {
   `;
 });
 
+// const AppRoot = createCustomElement(($) => {
+//   const x = $(memo)(() => Math.random().toString().slice(-4), []);
+//   const [y, setY] = $(state)(1);
+//   return html`
+//     <button @click=${() => setY((v) => v + 1)}>x=${x} y=${y}</button>
+//   `;
+// });
+
 customElements.define("app-button", AppButton);
 customElements.define("app-root", AppRoot);

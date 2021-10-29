@@ -1,7 +1,7 @@
 import { EffectCleanup } from "..";
 import { EFFECT_DATA_KEY } from "../constants";
 import { HookCaller, EffectCallback, Deps } from "../types";
-import { ensureKey, getInitialValue } from "../utils";
+import { ensureKey } from "../utils";
 import { element } from "./element";
 
 export const effect = ($: HookCaller) => {
@@ -20,20 +20,21 @@ export const effect = ($: HookCaller) => {
         }
       });
     }
-    if (!db.records.has(db.index)) {
-      db.records.set(db.index, { fn: () => {} });
+    const currentIndex = db.index++;
+    if (!db.records.has(currentIndex)) {
+      db.records.set(currentIndex, { fn, deps });
+    } else {
+      const record = db.records.get(currentIndex);
+      if (
+        Array.isArray(deps) &&
+        Array.isArray(record.deps) &&
+        deps.length === record.deps.length &&
+        deps.every((v, i) => v === record.deps[i])
+      ) {
+        return;
+      }
+      Object.assign(record, { deps, fn });
     }
-    const record = db.records.get(db.index);
-    if (
-      Array.isArray(deps) &&
-      Array.isArray(record.deps) &&
-      deps.length === record.deps.length &&
-      deps.every((v, i) => v === record.deps[i])
-    ) {
-      return;
-    }
-    Object.assign(record, { deps, fn });
-    db.index++;
   };
 };
 
