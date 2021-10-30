@@ -24,7 +24,7 @@ const h = (
     attributes,
     events,
     props,
-    children,
+    children: children.flat(Infinity),
   };
 };
 

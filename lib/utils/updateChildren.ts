@@ -18,6 +18,13 @@ export const updateChildren = (parent: Node, templateNodes: TemplateNode[]) => {
   const tokenTemplateNodeMap = new Map<string, TemplateNode>();
   const templateNodeTokenMap = new Map<TemplateNode, string>();
   for (const templateNode of templateNodes) {
+    if (
+      templateNode === null ||
+      templateNode === undefined ||
+      typeof templateNode === "boolean"
+    ) {
+      continue;
+    }
     const token = getTemplateNodeToken(templateNode, templateNodeCounts);
     tokenTemplateNodeMap.set(token, templateNode);
     templateNodeTokenMap.set(templateNode, token);
@@ -36,31 +43,22 @@ export const updateChildren = (parent: Node, templateNodes: TemplateNode[]) => {
       const nodeToken = nodeTokenMap.get(node);
       const templateNodeToken = templateNodeTokenMap.get(templateNode);
       if (nodeToken === templateNodeToken) {
-        // Since current tokens are equal,
-        // we can just update it and continue looping.
+        // Since current tokens are equal, we can
+        // just update current node and continue looping.
         updateNode(node, templateNode);
         node = node.nextSibling;
         continue;
       } else {
-        if (tokenNodeMap.has(templateNodeToken)) {
-          const targetNode = tokenNodeMap.get(templateNodeToken);
-          node.nextSibling
-            ? parent.insertBefore(targetNode, node.nextSibling)
-            : parent.appendChild(targetNode);
-          node = node.nextSibling;
-          continue;
-        } else {
+        const targetNode = tokenNodeMap.has(templateNodeToken)
+          ? tokenNodeMap.get(templateNodeToken)
+          : initializeTemplateNode(templateNode);
+        parent.insertBefore(targetNode, node);
+        if (!tokenTemplateNodeMap.has(nodeToken)) {
           const next = node.nextSibling;
-          const initializedNode = initializeTemplateNode(templateNode);
-          next
-            ? parent.insertBefore(initializedNode, next)
-            : parent.appendChild(initializedNode);
-          if (!tokenTemplateNodeMap.has(nodeToken)) {
-            parent.removeChild(node);
-          }
+          parent.removeChild(node);
           node = next;
-          continue;
         }
+        continue;
       }
     } else {
       // Since we're here, we've already reached the last parent element,
@@ -71,8 +69,9 @@ export const updateChildren = (parent: Node, templateNodes: TemplateNode[]) => {
     }
   }
   while (node) {
+    const next = node.nextSibling;
     parent.removeChild(node);
-    node = node.nextSibling;
+    node = next;
   }
 };
 
@@ -115,5 +114,7 @@ const getTemplateNodeToken = (
     } = templateNode;
     return indexToken(tag + (key ? "-" + key : ""), counts);
   }
-  return templateNode ? "text-" + templateNode.toString : "";
+  return templateNode !== undefined && templateNode !== null
+    ? "text-" + templateNode.toString
+    : "";
 };
