@@ -44,8 +44,17 @@ const columns = [
   { key: "age", heading: "Age" },
 ];
 
+const style = `
+  app-table::part(table) {
+    color: #83d795;
+  }
+`;
+
 const AppRoot = createCustomElement(($) => {
   return html`
+    <style>
+      ${style}
+    </style>
     <div>
       <app-table .columns=${columns} .data=${data}></app-table>
     </div>

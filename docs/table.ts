@@ -8,34 +8,18 @@ export interface AppTableProps {
   data: object[];
 }
 
-const style = `
-  table {
-    color: #69cb78;
-  }
-  td, th {
-    min-width: 150px;
-    text-align: left;
-  }
-  td {
-    cursor: pointer;
-  }
-`;
-
 export const AppTable = createCustomElement(($) => {
   const [columns] = $(prop)([], { name: "columns" });
   const [data] = $(prop)([], { name: "data" });
   const [selections, setSelections] = $(state)([]);
-  const r = html`
-    <style>
-      ${style}
-    </style>
-    <table>
-      <thead>
+  return html`
+    <table part="table">
+      <thead part="head">
         <tr>
           ${columns.map((v) => html`<th key=${v.key}>${v.heading}</th>`)}
         </tr>
       </thead>
-      <tbody>
+      <tbody part="body">
         ${data.map(
           (datum) => html`
             <tr
@@ -52,8 +36,8 @@ export const AppTable = createCustomElement(($) => {
             </tr>
             ${selections.includes(datum.id) &&
             html`
-              <!-- <tr key=${datum.id + "-expansion"}> -->
-              <tr>
+              <tr key=${datum.id + "-expansion"}>
+                <!-- <tr> -->
                 <td colspan=${columns.length}>EXPANSION</td>
               </tr>
             `}
@@ -62,6 +46,4 @@ export const AppTable = createCustomElement(($) => {
       </tbody>
     </table>
   `;
-  console.log(r);
-  return r;
 });

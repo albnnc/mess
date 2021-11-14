@@ -5,6 +5,7 @@
   "license": "ISC",
   "author": "",
   "scripts": {
+    "prebuild": "rm -r ./dist",
     "build": "parcel build",
     "dev": "parcel serve docs/index.html"
   },
@@ -21,8 +22,9 @@
     "lib": {
       "source": "lib/index.ts",
       "distDir": "dist",
+      "optimize": true,
+      "isLibrary": true,
       "outputFormat": "esmodule",
-      "optimize": false,
       "includeNodeModules": {
         "htm": false
       }
