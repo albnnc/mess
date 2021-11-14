@@ -47,6 +47,7 @@ const columns = [
 const style = `
   app-table::part(table) {
     color: #83d795;
+    cursor: pointer;
   }
 `;
 

@@ -12,7 +12,7 @@ export const AppTable = createCustomElement(() => {
   const [columns] = useProp([], { name: "columns" });
   const [data] = useProp([], { name: "data" });
   const [selections, setSelections] = useState([]);
-  return html`
+  const t = html`
     <table part="table">
       <thead part="head">
         <tr>
@@ -23,6 +23,7 @@ export const AppTable = createCustomElement(() => {
         ${data.map(
           (datum) => html`
             <tr
+              key=${datum.id}
               @click=${() =>
                 setSelections((prior) =>
                   prior.includes(datum.id)
@@ -46,4 +47,6 @@ export const AppTable = createCustomElement(() => {
       </tbody>
     </table>
   `;
+  console.log("template", t);
+  return t;
 });

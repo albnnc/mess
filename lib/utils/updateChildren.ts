@@ -29,7 +29,6 @@ export const updateChildren = (parent: Node, templateNodes: TemplateNode[]) => {
     tokenTemplateNodeMap.set(token, templateNode);
     templateNodeTokenMap.set(templateNode, token);
   }
-
   node = parent.firstChild;
   for (const templateNode of templateNodes) {
     if (
@@ -49,14 +48,17 @@ export const updateChildren = (parent: Node, templateNodes: TemplateNode[]) => {
         node = node.nextSibling;
         continue;
       } else {
-        const targetNode = tokenNodeMap.has(templateNodeToken)
+        const isExisting = tokenNodeMap.has(templateNodeToken);
+        const nodeToInsert = isExisting
           ? tokenNodeMap.get(templateNodeToken)
           : initializeTemplateNode(templateNode);
-        parent.insertBefore(targetNode, node);
+        parent.insertBefore(nodeToInsert, node);
+        if (isExisting) {
+          updateNode(nodeToInsert, templateNode);
+        }
         if (!tokenTemplateNodeMap.has(nodeToken)) {
-          const next = node.nextSibling;
           parent.removeChild(node);
-          node = next;
+          node = nodeToInsert.nextSibling;
         }
         continue;
       }
