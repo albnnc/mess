@@ -1,19 +1,19 @@
 import { LIFECYCLE_DATA_KEY } from "../constants";
-import { HookCaller, TemplateNode } from "../types";
+import { RenderableElement, TemplateNode } from "../types";
 import { ensureKey, updateNode } from "../utils";
-import { CustomElement } from "../CustomElement";
-import { element } from "./element";
+import { useElement } from "./useElement";
 
-export const lifecycle = ($: HookCaller) => {
-  const el = $(element);
-  return ensureKey(el, LIFECYCLE_DATA_KEY, () => getData(el));
+export const useLifecycle = () => {
+  const element = useElement();
+  return ensureKey(element, LIFECYCLE_DATA_KEY, () => getData(element));
 };
 
-const getData = (el: CustomElement) => {
+const getData = (element: RenderableElement) => {
   const data = {
     updating: false,
     update: () => {
-      const templateOutput = el.render();
+      console.log(element);
+      const templateOutput = element.render();
       const templateNode: TemplateNode = {
         tag: "",
         events: {},
@@ -23,8 +23,8 @@ const getData = (el: CustomElement) => {
           ? templateOutput
           : [templateOutput],
       };
-      updateNode(el.shadowRoot, templateNode);
-      dispatchLocalEvent(el, "updated");
+      updateNode(element.shadowRoot, templateNode);
+      dispatchLocalEvent(element, "updated");
       data.updating = false;
     },
     requestUpdate: () => {
@@ -33,8 +33,8 @@ const getData = (el: CustomElement) => {
       }
       data.updating = true;
       requestAnimationFrame(() => {
-        el.addEventListener("update", data.update, { once: true });
-        dispatchLocalEvent(el, "update");
+        element.addEventListener("update", data.update, { once: true });
+        dispatchLocalEvent(element, "update");
       });
     },
   };

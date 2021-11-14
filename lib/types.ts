@@ -6,8 +6,12 @@ export interface HookCaller {
   <T>(hook: Hook<T>): ReturnType<Hook<T>>;
 }
 
+export interface RenderableElement extends HTMLElement {
+  render(): TemplateNode | TemplateNode[];
+}
+
 export interface RenderFn {
-  ($: HookCaller): TemplateNode | TemplateNode[];
+  (): TemplateNode | TemplateNode[];
 }
 
 export type Initializer<T> = T | (() => T);

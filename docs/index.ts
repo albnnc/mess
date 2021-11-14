@@ -1,10 +1,10 @@
-import { html, state, prop, memo, createCustomElement } from "../lib";
+import { html, useState, useProp, useMemo, createCustomElement } from "../lib";
 import { AppTable } from "./table";
 
-const AppButton = createCustomElement(($) => {
-  const id = $(memo)(() => Math.random().toString().slice(-4), []);
-  const [x, setX] = $(state)(0);
-  const [y] = $(prop)(0, { name: "y" });
+const AppButton = createCustomElement(() => {
+  const id = useMemo(() => Math.random().toString().slice(-4), []);
+  const [x, setX] = useState(0);
+  const [y] = useProp(0, { name: "y" });
   return html`
     <button
       @click=${() => {
@@ -16,8 +16,8 @@ const AppButton = createCustomElement(($) => {
   `;
 });
 
-// const AppRoot = createCustomElement(($) => {
-//   const [y, setY] = $(state)(1);
+// const AppRoot = createCustomElement(() => {
+//   const [y, setY] = useState(1);
 //   return html`
 //     <div>
 //       <app-button
@@ -50,7 +50,7 @@ const style = `
   }
 `;
 
-const AppRoot = createCustomElement(($) => {
+const AppRoot = createCustomElement(() => {
   return html`
     <style>
       ${style}
@@ -60,6 +60,19 @@ const AppRoot = createCustomElement(($) => {
     </div>
   `;
 });
+
+// const AppRoot = createCustomElement(() => {
+//   const [x, setX] = useState(0);
+//   return html`
+//     <div
+//       @click=${() => {
+//         setX((v) => v + 1);
+//       }}
+//     >
+//       SAMPLE ${x}
+//     </div>
+//   `;
+// });
 
 // const AppRoot = createCustomElement(($) => {
 //   const x = $(memo)(() => Math.random().toString().slice(-4), []);

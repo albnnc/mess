@@ -1,10 +1,21 @@
+import { claimElement, useLifecycle } from "./hooks";
 import { RenderFn } from "./types";
-import { CustomElement } from "./CustomElement";
 
 export const createCustomElement = (fn: RenderFn) => {
-  return class extends CustomElement {
+  return class CustomElement extends HTMLElement {
+    constructor() {
+      super();
+      this.attachShadow({ mode: "open" });
+      claimElement(this, () => {
+        useLifecycle().update();
+      });
+    }
     render() {
-      return fn(this.use);
+      let template;
+      claimElement(this, () => {
+        template = fn();
+      });
+      return template;
     }
   };
 };

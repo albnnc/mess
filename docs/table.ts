@@ -1,4 +1,4 @@
-import { createCustomElement, html, prop, state } from "../lib";
+import { createCustomElement, html, useProp, useState } from "../lib";
 
 export interface AppTableProps {
   columns: {
@@ -8,10 +8,10 @@ export interface AppTableProps {
   data: object[];
 }
 
-export const AppTable = createCustomElement(($) => {
-  const [columns] = $(prop)([], { name: "columns" });
-  const [data] = $(prop)([], { name: "data" });
-  const [selections, setSelections] = $(state)([]);
+export const AppTable = createCustomElement(() => {
+  const [columns] = useProp([], { name: "columns" });
+  const [data] = useProp([], { name: "data" });
+  const [selections, setSelections] = useState([]);
   return html`
     <table part="table">
       <thead part="head">
