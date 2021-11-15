@@ -8,3 +8,5 @@ app.use((ctx) => {
 });
 
 await app.listen({ port });
+
+const _x: HTMLElement | null = null;
