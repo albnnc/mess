@@ -1,12 +1,11 @@
-import { Application } from "./deps.ts";
+// import { Application } from "./deps.ts";
+// const port = parseInt(Deno.env.get("PORT") || "") || 1234;
+// const app = new Application();
+// app.use((ctx) => {
+//   ctx.response.body = "TODO";
+// });
+// await app.listen({ port });
 
-const port = parseInt(Deno.env.get("PORT") || "") || 1234;
-const app = new Application();
+import { build } from "./build.ts";
 
-app.use((ctx) => {
-  ctx.response.body = "TODO";
-});
-
-await app.listen({ port });
-
-const _x: HTMLElement | null = null;
+build();
