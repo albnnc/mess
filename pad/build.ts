@@ -1,6 +1,7 @@
 import { fs, path, http, serveFile } from "./deps.ts";
 import { hashString } from "./hash_string.ts";
 import { buildUi } from "./build_ui.ts";
+import { getGlobDir } from "./get_glob_dir.ts";
 
 interface ProcessedEntry {
   id: string;
@@ -8,6 +9,7 @@ interface ProcessedEntry {
 }
 
 interface BuildOptions {
+  watch: boolean;
   entries: string;
   processEntry: (entry: string) => Promise<ProcessedEntry>;
 }
@@ -38,6 +40,12 @@ export async function build({ entries, processEntry }: BuildOptions) {
       await Deno.writeTextFile(filePath, content);
     }
   }
+
+  // const dirToWatch = await getGlobDir(entries);
+  // const watcher = Deno.watchFs(dirToWatch);
+  // for await (const event of watcher) {
+  //   console.log("sheet changed", event);
+  // }
 
   // http.serve(
   //   async (req) => {
