@@ -1,6 +1,9 @@
+#!/usr/bin/env -S deno run -A --no-check
 import { esbuild, path } from "../deps.ts";
-import { build } from "../build.ts";
+import { make } from "../make.ts";
 
+const currentDir = path.dirname(path.fromFileUrl(import.meta.url));
+const outputDir = path.join(currentDir, "../build");
 const baseDir = path.fromFileUrl(new URL("sheets", import.meta.url));
 const indexHtml = `
   <!DOCTYPE html>
@@ -9,17 +12,17 @@ const indexHtml = `
       <meta charset="UTF-8" />
       <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-      <base href=".">
       <title>Cobalt</title>
     </head>
     <body>
-      <script type="module" src="/index.js"></script>
+      <script type="module" src="index.js"></script>
       <app-root></app-root>
     </body>
   </html>
 `;
 
-await build({
+await make({
+  outputDir,
   entries: path.join(baseDir, "*.ts"),
   processEntry: async (entry) => {
     const { outputFiles } = await esbuild.build({
@@ -33,9 +36,10 @@ await build({
     return {
       id: entry,
       files: {
-        "/index.html": indexHtml,
-        "/index.js": decoder.decode(indexJs?.contents),
+        "index.html": indexHtml,
+        "index.js": decoder.decode(indexJs?.contents),
       },
     };
   },
+  isDev: Deno.args.includes("dev"),
 });

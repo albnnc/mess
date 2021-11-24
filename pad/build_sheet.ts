@@ -1,13 +1,23 @@
-import { path, fs } from "./deps.ts";
+import { path, fs, log } from "./deps.ts";
 import { hashString } from "./hash_string.ts";
-import { BuildSheetOptions } from "./types.ts";
+
+export interface ProcessedSheetEntry {
+  id: string;
+  files: Record<string, string>;
+}
+
+export interface BuildSheetOptions {
+  entry: string;
+  outputDir: string;
+  processEntry: (entry: string) => Promise<ProcessedSheetEntry>;
+}
 
 export async function buildSheet({
   entry,
   outputDir,
   processEntry,
 }: BuildSheetOptions) {
-  console.log("Building", entry);
+  log.info(`building sheet \`${entry}\``);
   const { id, files } = await processEntry(entry);
   const hash = await hashString(id);
   const sheetDir = path.join(outputDir, `sheets/${hash}`);
