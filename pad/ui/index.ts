@@ -1,8 +1,7 @@
-/// <reference no-default-lib="true" />
-/// <reference lib="dom" />
-/// <reference lib="deno.ns" />
+import { createCustomElement, html } from "../../cobalt/mod.ts";
 
-import { y } from "./other.ts";
+const AppRoot = createCustomElement(() => {
+  return html`<div>SAMPLE</div>`;
+});
 
-const x: HTMLElement | number = 5;
-console.log(x, y);
+customElements.define("app-root", AppRoot);

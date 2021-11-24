@@ -1,4 +1,4 @@
-import { path, esbuild, log, fs } from "./deps.ts";
+import { path, esbuild, log, fs, esbuildPluginHttp } from "./deps.ts";
 
 export async function buildUi(outputDir: string) {
   log.info("building pad UI");
@@ -10,6 +10,8 @@ export async function buildUi(outputDir: string) {
     outdir: outputDir,
     write: true,
     bundle: true,
+    minify: true,
+    plugins: [esbuildPluginHttp.createPlugin()],
   });
   esbuild.stop();
 }

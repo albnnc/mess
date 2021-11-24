@@ -6,3 +6,4 @@ export * as http from "https://deno.land/std@0.115.1/http/mod.ts";
 export * as async from "https://deno.land/std@0.115.1/async/mod.ts";
 export { serveFile } from "https://deno.land/std@0.115.1/http/file_server.ts";
 export * as esbuild from "https://deno.land/x/esbuild@v0.13.14/mod.js";
+export * as esbuildPluginHttp from "../esbuild_plugin_http/mod.ts";

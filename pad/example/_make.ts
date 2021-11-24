@@ -20,8 +20,10 @@ const indexHtml = `
     </body>
   </html>
 `;
+const isDev = Deno.args.includes("dev");
 
 await make({
+  isDev,
   outputDir,
   entries: path.join(baseDir, "*.ts"),
   processEntry: async (entry) => {
@@ -29,6 +31,7 @@ await make({
       entryPoints: [entry],
       write: false,
       bundle: true,
+      minify: !isDev,
     });
     esbuild.stop();
     const decoder = new TextDecoder();
@@ -41,5 +44,4 @@ await make({
       },
     };
   },
-  isDev: Deno.args.includes("dev"),
 });
