@@ -11,7 +11,7 @@ export async function buildUi(outputDir: string) {
     write: true,
     bundle: true,
     minify: true,
-    plugins: [esbuildPluginHttp.createPlugin()],
+    plugins: [await esbuildPluginHttp.create()],
   });
   esbuild.stop();
 }
@@ -24,6 +24,12 @@ const indexHtml = `
       <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       <meta http-equiv="X-UA-Compatible" content="ie=edge" />
       <title>Color Pad</title>
+      <style>
+        html, body {
+          margin: 0;
+          padding: 0;
+        }
+      </style>
     </head>
     <body>
       <script type="module" src="index.js"></script>
