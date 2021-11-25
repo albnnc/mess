@@ -5,6 +5,7 @@ import { getGlobDir } from "./get_glob_dir.ts";
 
 export interface WatchOptions
   extends Pick<BuildOptions, "outputDir" | "entries" | "processEntry"> {
+  watchDir?: string;
   watchDebounceTime?: number;
 }
 
@@ -12,10 +13,11 @@ export async function watch({
   outputDir,
   entries,
   processEntry,
+  watchDir,
   watchDebounceTime = 300,
 }: WatchOptions) {
-  const dirToWatch = await getGlobDir(entries);
-  log.info(`watching changes in \`${dirToWatch}\``);
+  watchDir = watchDir ?? (await getGlobDir(entries));
+  log.info(`watching changes in \`${watchDir}\``);
   const entryRegExp = path.globToRegExp(entries, {
     extended: true,
     globstar: true,
@@ -38,7 +40,7 @@ export async function watch({
       fileUpdateHandlers.set(v, fn);
     }
   };
-  const watcher = Deno.watchFs(dirToWatch);
+  const watcher = Deno.watchFs(watchDir);
   for await (const event of watcher) {
     event.paths
       .filter((v) => entryRegExp.test(v))

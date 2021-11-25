@@ -13,7 +13,6 @@ const getData = (element: RenderableElement) => {
   const data = {
     updating: false,
     update: () => {
-      console.log(element);
       const templateOutput = element.render();
       const templateNode: TemplateNode = {
         tag: "",
