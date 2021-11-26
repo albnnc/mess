@@ -19,6 +19,8 @@ const indexHtml = `
         html, body {
           margin: 0;
           padding: 0;
+          background: rgb(20, 20, 20);
+          color: rgb(200, 200, 200);
         }
       </style>
     </head>
