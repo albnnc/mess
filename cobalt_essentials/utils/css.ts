@@ -18,5 +18,5 @@ export function css(statics: TemplateStringsArray, ...args: unknown[]) {
       )
     );
   }
-  return cache.get(hash);
+  return cache.get(hash)!;
 }

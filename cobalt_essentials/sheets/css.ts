@@ -5,11 +5,9 @@ const AppRoot = createCustomElement(() => {
   const [count, setCount] = useState(0);
   return html`
     <style>
-      ${css`
-        button {
-          color: ${count % 2 ? "red" : "blue"};
-        }
-      `}
+      button {
+        color: ${count % 2 ? "red" : "blue"};
+      }
     </style>
     <button @click=${() => setCount((v) => v + 1)}>Increment</button>
   `;
