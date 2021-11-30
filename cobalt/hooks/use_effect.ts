@@ -6,7 +6,7 @@ import {
   RenderableElement,
 } from "../types.ts";
 import { ensureKey } from "../utils/mod.ts";
-import { useElement } from "./useElement.ts";
+import { useElement } from "./use_element.ts";
 
 export const useEffect = (fn: EffectCallback, deps?: Deps) => {
   const element = useElement() as RenderableElement &

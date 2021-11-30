@@ -1,7 +1,7 @@
 import { Initializer } from "../types.ts";
-import { useElement } from "./useElement.ts";
-import { useState } from "./useState.ts";
-import { useEffect } from "./useEffect.ts";
+import { useElement } from "./use_element.ts";
+import { useState } from "./use_state.ts";
+import { useEffect } from "./use_effect.ts";
 
 export interface PropOptions {
   name: string;

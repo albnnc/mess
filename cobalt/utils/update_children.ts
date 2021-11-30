@@ -1,6 +1,6 @@
 import { NODE_TYPE_TEXT, NODE_TYPE_ELEMENT } from "../constants.ts";
 import { TemplateNode } from "../types.ts";
-import { updateNode } from "./updateNode.ts";
+import { updateNode } from "./update_node.ts";
 
 export const updateChildren = (parent: Node, templateNodes: TemplateNode[]) => {
   const nodeCounts = {};

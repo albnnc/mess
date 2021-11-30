@@ -1,5 +1,5 @@
 import { Initializer } from "../types.ts";
-import { getInitialValue } from "./getInitialValue.ts";
+import { getInitialValue } from "./get_initial_value.ts";
 
 export const ensureKey = <T>(
   target: Record<string | number | symbol, unknown>,

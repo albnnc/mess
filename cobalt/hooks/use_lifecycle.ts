@@ -1,7 +1,7 @@
 import { LIFECYCLE_DATA_KEY } from "../constants.ts";
 import { RenderableElement, TemplateNode } from "../types.ts";
 import { ensureKey, updateNode } from "../utils/mod.ts";
-import { useElement } from "./useElement.ts";
+import { useElement } from "./use_element.ts";
 
 export const useLifecycle = () => {
   const element = useElement() as RenderableElement &

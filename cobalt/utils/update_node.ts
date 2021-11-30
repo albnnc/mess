@@ -5,8 +5,8 @@ import {
   NODE_TYPE_TEXT,
 } from "../constants.ts";
 import { TemplateNode } from "../types.ts";
-import { ensureKey } from "./ensureKey.ts";
-import { updateChildren } from "./updateChildren.ts";
+import { ensureKey } from "./ensure_key.ts";
+import { updateChildren } from "./update_children.ts";
 
 export const updateNode = (node: Node, templateNode: TemplateNode) => {
   if (

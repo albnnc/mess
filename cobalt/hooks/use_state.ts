@@ -2,8 +2,8 @@ import { RenderableElement, StateSetter } from "../types.ts";
 import { STATE_DATA_KEY } from "../constants.ts";
 import { Initializer, StateUpdate } from "../types.ts";
 import { ensureKey, getInitialValue } from "../utils/mod.ts";
-import { useLifecycle } from "./useLifecycle.ts";
-import { useElement } from "./useElement.ts";
+import { useLifecycle } from "./use_lifecycle.ts";
+import { useElement } from "./use_element.ts";
 
 export const useState = <T>(initializer: Initializer<T>) => {
   const { requestUpdate } = useLifecycle();
