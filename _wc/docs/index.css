@@ -1,8 +1,0 @@
-html {
-  background-color: rgba(32, 32, 32);
-  color: white;
-}
-
-app-table::part(table) {
-  color: green;
-}
