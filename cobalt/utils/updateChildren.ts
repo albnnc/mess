@@ -117,6 +117,6 @@ const getTemplateNodeToken = (
     return indexToken(tag + (key ? "-" + key : ""), counts);
   }
   return templateNode !== undefined && templateNode !== null
-    ? "text-" + templateNode.toString
+    ? "text-" + templateNode.toString()
     : "";
 };

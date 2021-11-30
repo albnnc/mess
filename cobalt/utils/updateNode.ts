@@ -46,6 +46,8 @@ export const updateNode = (node: Node, templateNode: TemplateNode) => {
   ) {
     const data = templateNode.toString();
     const text = node as Text;
-    text.replaceWith(data);
+    if (data !== text.nodeValue) {
+      text.replaceWith(data);
+    }
   }
 };

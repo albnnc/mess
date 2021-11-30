@@ -3,12 +3,6 @@ import { styledHtml as html } from "../mod.ts";
 
 const AppRoot = createCustomElement(() => {
   const [count, setCount] = useState(0);
-  const handleClick = useMemo(() => {
-    console.log("!");
-    return () => {
-      setCount((v) => v + 1);
-    };
-  }, []);
   return html`
     <style>
       button {
@@ -16,8 +10,6 @@ const AppRoot = createCustomElement(() => {
       }
     </style>
     <button @click=${() => setCount((v) => v + 1)}>Increment</button>
-    <a @click=${handleClick}>Increment</a>
-    <!-- <app-button @click=${() => setCount((v) => v + 1)}></app-button> -->
   `;
 });
 

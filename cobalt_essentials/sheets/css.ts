@@ -1,5 +1,4 @@
 import { createCustomElement, html, useState } from "../deps.ts";
-import { css } from "../mod.ts";
 
 const AppRoot = createCustomElement(() => {
   const [count, setCount] = useState(0);
