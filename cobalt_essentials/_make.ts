@@ -36,7 +36,6 @@ await pad.make({
   isDev,
   outputDir,
   entries: path.join(inputDir, "*.ts"),
-  watchDir: currentDir,
   processEntry: async (entry) => {
     const { outputFiles } = await esbuild.build({
       entryPoints: [entry],
@@ -45,7 +44,6 @@ await pad.make({
       minify: !isDev,
       plugins: [await esbuildPluginHttp.create()],
     });
-    esbuild.stop();
     const decoder = new TextDecoder();
     const indexJs = outputFiles.find((v) => v.path === "<stdout>");
     return {
@@ -57,3 +55,5 @@ await pad.make({
     };
   },
 });
+
+esbuild.stop();
