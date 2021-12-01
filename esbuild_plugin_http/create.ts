@@ -1,6 +1,4 @@
-import { esbuild } from "./deps.ts";
-import { locateCacheDir } from "./locate_cache_dir.ts";
-import { locateCacheFile } from "./locate_cache_file.ts";
+import { esbuild, modUtils } from "./deps.ts";
 
 export interface EsbuildPluginHttpOptions {
   cacheDir?: string;
@@ -9,7 +7,7 @@ export interface EsbuildPluginHttpOptions {
 export async function create({
   cacheDir: passedCacheDir,
 }: EsbuildPluginHttpOptions = {}): Promise<esbuild.Plugin> {
-  const cacheDir = passedCacheDir ?? (await locateCacheDir());
+  const cacheDir = passedCacheDir ?? (await modUtils.locateCacheDir());
   return {
     name: "http",
     setup(build) {
@@ -22,7 +20,9 @@ export async function create({
         namespace: "http-url",
       }));
       build.onLoad({ filter: /.*/, namespace: "http-url" }, async (args) => {
-        const cacheFile = await locateCacheFile(cacheDir, args.path);
+        const cacheFile = await modUtils.locateCacheFile(args.path, {
+          cacheDir,
+        });
         if (cacheFile) {
           return { contents: await Deno.readTextFile(cacheFile) };
         }

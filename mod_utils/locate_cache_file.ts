@@ -1,11 +1,19 @@
 import { path } from "./deps.ts";
+import { locateCacheDir } from "./locate_cache_dir.ts";
+
+export interface LocateCacheFileOptions {
+  cacheDir?: string;
+}
 
 export async function locateCacheFile(
-  cacheDir: string,
-  url: string
+  specifier: string,
+  { cacheDir }: LocateCacheFileOptions = {}
 ): Promise<string | undefined> {
+  if (!cacheDir) {
+    cacheDir = await locateCacheDir();
+  }
   const [_, protocol, host, pathname] =
-    url.match(/(https)?:\/\/([^\/]+)(.+)/) ?? [];
+    specifier.match(/(https?):\/\/([^\/]+)(.+)/) ?? [];
   if (!protocol || !host || !pathname) {
     return undefined;
   }
