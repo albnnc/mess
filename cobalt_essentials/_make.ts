@@ -4,6 +4,7 @@ import * as esbuild from "https://deno.land/x/esbuild@v0.13.14/mod.js";
 import * as esbuildPluginHttp from "../esbuild_plugin_http/mod.ts";
 import * as pad from "../pad/mod.ts";
 
+const isDev = Deno.args.includes("dev");
 const currentDir = path.dirname(path.fromFileUrl(import.meta.url));
 const inputDir = path.join(currentDir, "./sheets");
 const outputDir = path.join(currentDir, "./build");
@@ -27,10 +28,10 @@ const indexHtml = `
     <body>
       <script type="module" src="index.js"></script>
       <app-root></app-root>
+      ${isDev ? `<script>${pad.reloadScript}</script>` : ""}
     </body>
   </html>
 `;
-const isDev = Deno.args.includes("dev");
 
 await pad.make({
   isDev,
