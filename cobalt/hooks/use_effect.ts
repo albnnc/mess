@@ -17,7 +17,10 @@ export const useEffect = (fn: EffectCallback, deps?: Deps) => {
     element.addEventListener("updated", () => {
       db.index = 0;
       for (const v of db.records.values()) {
-        v.clean?.();
+        if (v.clean && v.fn) {
+          v.clean?.();
+          delete v.clean;
+        }
         const clean = v.fn?.();
         clean && (v.clean = clean);
         delete v.fn;

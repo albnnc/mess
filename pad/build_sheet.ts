@@ -1,8 +1,8 @@
+import { cyrb53 } from "./cyrb53.ts";
 import { path, fs, log } from "./deps.ts";
-import { hashString } from "./hash_string.ts";
 
 export interface ProcessedSheetEntry {
-  id: string;
+  name: string;
   files: Record<string, string>;
 }
 
@@ -12,15 +12,20 @@ export interface BuildSheetOptions {
   processEntry: (entry: string) => Promise<ProcessedSheetEntry>;
 }
 
+export interface BuildSheetResult {
+  id: string;
+  name: string;
+}
+
 export async function buildSheet({
   entry,
   outputDir,
   processEntry,
-}: BuildSheetOptions) {
+}: BuildSheetOptions): Promise<BuildSheetResult> {
   log.info(`building sheet \`${entry}\``);
-  const { id, files } = await processEntry(entry);
-  const hash = await hashString(id);
-  const sheetDir = path.join(outputDir, `sheets/${hash}`);
+  const { name, files } = await processEntry(entry);
+  const id = cyrb53(entry).toString();
+  const sheetDir = path.join(outputDir, `sheets/${id}`);
   await fs.ensureDir(sheetDir);
   await Promise.all(
     Object.entries(files).map(async ([file, content]) => {
@@ -30,4 +35,5 @@ export async function buildSheet({
       await Deno.writeTextFile(filePath, content);
     })
   );
+  return { id, name };
 }

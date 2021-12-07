@@ -20,15 +20,20 @@ export async function build({
   ) {
     await Deno.remove(outputDir, { recursive: true });
   }
-  await buildUi(outputDir);
+  const files: string[] = [];
   for await (const v of fs.expandGlob(entries)) {
-    if (!v.isFile) {
-      return;
+    if (v.isFile) {
+      files.push(v.path);
     }
-    await buildSheet({
-      entry: v.path,
-      outputDir,
-      processEntry,
-    });
   }
+  const sheets = await Promise.all(
+    files.map((v) =>
+      buildSheet({
+        entry: v,
+        outputDir,
+        processEntry,
+      })
+    )
+  );
+  await buildUi({ outputDir, sheets });
 }

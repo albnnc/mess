@@ -1,7 +1,6 @@
 import { BuildOptions } from "./build.ts";
 import { buildSheet } from "./build_sheet.ts";
 import { async, fs, modUtils, oak } from "./deps.ts";
-import { hashString } from "./hash_string.ts";
 
 export interface WatchOptions
   extends Pick<BuildOptions, "outputDir" | "entries" | "processEntry"> {
@@ -18,7 +17,9 @@ export function watch({
   const middleware: oak.Middleware = async (context, next) => {
     if (context.request.url.pathname.startsWith("/updates")) {
       const target = context.sendEvents();
-      target.addEventListener("close", () => sseTargets.delete(target));
+      target.addEventListener("close", () => {
+        sseTargets.delete(target);
+      });
       sseTargets.add(target);
     } else {
       await next();
@@ -26,19 +27,12 @@ export function watch({
   };
   const watchEntry = async (entry: string) => {
     const handle = async.debounce(async () => {
-      await buildSheet({
+      const sheet = await buildSheet({
         entry,
         outputDir,
         processEntry,
       });
-      await Promise.all(
-        Array.from(sseTargets).map(async (v) =>
-          v.dispatchMessage({
-            entry,
-            id: await hashString(entry),
-          })
-        )
-      );
+      Array.from(sseTargets).map((v) => v.dispatchMessage(sheet));
     }, watchDebounceTime);
     for await (const _ of modUtils.watchModule(entry)) {
       handle();

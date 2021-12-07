@@ -1,10 +1,21 @@
 import { path, esbuild, log, fs, esbuildPluginHttp } from "./deps.ts";
 
-export async function buildUi(outputDir: string) {
+export interface BuildUiOptions {
+  outputDir: string;
+  sheets: {
+    id: string;
+    name: string;
+  }[];
+}
+
+export async function buildUi({ outputDir, sheets }: BuildUiOptions) {
   log.info("building pad UI");
   const currentDir = path.dirname(path.fromFileUrl(import.meta.url));
   await fs.ensureDir(outputDir);
-  await Deno.writeTextFile(path.join(outputDir, "index.html"), indexHtml);
+  await Deno.writeTextFile(
+    path.join(outputDir, "index.html"),
+    getIndexHtml(sheets)
+  );
   await esbuild.build({
     entryPoints: [path.join(currentDir, "ui/index.ts")],
     outdir: outputDir,
@@ -16,7 +27,7 @@ export async function buildUi(outputDir: string) {
   esbuild.stop();
 }
 
-const indexHtml = `
+const getIndexHtml = (sheets: BuildUiOptions["sheets"]) => `
   <!DOCTYPE html>
   <html lang="en">
     <head>
@@ -24,6 +35,9 @@ const indexHtml = `
       <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       <meta http-equiv="X-UA-Compatible" content="ie=edge" />
       <title>Color Pad</title>
+      <link rel="preconnect" href="https://fonts.googleapis.com">
+      <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+      <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap" rel="stylesheet">
       <style>
         html, body {
           margin: 0;
@@ -32,8 +46,9 @@ const indexHtml = `
       </style>
     </head>
     <body>
-      <script type="module" src="index.js"></script>
       <app-root></app-root>
+      <script type="module" src="index.js"></script>
+      <script>globalThis.padSheets = ${JSON.stringify(sheets)}</script>
     </body>
   </html>
 `;

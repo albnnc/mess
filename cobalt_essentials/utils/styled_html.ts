@@ -10,7 +10,6 @@ export function styledHtml(...args: Parameters<typeof html>) {
         continue;
       }
       if (node.tag === "style") {
-        console.log("assigning");
         node.children = [
           css`
             ${node.children.join("")}

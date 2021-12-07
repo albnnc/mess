@@ -48,7 +48,10 @@ await pad.make({
     const decoder = new TextDecoder();
     const indexJs = outputFiles.find((v) => v.path === "<stdout>");
     return {
-      id: entry,
+      name: path
+        .basename(entry, ".ts")
+        .replace(/[\W]/g, "")
+        .replace(/[\s_-]+/, " "),
       files: {
         "index.html": indexHtml,
         "index.js": decoder.decode(indexJs?.contents),
