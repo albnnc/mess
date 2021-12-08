@@ -4,7 +4,7 @@ import { make } from "../make.ts";
 
 const currentDir = path.dirname(path.fromFileUrl(import.meta.url));
 const outputDir = path.join(currentDir, "../build");
-const baseDir = path.fromFileUrl(new URL("sheets", import.meta.url));
+const baseDir = path.fromFileUrl(new URL("tones", import.meta.url));
 const indexHtml = `
   <!DOCTYPE html>
   <html lang="en">
@@ -37,7 +37,7 @@ await make({
     const decoder = new TextDecoder();
     const indexJs = outputFiles.find((v) => v.path === "<stdout>");
     return {
-      id: entry,
+      name: path.basename(entry),
       files: {
         "index.html": indexHtml,
         "index.js": decoder.decode(indexJs?.contents),

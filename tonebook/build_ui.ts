@@ -1,20 +1,18 @@
+import { ToneMeta } from "./build_tone.ts";
 import { path, esbuild, log, fs, esbuildPluginHttp } from "./deps.ts";
 
 export interface BuildUiOptions {
   outputDir: string;
-  sheets: {
-    id: string;
-    name: string;
-  }[];
+  tones: ToneMeta[];
 }
 
-export async function buildUi({ outputDir, sheets }: BuildUiOptions) {
-  log.info("building pad UI");
+export async function buildUi({ outputDir, tones }: BuildUiOptions) {
+  log.info("Building main UI");
   const currentDir = path.dirname(path.fromFileUrl(import.meta.url));
   await fs.ensureDir(outputDir);
   await Deno.writeTextFile(
     path.join(outputDir, "index.html"),
-    getIndexHtml(sheets)
+    getIndexHtml(tones)
   );
   await esbuild.build({
     entryPoints: [path.join(currentDir, "ui/index.ts")],
@@ -27,7 +25,7 @@ export async function buildUi({ outputDir, sheets }: BuildUiOptions) {
   esbuild.stop();
 }
 
-const getIndexHtml = (sheets: BuildUiOptions["sheets"]) => `
+const getIndexHtml = (tones: BuildUiOptions["tones"]) => `
   <!DOCTYPE html>
   <html lang="en">
     <head>
@@ -48,7 +46,7 @@ const getIndexHtml = (sheets: BuildUiOptions["sheets"]) => `
     <body>
       <app-root></app-root>
       <script type="module" src="index.js"></script>
-      <script>globalThis.padSheets = ${JSON.stringify(sheets)}</script>
+      <script>globalThis.TONEBOOK_TONES = ${JSON.stringify(tones)}</script>
     </body>
   </html>
 `;

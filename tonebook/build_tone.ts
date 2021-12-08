@@ -1,31 +1,31 @@
 import { cyrb53 } from "./cyrb53.ts";
 import { path, fs, log } from "./deps.ts";
 
-export interface ProcessedSheetEntry {
-  name: string;
-  files: Record<string, string>;
-}
-
-export interface BuildSheetOptions {
-  entry: string;
-  outputDir: string;
-  processEntry: (entry: string) => Promise<ProcessedSheetEntry>;
-}
-
-export interface BuildSheetResult {
+export interface ToneMeta {
   id: string;
   name: string;
 }
 
-export async function buildSheet({
+export interface ToneContent {
+  name: string;
+  files: Record<string, string>;
+}
+
+export interface BuildToneOptions {
+  entry: string;
+  outputDir: string;
+  processEntry: (entry: string) => Promise<ToneContent>;
+}
+
+export async function buildTone({
   entry,
   outputDir,
   processEntry,
-}: BuildSheetOptions): Promise<BuildSheetResult> {
-  log.info(`building sheet \`${entry}\``);
+}: BuildToneOptions): Promise<ToneMeta> {
+  log.info(`Building entry "${entry}"`);
   const { name, files } = await processEntry(entry);
-  const id = cyrb53(entry).toString();
-  const sheetDir = path.join(outputDir, `sheets/${id}`);
+  const id = "tone_" + cyrb53(entry).toString();
+  const sheetDir = path.join(outputDir, `tones/${id}`);
   await fs.ensureDir(sheetDir);
   await Promise.all(
     Object.entries(files).map(async ([file, content]) => {

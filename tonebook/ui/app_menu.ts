@@ -1,15 +1,16 @@
-import { createCustomElement } from "../../cobalt/mod.ts";
+import { createCustomElement, useMemo } from "../../cobalt/mod.ts";
 import { styledHtml as html } from "../../cobalt_essentials/mod.ts";
-import { getSheets } from "./get_sheets.ts";
-
-const sheets = getSheets();
+import { TONEBOOK_TONES } from "./tones.ts";
 
 export const AppMenu = createCustomElement(() => {
-  console.log("sheets", sheets);
+  const tones = useMemo(
+    () => TONEBOOK_TONES.sort((a, b) => a.name.localeCompare(b.name)),
+    []
+  );
   return html`
     <style>
       .container {
-        padding: 1.5rem;
+        padding: 1.5rem 2.5rem;
         max-width: 300px;
         display: flex;
         flex-direction: column;
@@ -31,7 +32,7 @@ export const AppMenu = createCustomElement(() => {
       }
     </style>
     <div class="container">
-      ${sheets.map(
+      ${tones.map(
         (v) => html`
           <div key=${v.id}>
             <a href=${`#${v.id}`}>${v.name}</a>

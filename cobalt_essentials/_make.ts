@@ -6,7 +6,7 @@ import * as tonebook from "../tonebook/mod.ts";
 
 const isDev = Deno.args.includes("dev");
 const currentDir = path.dirname(path.fromFileUrl(import.meta.url));
-const inputDir = path.join(currentDir, "./sheets");
+const inputDir = path.join(currentDir, "./tones");
 const outputDir = path.join(currentDir, "./build");
 const indexHtml = `
   <!DOCTYPE html>

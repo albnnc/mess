@@ -1,19 +1,17 @@
 import { createCustomElement, useEffect, useState } from "../../cobalt/mod.ts";
 import { styledHtml as html } from "../../cobalt_essentials/mod.ts";
-import { getSheets } from "./get_sheets.ts";
-
-const sheets = getSheets();
+import { TONEBOOK_TONES } from "./tones.ts";
 
 export const AppRoot = createCustomElement(() => {
-  const [currentSheet, setCurrentSheet] = useState(sheets[0]);
+  const [currentTone, setCurrentTone] = useState(TONEBOOK_TONES[0]);
   useEffect(() => {
     const handleHashChange = () => {
       const nextId = location.hash.replace("#", "");
-      const nextSheet = sheets.find((v) => v.id === nextId);
-      if (!nextSheet) {
+      const nextTone = TONEBOOK_TONES.find((v) => v.id === nextId);
+      if (!nextTone) {
         return;
       }
-      setCurrentSheet(nextSheet);
+      setCurrentTone(nextTone);
     };
     addEventListener("hashchange", handleHashChange);
     return () => {
@@ -38,7 +36,7 @@ export const AppRoot = createCustomElement(() => {
     </style>
     <div class="container">
       <app-menu></app-menu>
-      <iframe src=${`sheets/${currentSheet.id}/`}></iframe>
+      <iframe src=${`tones/${currentTone.id}/`}></iframe>
     </div>
   `;
 });

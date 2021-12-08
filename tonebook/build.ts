@@ -1,11 +1,11 @@
 import { fs } from "./deps.ts";
 import { buildUi } from "./build_ui.ts";
-import { buildSheet, ProcessedSheetEntry } from "./build_sheet.ts";
+import { buildTone, ToneContent } from "./build_tone.ts";
 
 export interface BuildOptions {
   outputDir: string;
   entries: string;
-  processEntry: (entry: string) => Promise<ProcessedSheetEntry>;
+  processEntry: (entry: string) => Promise<ToneContent>;
 }
 
 export async function build({
@@ -26,14 +26,14 @@ export async function build({
       files.push(v.path);
     }
   }
-  const sheets = await Promise.all(
+  const tones = await Promise.all(
     files.map((v) =>
-      buildSheet({
+      buildTone({
         entry: v,
         outputDir,
         processEntry,
       })
     )
   );
-  await buildUi({ outputDir, sheets });
+  await buildUi({ outputDir, tones });
 }

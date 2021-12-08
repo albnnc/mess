@@ -1,5 +1,5 @@
 import { BuildOptions } from "./build.ts";
-import { buildSheet } from "./build_sheet.ts";
+import { buildTone } from "./build_tone.ts";
 import { async, fs, modUtils, oak } from "./deps.ts";
 
 export interface WatchOptions
@@ -27,7 +27,7 @@ export function watch({
   };
   const watchEntry = async (entry: string) => {
     const handle = async.debounce(async () => {
-      const sheet = await buildSheet({
+      const sheet = await buildTone({
         entry,
         outputDir,
         processEntry,
