@@ -2,7 +2,7 @@
 import * as path from "https://deno.land/std@0.115.1/path/mod.ts";
 import * as esbuild from "https://deno.land/x/esbuild@v0.13.14/mod.js";
 import * as esbuildPluginHttp from "../esbuild_plugin_http/mod.ts";
-import * as pad from "../pad/mod.ts";
+import * as tonebook from "../tonebook/mod.ts";
 
 const isDev = Deno.args.includes("dev");
 const currentDir = path.dirname(path.fromFileUrl(import.meta.url));
@@ -28,12 +28,12 @@ const indexHtml = `
     <body>
       <script type="module" src="index.js"></script>
       <app-root></app-root>
-      ${isDev ? `<script>${pad.reloadScript}</script>` : ""}
+      ${isDev ? `<script>${tonebook.reloadScript}</script>` : ""}
     </body>
   </html>
 `;
 
-await pad.make({
+await tonebook.make({
   isDev,
   outputDir,
   entries: path.join(inputDir, "*.ts"),
