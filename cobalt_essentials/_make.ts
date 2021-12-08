@@ -1,5 +1,5 @@
 #!/usr/bin/env -S deno run -A --no-check
-import * as path from "https://deno.land/std@0.115.1/path/mod.ts";
+import * as path from "https://deno.land/std@0.117.0/path/mod.ts";
 import * as esbuild from "https://deno.land/x/esbuild@v0.13.14/mod.js";
 import * as esbuildPluginHttp from "../esbuild_plugin_http/mod.ts";
 import * as tonebook from "../tonebook/mod.ts";
@@ -23,11 +23,20 @@ const indexHtml = `
           background: rgb(20, 20, 20);
           color: rgb(200, 200, 200);
         }
+        .container {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          width: 100%;
+          min-height: 100vh;
+        }
       </style>
     </head>
     <body>
       <script type="module" src="index.js"></script>
-      <app-root></app-root>
+      <div class="container">
+        <app-root></app-root>
+      </div>
       ${isDev ? `<script>${tonebook.reloadScript}</script>` : ""}
     </body>
   </html>

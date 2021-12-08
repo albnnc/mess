@@ -23,7 +23,7 @@ export async function make({
   if (isDev) {
     const app = new oak.Application({ logErrors: false });
     app.use(
-      watch({
+      await watch({
         outputDir,
         entries,
         processEntry,
