@@ -15,7 +15,7 @@ export async function make({
   entries,
   processEntry,
 }: MakeOptions) {
-  await build({
+  const tones = await build({
     outputDir,
     entries,
     processEntry,
@@ -24,8 +24,9 @@ export async function make({
     const app = new oak.Application({ logErrors: false });
     app.use(
       await watch({
-        outputDir,
+        tones,
         entries,
+        outputDir,
         processEntry,
       })
     );

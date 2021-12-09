@@ -3,7 +3,7 @@ import { path, esbuild, log, fs, esbuildPluginHttp } from "./deps.ts";
 
 export interface BuildUiOptions {
   outputDir: string;
-  tones: ToneMeta[];
+  tones: Map<string, ToneMeta>;
 }
 
 export async function buildUi({ outputDir, tones }: BuildUiOptions) {
@@ -46,7 +46,9 @@ const getIndexHtml = (tones: BuildUiOptions["tones"]) => `
     <body>
       <app-root></app-root>
       <script type="module" src="index.js"></script>
-      <script>globalThis.TONEBOOK_TONES = ${JSON.stringify(tones)}</script>
+      <script>globalThis.TONEBOOK_TONES = ${JSON.stringify(
+        Array.from(tones).map(([_, v]) => v)
+      )}</script>
     </body>
   </html>
 `;

@@ -26,7 +26,7 @@ export async function build({
       files.push(v.path);
     }
   }
-  const tones = await Promise.all(
+  const toneMetas = await Promise.all(
     files.map((v) =>
       buildTone({
         entry: v,
@@ -35,5 +35,7 @@ export async function build({
       })
     )
   );
+  const tones = new Map(toneMetas.map((v) => [v.id, v]));
   await buildUi({ outputDir, tones });
+  return tones;
 }

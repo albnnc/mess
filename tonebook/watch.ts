@@ -1,13 +1,17 @@
-import { build, BuildOptions } from "./build.ts";
+import { BuildOptions } from "./build.ts";
 import { buildTone } from "./build_tone.ts";
-import { async, fs, modUtils, oak, path } from "./deps.ts";
+import { buildUi, BuildUiOptions } from "./build_ui.ts";
+import { cyrb53 } from "./cyrb53.ts";
+import { async, fs, log, modUtils, oak, path } from "./deps.ts";
 
 export interface WatchOptions
-  extends Pick<BuildOptions, "outputDir" | "entries" | "processEntry"> {
+  extends Pick<BuildOptions, "outputDir" | "entries" | "processEntry">,
+    Pick<BuildUiOptions, "tones"> {
   watchDebounceTime?: number;
 }
 
 export async function watch({
+  tones,
   outputDir,
   entries,
   processEntry,
@@ -50,7 +54,12 @@ export async function watch({
     const watcher = modUtils.watchModule(entry);
     watchers.add(watcher);
     for await (const event of watcher) {
-      if (["modify", "create", "remove"].includes(event.kind)) {
+      if (
+        event.kind === "modify" ||
+        event.kind === "create" ||
+        (event.kind === "remove" &&
+          event.paths.every((v) => !entriesRegExp.test(v)))
+      ) {
         handle();
       }
     }
@@ -65,14 +74,35 @@ export async function watch({
     watchers.clear();
     startWatching();
     for await (const event of Deno.watchFs(entriesDir)) {
-      if (
-        ["create", "remove"].includes(event.kind) &&
-        event.paths.some((v) => entriesRegExp.test(v))
-      ) {
+      if (!event.paths.some((v) => entriesRegExp.test(v))) {
+        continue;
+      }
+      if (event.kind === "create") {
+        for (const entry of event.paths) {
+          const tone = await buildTone({
+            entry,
+            outputDir,
+            processEntry,
+          });
+          tones.set(tone.id, tone);
+        }
+        break;
+      }
+      if (event.kind === "remove") {
+        for (const entry of event.paths) {
+          log.info(`Dropping "${entry}"`);
+          const toneId = "tone_" + cyrb53(entry);
+          const toneDir = path.join(outputDir, "tones", toneId);
+          await Deno.remove(toneDir, { recursive: true });
+          tones.delete(toneId);
+        }
         break;
       }
     }
-    // TODO: Restart here.
+    await buildUi({ outputDir, tones });
+    Array.from(sseTargets).map((v) =>
+      v.dispatchMessage({ id: "root", name: "root" })
+    );
     watch();
   };
   watch();

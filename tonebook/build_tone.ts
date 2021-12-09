@@ -23,17 +23,30 @@ export async function buildTone({
   processEntry,
 }: BuildToneOptions): Promise<ToneMeta> {
   log.info(`Building entry "${entry}"`);
-  const { name, files } = await processEntry(entry);
-  const id = "tone_" + cyrb53(entry).toString();
-  const sheetDir = path.join(outputDir, `tones/${id}`);
-  await fs.ensureDir(sheetDir);
-  await Promise.all(
-    Object.entries(files).map(async ([file, content]) => {
-      const filePath = path.join(sheetDir, file);
-      const fileDir = path.dirname(filePath);
-      await fs.ensureDir(fileDir);
-      await Deno.writeTextFile(filePath, content);
-    })
-  );
-  return { id, name };
+  const id = "tone_" + cyrb53(entry);
+  try {
+    const { name, files } = await processEntry(entry);
+    const toneDir = path.join(outputDir, "tones", id);
+    if (
+      await Deno.lstat(toneDir)
+        .then(() => true)
+        .catch(() => false)
+    ) {
+      // Removing existing entry before writing output.
+      await Deno.remove(toneDir, { recursive: true });
+    }
+    await fs.ensureDir(toneDir);
+    await Promise.all(
+      Object.entries(files).map(async ([file, content]) => {
+        const filePath = path.join(toneDir, file);
+        const fileDir = path.dirname(filePath);
+        await fs.ensureDir(fileDir);
+        await Deno.writeTextFile(filePath, content);
+      })
+    );
+    return { id, name };
+  } catch (e) {
+    log.error(`Error while building "${entry}":\n${e.message ?? e}`);
+    return { id, name: "?" };
+  }
 }
