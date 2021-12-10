@@ -4,7 +4,7 @@ import * as esbuild from "https://deno.land/x/esbuild@v0.13.14/mod.js";
 import * as esbuildPluginHttp from "../esbuild_plugin_http/mod.ts";
 import * as tonebook from "../tonebook/mod.ts";
 
-const isDev = Deno.args.includes("dev");
+const dev = Deno.args.includes("dev");
 const currentDir = path.dirname(path.fromFileUrl(import.meta.url));
 const inputDir = path.join(currentDir, "./tones");
 const outputDir = path.join(currentDir, "./build");
@@ -37,13 +37,13 @@ const indexHtml = `
       <div class="container">
         <app-root></app-root>
       </div>
-      ${isDev ? `<script>${tonebook.reloadScript}</script>` : ""}
+      ${dev ? `<script>${tonebook.createReloadScript()}</script>` : ""}
     </body>
   </html>
 `;
 
 await tonebook.make({
-  isDev,
+  dev,
   outputDir,
   entries: path.join(inputDir, "*.ts"),
   processEntry: async (entry) => {
@@ -51,7 +51,7 @@ await tonebook.make({
       entryPoints: [entry],
       write: false,
       bundle: true,
-      minify: !isDev,
+      minify: !dev,
       plugins: [await esbuildPluginHttp.create()],
     });
     const decoder = new TextDecoder();

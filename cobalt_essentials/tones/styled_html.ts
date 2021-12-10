@@ -17,7 +17,7 @@ customElements.define("app-root", AppRoot);
 
 const AppButton = createCustomElement(() => {
   const id = useMemo(() => Math.random().toString().slice(-4), []);
-  return html` <button>Increment id=${id}</button> `;
+  return html`<button>Increment id=${id}</button>`;
 });
 
 customElements.define("app-button", AppButton);

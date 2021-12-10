@@ -50,6 +50,7 @@ export async function watch({
         outputDir,
         processEntry,
       });
+      console.log(tone);
       Array.from(sseTargets).map((v) => v.dispatchMessage(tone));
     }, watchDebounceTime);
     const watcher = modUtils.watchModule(entry);
@@ -103,7 +104,11 @@ export async function watch({
         break;
       }
     }
-    await buildUi({ outputDir, toneDescriptions });
+    await buildUi({
+      dev: true,
+      outputDir,
+      toneDescriptions,
+    });
     Array.from(sseTargets).map((v) =>
       v.dispatchMessage({ id: "root", name: "root" })
     );

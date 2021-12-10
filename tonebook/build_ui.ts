@@ -1,18 +1,24 @@
+import { createReloadScript } from "./create_reload_script.ts";
 import { path, esbuild, log, fs, esbuildPluginHttp } from "./deps.ts";
 import { ToneDescription } from "./describe_tone.ts";
 
 export interface BuildUiOptions {
+  dev: boolean;
   outputDir: string;
   toneDescriptions: ToneDescription[];
 }
 
-export async function buildUi({ outputDir, toneDescriptions }: BuildUiOptions) {
+export async function buildUi({
+  dev,
+  toneDescriptions,
+  outputDir,
+}: BuildUiOptions) {
   log.info("Building main UI");
   const currentDir = path.dirname(path.fromFileUrl(import.meta.url));
   await fs.ensureDir(outputDir);
   await Deno.writeTextFile(
     path.join(outputDir, "index.html"),
-    createIndexHtml(toneDescriptions)
+    createIndexHtml({ dev, toneDescriptions })
   );
   await esbuild.build({
     entryPoints: [path.join(currentDir, "ui/index.ts")],
@@ -25,7 +31,10 @@ export async function buildUi({ outputDir, toneDescriptions }: BuildUiOptions) {
   esbuild.stop();
 }
 
-const createIndexHtml = (toneDescriptions: ToneDescription[]) => `
+const createIndexHtml = (options: {
+  dev: boolean;
+  toneDescriptions: ToneDescription[];
+}) => `
   <!DOCTYPE html>
   <html lang="en">
     <head>
@@ -48,10 +57,11 @@ const createIndexHtml = (toneDescriptions: ToneDescription[]) => `
       <script type="module" src="index.js"></script>
       <script>
         globalThis.TONEBOOK_TONE_DESCRIPTIONS =
-        ${JSON.stringify(toneDescriptions, null, 2)
+        ${JSON.stringify(options.toneDescriptions, null, 2)
           .split("\n")
           .join("\n        ")};
       </script>
+      ${options.dev ? `<script>${createReloadScript(true)}</script>` : ""}
     </body>
   </html>
 `;
