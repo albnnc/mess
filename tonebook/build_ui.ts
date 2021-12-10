@@ -1,18 +1,18 @@
-import { ToneMeta } from "./build_tone.ts";
 import { path, esbuild, log, fs, esbuildPluginHttp } from "./deps.ts";
+import { ToneDescription } from "./describe_tone.ts";
 
 export interface BuildUiOptions {
   outputDir: string;
-  tones: Map<string, ToneMeta>;
+  toneDescriptions: ToneDescription[];
 }
 
-export async function buildUi({ outputDir, tones }: BuildUiOptions) {
+export async function buildUi({ outputDir, toneDescriptions }: BuildUiOptions) {
   log.info("Building main UI");
   const currentDir = path.dirname(path.fromFileUrl(import.meta.url));
   await fs.ensureDir(outputDir);
   await Deno.writeTextFile(
     path.join(outputDir, "index.html"),
-    getIndexHtml(tones)
+    createIndexHtml(toneDescriptions)
   );
   await esbuild.build({
     entryPoints: [path.join(currentDir, "ui/index.ts")],
@@ -25,7 +25,7 @@ export async function buildUi({ outputDir, tones }: BuildUiOptions) {
   esbuild.stop();
 }
 
-const getIndexHtml = (tones: BuildUiOptions["tones"]) => `
+const createIndexHtml = (toneDescriptions: ToneDescription[]) => `
   <!DOCTYPE html>
   <html lang="en">
     <head>
@@ -46,9 +46,12 @@ const getIndexHtml = (tones: BuildUiOptions["tones"]) => `
     <body>
       <app-root></app-root>
       <script type="module" src="index.js"></script>
-      <script>globalThis.TONEBOOK_TONES = ${JSON.stringify(
-        Array.from(tones).map(([_, v]) => v)
-      )}</script>
+      <script>
+        globalThis.TONEBOOK_TONE_DESCRIPTIONS =
+        ${JSON.stringify(toneDescriptions, null, 2)
+          .split("\n")
+          .join("\n        ")};
+      </script>
     </body>
   </html>
 `;

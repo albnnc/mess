@@ -1,17 +1,19 @@
 import { createCustomElement, useEffect, useState } from "../../cobalt/mod.ts";
 import { styledHtml as html } from "../../cobalt_essentials/mod.ts";
-import { TONEBOOK_TONES } from "./tones.ts";
+import { TONEBOOK_TONE_DESCRIPTIONS } from "./tone_descriptions.ts";
 
 export const AppRoot = createCustomElement(() => {
-  const [currentTone, setCurrentTone] = useState(TONEBOOK_TONES[0]);
+  const [currentToneDescription, setCurrentToneDescription] = useState(
+    TONEBOOK_TONE_DESCRIPTIONS[0]
+  );
   useEffect(() => {
     const handleHashChange = () => {
       const nextId = location.hash.replace("#", "");
-      const nextTone = TONEBOOK_TONES.find((v) => v.id === nextId);
+      const nextTone = TONEBOOK_TONE_DESCRIPTIONS.find((v) => v.id === nextId);
       if (!nextTone) {
         return;
       }
-      setCurrentTone(nextTone);
+      setCurrentToneDescription(nextTone);
     };
     addEventListener("hashchange", handleHashChange);
     return () => {
@@ -36,8 +38,8 @@ export const AppRoot = createCustomElement(() => {
     </style>
     <div class="container">
       <app-menu></app-menu>
-      ${currentTone &&
-      html`<iframe src=${`tones/${currentTone.id}/`}></iframe>`}
+      ${currentToneDescription &&
+      html`<iframe src=${`tones/${currentToneDescription.id}/`}></iframe>`}
     </div>
   `;
 });

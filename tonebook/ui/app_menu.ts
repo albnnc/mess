@@ -1,10 +1,11 @@
 import { createCustomElement, useMemo } from "../../cobalt/mod.ts";
 import { styledHtml as html } from "../../cobalt_essentials/mod.ts";
-import { TONEBOOK_TONES } from "./tones.ts";
+import { TONEBOOK_TONE_DESCRIPTIONS } from "./tone_descriptions.ts";
 
 export const AppMenu = createCustomElement(() => {
-  const tones = useMemo(
-    () => TONEBOOK_TONES.sort((a, b) => a.name.localeCompare(b.name)),
+  const toneDescriptios = useMemo(
+    () =>
+      TONEBOOK_TONE_DESCRIPTIONS.sort((a, b) => a.name.localeCompare(b.name)),
     []
   );
   return html`
@@ -32,7 +33,7 @@ export const AppMenu = createCustomElement(() => {
       }
     </style>
     <div class="container">
-      ${tones.map(
+      ${toneDescriptios.map(
         (v) => html`
           <div key=${v.id}>
             <a href=${`#${v.id}`}>${v.name}</a>

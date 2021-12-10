@@ -1,13 +1,7 @@
-import { cyrb53 } from "./cyrb53.ts";
 import { path, fs, log } from "./deps.ts";
-
-export interface ToneMeta {
-  id: string;
-  name: string;
-}
+import { describeTone } from "./describe_tone.ts";
 
 export interface ToneContent {
-  name: string;
   files: Record<string, string>;
 }
 
@@ -21,11 +15,11 @@ export async function buildTone({
   entry,
   outputDir,
   processEntry,
-}: BuildToneOptions): Promise<ToneMeta> {
+}: BuildToneOptions) {
   log.info(`Building entry "${entry}"`);
-  const id = "tone_" + cyrb53(entry);
+  const { id } = describeTone(entry);
   try {
-    const { name, files } = await processEntry(entry);
+    const { files } = await processEntry(entry);
     const toneDir = path.join(outputDir, "tones", id);
     if (
       await Deno.lstat(toneDir)
@@ -44,9 +38,7 @@ export async function buildTone({
         await Deno.writeTextFile(filePath, content);
       })
     );
-    return { id, name };
   } catch (e) {
     log.error(`Error while building "${entry}":\n${e.message ?? e}`);
-    return { id, name: "?" };
   }
 }

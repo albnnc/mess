@@ -1,10 +1,11 @@
 import { fs } from "./deps.ts";
 import { buildUi } from "./build_ui.ts";
 import { buildTone, ToneContent } from "./build_tone.ts";
+import { describeTone } from "./describe_tone.ts";
 
 export interface BuildOptions {
-  outputDir: string;
   entries: string;
+  outputDir: string;
   processEntry: (entry: string) => Promise<ToneContent>;
 }
 
@@ -26,16 +27,16 @@ export async function build({
       files.push(v.path);
     }
   }
-  const toneMetas = await Promise.all(
-    files.map((v) =>
+  const toneDescriptions = files.map((v) => describeTone(v));
+  await Promise.all([
+    buildUi({ outputDir, toneDescriptions }),
+    ...files.map((v) =>
       buildTone({
         entry: v,
         outputDir,
         processEntry,
       })
-    )
-  );
-  const tones = new Map(toneMetas.map((v) => [v.id, v]));
-  await buildUi({ outputDir, tones });
-  return tones;
+    ),
+  ]);
+  return toneDescriptions;
 }
