@@ -45,12 +45,12 @@ export async function watch({
   const watchers = new Set<ReturnType<typeof modUtils.watchModule>>();
   const watchEntry = async (entry: string) => {
     const handle = async.debounce(async () => {
-      const tone = await buildTone({
+      await buildTone({
         entry,
         outputDir,
         processEntry,
       });
-      console.log(tone);
+      const tone = describeTone(entry);
       Array.from(sseTargets).map((v) => v.dispatchMessage(tone));
     }, watchDebounceTime);
     const watcher = modUtils.watchModule(entry);
