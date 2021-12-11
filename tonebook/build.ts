@@ -30,15 +30,18 @@ export async function build({
     }
   }
   const toneDescriptions = files.map((v) => describeTone(v));
-  await Promise.all([
-    buildUi({ dev, toneDescriptions, outputDir }),
-    ...files.map((v) =>
+  // One has to separate main UI building and
+  // tones building since the first one stops
+  // esbuild instance while other could use it.
+  await buildUi({ dev, toneDescriptions, outputDir });
+  await Promise.all(
+    files.map((v) =>
       buildTone({
         entry: v,
         outputDir,
         processEntry,
       })
-    ),
-  ]);
+    )
+  );
   return toneDescriptions;
 }
