@@ -3,9 +3,13 @@ import { styledHtml as html } from "../../cobalt_essentials/mod.ts";
 import { TONEBOOK_TONE_DESCRIPTIONS } from "./tone_descriptions.ts";
 
 export const AppRoot = createCustomElement(() => {
-  const [currentToneDescription, setCurrentToneDescription] = useState(
-    TONEBOOK_TONE_DESCRIPTIONS[0]
-  );
+  const [currentToneDescription, setCurrentToneDescription] = useState(() => {
+    const id = location.hash.replace("#", "");
+    return (
+      TONEBOOK_TONE_DESCRIPTIONS.find((v) => v.id === id) ??
+      TONEBOOK_TONE_DESCRIPTIONS[0]
+    );
+  });
   useEffect(() => {
     const handleHashChange = () => {
       const nextId = location.hash.replace("#", "");
