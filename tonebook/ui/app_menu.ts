@@ -3,7 +3,7 @@ import { styledHtml as html } from "../../cobalt_essentials/mod.ts";
 import { TONEBOOK_TONE_DESCRIPTIONS } from "./tone_descriptions.ts";
 
 export const AppMenu = createCustomElement(() => {
-  const toneDescriptios = useMemo(
+  const toneDescriptions = useMemo(
     () =>
       TONEBOOK_TONE_DESCRIPTIONS.sort((a, b) => a.name.localeCompare(b.name)),
     []
@@ -11,16 +11,27 @@ export const AppMenu = createCustomElement(() => {
   return html`
     <style>
       .container {
-        padding: 1.5rem 2.5rem;
-        max-width: 300px;
+        color-scheme: dark;
+        box-sizing: border-box;
         display: flex;
         flex-direction: column;
-        gap: 0.25rem;
+        gap: 0.5rem;
+        padding: 1.5rem 2rem;
+        min-width: 200px;
+        max-width: 250px;
+        height: 100%;
+        overflow-y: auto;
+        background: rgb(30, 30, 30);
       }
       a {
+        display: block;
         text-transform: uppercase;
         font-weight: 300;
         letter-spacing: 0.05em;
+        overflow: hidden;
+        flex: 0 0 auto;
+        white-space: nowrap;
+        text-overflow: ellipsis;
         &,
         &:visited,
         &:focus {
@@ -33,12 +44,8 @@ export const AppMenu = createCustomElement(() => {
       }
     </style>
     <div class="container">
-      ${toneDescriptios.map(
-        (v) => html`
-          <div key=${v.id}>
-            <a href=${`#${v.id}`}>${v.name}</a>
-          </div>
-        `
+      ${toneDescriptions.map(
+        (v) => html`<a key=${v.id} href=${`#${v.id}`}>${v.name}</a>`
       )}
     </div>
   `;

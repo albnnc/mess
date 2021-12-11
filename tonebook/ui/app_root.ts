@@ -27,12 +27,12 @@ export const AppRoot = createCustomElement(() => {
   return html`
     <style>
       .container {
-        width: 100vw;
-        min-height: 100vh;
-        color: rgb(200, 200, 200);
-        background: rgb(30, 30, 30);
         display: flex;
         align-items: stretch;
+        width: 100vw;
+        height: 100vh;
+        color: rgb(200, 200, 200);
+        background: rgb(20, 20, 20);
         font-family: "Roboto", sans-serif;
       }
       iframe {
