@@ -1,14 +1,21 @@
-import { createCustomElement, useMemo } from "../../cobalt/mod.ts";
+import { createCustomElement, useMemo, useState } from "../../cobalt/mod.ts";
 import { styledHtml as html } from "../../cobalt_essentials/mod.ts";
 import { TONEBOOK_TONE_DESCRIPTIONS } from "./tone_descriptions.ts";
 import { useCurrentToneDescription } from "./use_current_tone_description.ts";
 
 export const AppMenu = createCustomElement(() => {
+  const [query, setQuery] = useState("");
   const currentToneDescription = useCurrentToneDescription();
   const toneDescriptions = useMemo(
     () =>
-      TONEBOOK_TONE_DESCRIPTIONS.sort((a, b) => a.name.localeCompare(b.name)),
-    []
+      TONEBOOK_TONE_DESCRIPTIONS.sort((a, b) =>
+        a.name.localeCompare(b.name)
+      ).filter(
+        (v) =>
+          !query ||
+          v.name.toLocaleLowerCase().includes(query.toLocaleLowerCase())
+      ),
+    [query]
   );
   return html`
     <style>
@@ -18,12 +25,23 @@ export const AppMenu = createCustomElement(() => {
         display: flex;
         flex-direction: column;
         gap: 0.5rem;
-        padding: 1.5rem 2rem;
+        padding: 2rem;
         min-width: 200px;
         max-width: 250px;
         height: 100%;
         overflow-y: auto;
         background: rgb(30, 30, 30);
+      }
+      input {
+        border: none;
+        border-bottom: 1px solid rgb(255, 255, 255, 0.4);
+        padding: 0;
+        padding-bottom: 0.5rem;
+        font-size: 1rem;
+        text-transform: uppercase;
+        background: none;
+        outline: none;
+        margin-bottom: 1rem;
       }
       a {
         display: block;
@@ -49,6 +67,11 @@ export const AppMenu = createCustomElement(() => {
       }
     </style>
     <div class="container">
+      <input
+        placeholder="Search"
+        .value=${query}
+        @input=${(e: Event) => setQuery((e.target as HTMLInputElement).value)}
+      />
       ${toneDescriptions.map(
         (v) =>
           html`
