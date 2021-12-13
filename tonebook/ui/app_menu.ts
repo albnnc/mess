@@ -1,8 +1,10 @@
 import { createCustomElement, useMemo } from "../../cobalt/mod.ts";
 import { styledHtml as html } from "../../cobalt_essentials/mod.ts";
 import { TONEBOOK_TONE_DESCRIPTIONS } from "./tone_descriptions.ts";
+import { useCurrentToneDescription } from "./use_current_tone_description.ts";
 
 export const AppMenu = createCustomElement(() => {
+  const currentToneDescription = useCurrentToneDescription();
   const toneDescriptions = useMemo(
     () =>
       TONEBOOK_TONE_DESCRIPTIONS.sort((a, b) => a.name.localeCompare(b.name)),
@@ -41,11 +43,23 @@ export const AppMenu = createCustomElement(() => {
         &:hover {
           text-decoration: underline;
         }
+        &.current::before {
+          content: "➝ ";
+        }
       }
     </style>
     <div class="container">
       ${toneDescriptions.map(
-        (v) => html`<a key=${v.id} href=${`#${v.id}`}>${v.name}</a>`
+        (v) =>
+          html`
+            <a
+              key=${v.id}
+              href=${`#${v.id}`}
+              class=${v.id === currentToneDescription.id ? "current" : ""}
+            >
+              ${v.name}
+            </a>
+          `
       )}
     </div>
   `;

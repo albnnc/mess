@@ -1,29 +1,9 @@
-import { createCustomElement, useEffect, useState } from "../../cobalt/mod.ts";
+import { createCustomElement } from "../../cobalt/mod.ts";
 import { styledHtml as html } from "../../cobalt_essentials/mod.ts";
-import { TONEBOOK_TONE_DESCRIPTIONS } from "./tone_descriptions.ts";
+import { useCurrentToneDescription } from "./use_current_tone_description.ts";
 
 export const AppRoot = createCustomElement(() => {
-  const [currentToneDescription, setCurrentToneDescription] = useState(() => {
-    const id = location.hash.replace("#", "");
-    return (
-      TONEBOOK_TONE_DESCRIPTIONS.find((v) => v.id === id) ??
-      TONEBOOK_TONE_DESCRIPTIONS[0]
-    );
-  });
-  useEffect(() => {
-    const handleHashChange = () => {
-      const nextId = location.hash.replace("#", "");
-      const nextTone = TONEBOOK_TONE_DESCRIPTIONS.find((v) => v.id === nextId);
-      if (!nextTone) {
-        return;
-      }
-      setCurrentToneDescription(nextTone);
-    };
-    addEventListener("hashchange", handleHashChange);
-    return () => {
-      removeEventListener("hashchange", handleHashChange);
-    };
-  }, []);
+  const currentToneDescription = useCurrentToneDescription();
   return html`
     <style>
       .container {
