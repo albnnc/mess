@@ -33,15 +33,17 @@ export const AppMenu = createCustomElement(() => {
         background: rgb(30, 30, 30);
       }
       input {
-        border: none;
-        border-bottom: 1px solid rgb(255, 255, 255, 0.4);
+        margin-bottom: 1rem;
         padding: 0;
         padding-bottom: 0.5rem;
-        font-size: 1rem;
-        text-transform: uppercase;
+        border: none;
+        border-bottom: 1px solid rgb(255, 255, 255, 0.4);
         background: none;
         outline: none;
-        margin-bottom: 1rem;
+        font-size: 1rem;
+        text-transform: uppercase;
+        font-weight: 300;
+        letter-spacing: 0.05em;
       }
       a {
         display: block;
