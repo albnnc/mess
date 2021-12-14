@@ -35,7 +35,7 @@ export const AppMenu = createCustomElement(() => {
       input {
         margin-bottom: 1rem;
         padding: 0;
-        padding-bottom: 0.5rem;
+        padding-bottom: 0.25rem;
         border: none;
         border-bottom: 1px solid rgb(255, 255, 255, 0.4);
         background: none;
