@@ -5,7 +5,7 @@ import {
   EffectCleanup,
   RenderableElement,
 } from "../types.ts";
-import { ensureKey } from "../utils/mod.ts";
+import { compareDeps, ensureKey } from "../utils/mod.ts";
 import { useElement } from "./use_element.ts";
 
 export const useEffect = (fn: EffectCallback, deps?: Deps) => {
@@ -32,12 +32,7 @@ export const useEffect = (fn: EffectCallback, deps?: Deps) => {
     db.records.set(currentIndex, { fn, deps });
   } else {
     const record = db.records.get(currentIndex)!; // FIXME
-    if (
-      Array.isArray(deps) &&
-      Array.isArray(record.deps) &&
-      deps.length === record.deps.length &&
-      deps.every((v, i) => v === record.deps?.[i])
-    ) {
+    if (compareDeps(deps, record.deps)) {
       return;
     }
     Object.assign(record, { deps, fn });
