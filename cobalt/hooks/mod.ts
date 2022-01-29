@@ -1,3 +1,5 @@
+export * from "./use_context.ts";
+export * from "./use_context_provider.ts";
 export * from "./use_effect.ts";
 export * from "./use_element.ts";
 export * from "./use_lifecycle.ts";

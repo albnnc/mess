@@ -18,6 +18,17 @@ export type StateSetter<T> = (update: StateUpdate<T>) => void;
 export type EffectCleanup = () => void;
 export type EffectCallback = (() => void) | (() => EffectCleanup);
 
+export interface Context<T> {
+  name: string;
+  initialValue?: T;
+}
+export type ContextValue<T extends Context<unknown>> = T extends Context<
+  infer V
+>
+  ? V
+  : never;
+export type ContextCallback<T> = (value: T, dispose?: () => void) => void;
+
 export interface TemplateNodeObject {
   tag: string;
   attributes: Record<string, string>;
