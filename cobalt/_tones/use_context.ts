@@ -6,24 +6,26 @@ import {
 } from "../mod.ts";
 import { createContext } from "../utils/mod.ts";
 
-document.body.addEventListener("context-request", (ev) => {
-  console.log("unregistered", ev);
-});
-
 const context = createContext("number-context", 0);
 
-const AppButton = createCustomElement(() => {
-  console.log("rendering button");
+const ContextProvider = createCustomElement(() => {
+  useContextProvider(context, 1);
+  return html`<slot></slot>`;
+});
+
+const ContextConsumer = createCustomElement(() => {
   const value = useContext(context);
-  console.log("value", value);
-  return html`<button>context value = ${value}</button>`;
+  return html`context value = ${value}`;
 });
 
 const AppRoot = createCustomElement(() => {
-  console.log("rendering root");
-  useContextProvider(context, 1);
-  return html`<app-button></app-button>`;
+  return html`
+    <context-provider>
+      <context-consumer></context-consumer>
+    </context-provider>
+  `;
 });
 
-customElements.define("app-button", AppButton);
+customElements.define("context-provider", ContextProvider);
+customElements.define("context-consumer", ContextConsumer);
 customElements.define("app-root", AppRoot);

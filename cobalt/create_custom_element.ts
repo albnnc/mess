@@ -6,6 +6,8 @@ export const createCustomElement = (fn: RenderFn) => {
     constructor() {
       super();
       this.attachShadow({ mode: "open" });
+    }
+    connectedCallback() {
       claimElement(this, () => {
         useLifecycle().update();
       });

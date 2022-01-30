@@ -11,12 +11,12 @@ import { useElement } from "./use_element.ts";
 export const useEffect = (fn: EffectCallback, deps?: Deps) => {
   const element = useElement() as RenderableElement &
     Record<string | number | symbol, unknown>;
-  const db = ensureKey(element, EFFECT_DATA_KEY, initializeData);
-  if (!db.listening) {
-    db.listening = true;
+  const data = ensureKey(element, EFFECT_DATA_KEY, initializeData);
+  if (!data.listening) {
+    data.listening = true;
     element.addEventListener("updated", () => {
-      db.index = 0;
-      for (const v of db.records.values()) {
+      data.index = 0;
+      for (const v of data.records.values()) {
         if (v.clean && v.fn) {
           v.clean?.();
           delete v.clean;
@@ -27,15 +27,14 @@ export const useEffect = (fn: EffectCallback, deps?: Deps) => {
       }
     });
   }
-  const currentIndex = db.index++;
-  if (!db.records.has(currentIndex)) {
-    db.records.set(currentIndex, { fn, deps });
-  } else {
-    const record = db.records.get(currentIndex)!; // FIXME
-    if (compareDeps(deps, record.deps)) {
-      return;
+  const currentIndex = data.index++;
+  const record = data.records.get(currentIndex);
+  if (record) {
+    if (!compareDeps(deps, record.deps)) {
+      Object.assign(record, { fn, deps });
     }
-    Object.assign(record, { deps, fn });
+  } else {
+    data.records.set(currentIndex, { fn, deps });
   }
 };
 

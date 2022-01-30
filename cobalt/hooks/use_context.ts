@@ -8,13 +8,7 @@ export function useContext<T extends unknown>(context: Context<T>) {
   const element = useElement();
   const [value, setValue] = useState(context.initialValue);
   useEffect(() => {
-    console.log("dispatching event", element);
-    element.dispatchEvent(
-      new ContextRequestEvent(context, (v) => {
-        console.log("found provider with value", v);
-        setValue(v);
-      })
-    );
+    element.dispatchEvent(new ContextRequestEvent(context, setValue));
   }, []);
   return value;
 }

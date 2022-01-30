@@ -13,8 +13,6 @@ const getData = (element: RenderableElement) => {
   const data = {
     updating: false,
     update: () => {
-      // TODO: Is it still able to batch if called here?
-      data.updating = false;
       data.updating = false;
       const templateOutput = element.render();
       const templateNode: TemplateNode = {

@@ -9,32 +9,40 @@ export function useContextProvider<T extends unknown>(
   value: T
 ) {
   const element = useElement();
-  const callbacks = useMemo(() => new Set<ContextCallback<T>>(), []);
-  useEffect(() => {
-    callbacks.clear();
-  }, [context]);
-  useEffect(() => {
-    for (const fn of callbacks.values()) {
-      fn(value);
-    }
-  }, [value]);
-  useEffect(() => {
+  const data = useMemo(
+    () => ({
+      context,
+      value,
+      listening: false,
+      callbacks: new Set<ContextCallback<T>>(),
+    }),
+    []
+  );
+  if (!data.listening) {
+    data.listening = true;
     const handleContextRequest = (
       ev: ContextRequestEvent<Context<unknown>>
     ) => {
-      console.log("got event");
-      if (ev.context.name === context.name) {
-        ev.callback(value);
+      if (ev.context.name === data.context.name) {
+        ev.callback(data.value);
         if (ev.multiple) {
-          callbacks.add(ev.callback);
+          data.callbacks.add(ev.callback);
         }
         ev.stopPropagation();
       }
     };
-    console.log("registering listener", element);
     element.addEventListener("context-request", handleContextRequest);
-    return () => {
-      element.removeEventListener("context-request", handleContextRequest);
-    };
-  }, [context, value]);
+  }
+  useEffect(() => {
+    data.context = context;
+    data.callbacks.clear();
+  }, [context]);
+  useEffect(() => {
+    data.value = value;
+    for (const fn of data.callbacks.values()) {
+      fn(value, () => {
+        data.callbacks.delete(fn);
+      });
+    }
+  }, [value]);
 }
