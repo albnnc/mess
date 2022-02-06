@@ -1,52 +1,42 @@
-import { EFFECT_DATA_KEY } from "../constants.ts";
-import {
-  EffectCallback,
-  Deps,
-  EffectCleanup,
-  RenderableElement,
-} from "../types.ts";
-import { compareDeps, ensureKey } from "../utils/mod.ts";
-import { useElement } from "./use_element.ts";
+import { EFFECT_HOOK_KEY } from "../constants.ts";
+import { EffectCallback, Deps, EffectCleanup } from "../types.ts";
+import { compareDeps } from "../utils/mod.ts";
+import { useEventListener } from "./use_event_listener.ts";
+import { useChain } from "./_use_chain.ts";
 
-export const useEffect = (fn: EffectCallback, deps?: Deps) => {
-  const element = useElement() as RenderableElement &
-    Record<string | number | symbol, unknown>;
-  const data = ensureKey(element, EFFECT_DATA_KEY, initializeData);
-  if (!data.listening) {
-    data.listening = true;
-    element.addEventListener("updated", () => {
-      data.index = 0;
-      for (const v of data.records.values()) {
-        if (v.clean && v.fn) {
-          v.clean?.();
-          delete v.clean;
-        }
-        const clean = v.fn?.();
-        clean && (v.clean = clean);
-        delete v.fn;
+export interface EffectChainItem {
+  fn?: EffectCallback;
+  clean?: EffectCleanup;
+  deps?: Deps;
+}
+
+export function useEffect(fn: EffectCallback, deps?: Deps) {
+  const [_, index, items] = useChain<EffectChainItem>(
+    EFFECT_HOOK_KEY,
+    (prior) => {
+      if (!prior) {
+        return { fn, deps };
       }
-    });
-  }
-  const currentIndex = data.index++;
-  const record = data.records.get(currentIndex);
-  if (record) {
-    if (!compareDeps(deps, record.deps)) {
-      Object.assign(record, { fn, deps });
+      if (!compareDeps(deps, prior.deps)) {
+        Object.assign(prior, { fn, deps });
+      }
+      return prior;
     }
-  } else {
-    data.records.set(currentIndex, { fn, deps });
-  }
-};
-
-const initializeData = () => ({
-  records: new Map<
-    number,
-    {
-      fn?: EffectCallback;
-      clean?: EffectCleanup;
-      deps?: Deps;
-    }
-  >(),
-  index: 0,
-  listening: false,
-});
+  );
+  useEventListener(
+    "updated",
+    !index &&
+      (() => {
+        for (const v of items.values()) {
+          if (v.clean && v.fn) {
+            v.clean?.();
+            delete v.clean;
+          }
+          const clean = v.fn?.();
+          clean && (v.clean = clean);
+          delete v.fn;
+        }
+      }),
+    []
+  );
+}

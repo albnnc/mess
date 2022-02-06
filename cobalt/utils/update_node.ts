@@ -1,5 +1,5 @@
 import {
-  EVENT_LISTENERS_KEY,
+  EVENT_LISTENER_REGISTRY_KEY,
   NODE_TYPE_FRAGMENT,
   NODE_TYPE_ELEMENT,
   NODE_TYPE_TEXT,
@@ -19,7 +19,7 @@ export const updateNode = (node: Node, templateNode: TemplateNode) => {
     const el = node as Element & Record<string | number | symbol, unknown>; // FIXME
     const eventListeners = ensureKey(
       el,
-      EVENT_LISTENERS_KEY,
+      EVENT_LISTENER_REGISTRY_KEY,
       () => new Map<string, EventListenerOrEventListenerObject>()
     );
     Object.entries(events).forEach(([k, v]) => {

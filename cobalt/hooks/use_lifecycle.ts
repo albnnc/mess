@@ -1,4 +1,4 @@
-import { LIFECYCLE_DATA_KEY } from "../constants.ts";
+import { LIFECYCLE_HOOK_KEY } from "../constants.ts";
 import { RenderableElement, TemplateNode } from "../types.ts";
 import { ensureKey, updateNode } from "../utils/mod.ts";
 import { useElement } from "./use_element.ts";
@@ -6,7 +6,7 @@ import { useElement } from "./use_element.ts";
 export const useLifecycle = () => {
   const element = useElement() as RenderableElement &
     Record<string | number | symbol, unknown>;
-  return ensureKey(element, LIFECYCLE_DATA_KEY, () => getData(element));
+  return ensureKey(element, LIFECYCLE_HOOK_KEY, () => getData(element));
 };
 
 const getData = (element: RenderableElement) => {
