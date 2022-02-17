@@ -8,7 +8,7 @@ export function useContext<T extends unknown>(context: Context<T>) {
   const element = useElement();
   const [value, setValue] = useState(context.initialValue);
   useEffect(() => {
-    element.dispatchEvent(new ContextRequestEvent(context, setValue));
+    element.dispatchEvent(new ContextRequestEvent(context, setValue, true));
   }, []);
   return value;
 }
