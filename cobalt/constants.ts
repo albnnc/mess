@@ -2,7 +2,7 @@ export const NODE_TYPE_ELEMENT = 1;
 export const NODE_TYPE_TEXT = 3;
 export const NODE_TYPE_FRAGMENT = 11;
 
-export const EVENT_LISTENER_REGISTRY_KEY = Symbol("EVENT_LISTENERS");
+export const EVENT_LISTENER_REGISTRY_KEY = Symbol("EVENT_LISTENER_REGISTRY");
 
 export const LIFECYCLE_HOOK_KEY = Symbol("LIFECYCLE_HOOK");
 export const EVENT_LISTENER_HOOK_KEY = Symbol("EVENT_LISTENER_HOOK");

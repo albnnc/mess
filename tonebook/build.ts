@@ -1,20 +1,24 @@
-import { fs } from "./deps.ts";
+import { fs, oak } from "./deps.ts";
 import { buildUi } from "./build_ui.ts";
 import { buildTone, ToneContent } from "./build_tone.ts";
 import { describeTone } from "./describe_tone.ts";
+import { watch } from "./watch.ts";
+import { serve } from "./serve.ts";
 
 export interface BuildOptions {
-  dev: boolean;
   entries: string;
   outputDir: string;
   processEntry: (entry: string) => Promise<ToneContent>;
+  dev?: boolean;
+  port?: number;
 }
 
 export async function build({
-  dev,
-  outputDir,
   entries,
+  outputDir,
   processEntry,
+  dev,
+  port = 1234,
 }: BuildOptions) {
   if (
     await Deno.lstat(outputDir)
@@ -43,5 +47,17 @@ export async function build({
       })
     )
   );
-  return toneDescriptions;
+  if (dev) {
+    const app = new oak.Application({ logErrors: false });
+    app.use(
+      await watch({
+        toneDescriptions,
+        entries,
+        outputDir,
+        processEntry,
+      })
+    );
+    app.use(serve({ outputDir }));
+    await app.listen({ port });
+  }
 }
