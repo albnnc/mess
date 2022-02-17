@@ -1,6 +1,6 @@
 import { LIFECYCLE_HOOK_KEY } from "../constants.ts";
 import { RenderableElement, TemplateNode } from "../types.ts";
-import { ensureKey, updateNode } from "../utils/mod.ts";
+import { dispatchLocalEvent, ensureKey, updateNode } from "../utils/mod.ts";
 import { useElement } from "./use_element.ts";
 
 export const useLifecycle = () => {
@@ -39,14 +39,4 @@ const getData = (element: RenderableElement) => {
     },
   };
   return data;
-};
-
-const dispatchLocalEvent = (el: HTMLElement, event: string) => {
-  el.dispatchEvent(
-    new CustomEvent(event, {
-      bubbles: false,
-      composed: false,
-      cancelable: false,
-    })
-  );
 };

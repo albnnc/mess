@@ -39,4 +39,15 @@ export function useEffect(fn: EffectCallback, deps?: Deps) {
       }),
     []
   );
+  useEventListener(
+    "disconnected",
+    !index &&
+      (() => {
+        for (const v of items.values()) {
+          v.clean?.();
+        }
+        items.clear();
+      }),
+    []
+  );
 }
