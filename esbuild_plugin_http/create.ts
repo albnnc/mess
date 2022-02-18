@@ -1,4 +1,4 @@
-import { esbuild, modUtils } from "./deps.ts";
+import { esbuild, mod } from "./deps.ts";
 
 export interface EsbuildPluginHttpOptions {
   cacheDir?: string;
@@ -7,7 +7,7 @@ export interface EsbuildPluginHttpOptions {
 export async function create({
   cacheDir: passedCacheDir,
 }: EsbuildPluginHttpOptions = {}): Promise<esbuild.Plugin> {
-  const cacheDir = passedCacheDir ?? (await modUtils.locateCacheDir());
+  const cacheDir = passedCacheDir ?? (await mod.locateCacheDir());
   return {
     name: "http",
     setup(build) {
@@ -20,7 +20,7 @@ export async function create({
         namespace: "http-url",
       }));
       build.onLoad({ filter: /.*/, namespace: "http-url" }, async (args) => {
-        const cacheFile = await modUtils.locateCacheFile(args.path, {
+        const cacheFile = await mod.locateCacheFile(args.path, {
           cacheDir,
         });
         if (cacheFile) {

@@ -9,4 +9,4 @@ export * as caseUtils from "https://deno.land/x/case@v2.1.0/mod.ts";
 export * as oak from "https://deno.land/x/oak@v10.2.0/mod.ts";
 export * as esbuild from "https://deno.land/x/esbuild@v0.13.14/mod.js";
 export * as esbuildPluginHttp from "../esbuild_plugin_http/mod.ts";
-export * as modUtils from "../mod_utils/mod.ts";
+export * as mod from "../mod/mod.ts";

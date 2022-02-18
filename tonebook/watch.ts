@@ -2,7 +2,7 @@ import { BuildOptions } from "./build.ts";
 import { buildTone } from "./build_tone.ts";
 import { buildUi } from "./build_ui.ts";
 import { cyrb53 } from "./cyrb53.ts";
-import { async, fs, log, modUtils, oak, path } from "./deps.ts";
+import { async, fs, log, mod, oak, path } from "./deps.ts";
 import { describeTone, ToneDescription } from "./describe_tone.ts";
 
 export interface WatchOptions
@@ -42,7 +42,7 @@ export async function watch({
       await next();
     }
   };
-  const watchers = new Set<ReturnType<typeof modUtils.watchModule>>();
+  const watchers = new Set<ReturnType<typeof mod.watchModule>>();
   const watchEntry = async (entry: string) => {
     const handle = async.debounce(async () => {
       await buildTone({
@@ -53,7 +53,7 @@ export async function watch({
       const tone = describeTone(entry);
       Array.from(sseTargets).map((v) => v.dispatchMessage(tone));
     }, watchDebounceTime);
-    const watcher = modUtils.watchModule(entry);
+    const watcher = mod.watchModule(entry);
     watchers.add(watcher);
     for await (const event of watcher) {
       if (
