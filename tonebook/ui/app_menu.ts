@@ -24,56 +24,7 @@ export const AppMenu = createCustomElement(() => {
   );
   return html`
     <style>
-      ${css`
-        .container {
-          color-scheme: dark;
-          box-sizing: border-box;
-          display: flex;
-          flex-direction: column;
-          gap: 0.5rem;
-          padding: 2rem;
-          min-width: 200px;
-          max-width: 250px;
-          height: 100%;
-          overflow-y: auto;
-          background: rgb(30, 30, 30);
-        }
-        input {
-          margin-bottom: 1rem;
-          padding: 0;
-          padding-bottom: 0.25rem;
-          border: none;
-          border-bottom: 1px solid rgb(255, 255, 255, 0.4);
-          background: none;
-          outline: none;
-          font-size: 1rem;
-          text-transform: uppercase;
-          font-weight: 300;
-          letter-spacing: 0.05em;
-        }
-        a {
-          display: block;
-          text-transform: uppercase;
-          font-weight: 300;
-          letter-spacing: 0.05em;
-          overflow: hidden;
-          flex: 0 0 auto;
-          white-space: nowrap;
-          text-overflow: ellipsis;
-          &,
-          &:visited,
-          &:focus {
-            color: inherit;
-            text-decoration: none;
-          }
-          &:hover {
-            text-decoration: underline;
-          }
-          &.current::before {
-            content: "➝ ";
-          }
-        }
-      `}
+      ${style}
     </style>
     <div class="container">
       <input
@@ -98,3 +49,51 @@ export const AppMenu = createCustomElement(() => {
 });
 
 customElements.define("app-menu", AppMenu);
+
+const style = css`
+  .container {
+    color-scheme: dark;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    padding: 2rem 0;
+    width: 250px;
+    height: 100%;
+    overflow-y: auto;
+    background: rgb(30, 30, 30);
+  }
+  input {
+    margin-bottom: 1rem;
+    padding: 0 1.5rem;
+    padding-bottom: 0.5rem;
+    border: none;
+    border-bottom: 1px solid rgb(255, 255, 255, 0.4);
+    background: none;
+    outline: none;
+    font-size: 1rem;
+    text-transform: uppercase;
+    font-weight: 300;
+    letter-spacing: 0.05em;
+  }
+  a {
+    flex: 0 0 auto;
+    display: block;
+    padding: 0.5rem 1.5rem;
+    text-decoration: none;
+    text-transform: uppercase;
+    font-weight: 300;
+    letter-spacing: 0.05em;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    &,
+    &:visited,
+    &:focus {
+      color: inherit;
+    }
+    &:hover,
+    &.current {
+      background-color: rgba(255, 255, 255, 0.1);
+    }
+  }
+`;
