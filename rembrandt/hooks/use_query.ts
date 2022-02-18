@@ -1,4 +1,6 @@
-import { useEffect, useElement, useState } from "../deps.ts";
+import { useEffect } from "./use_effect.ts";
+import { useElement } from "./use_element.ts";
+import { useState } from "./use_state.ts";
 
 export function useQuery(query: string) {
   const { shadowRoot } = useElement();

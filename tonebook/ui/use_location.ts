@@ -1,4 +1,4 @@
-import { useEffect, useState } from "../../cobalt/mod.ts";
+import { useEffect, useState } from "../../rembrandt/mod.ts";
 
 export function useLocation() {
   const [locationCopy, setLocationCopy] = useState(location);

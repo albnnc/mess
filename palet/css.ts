@@ -1,4 +1,4 @@
-import { stylis } from "../deps.ts";
+import { stylis } from "./deps.ts";
 import { cyrb53 } from "./cyrb53.ts";
 
 const cache = new Map<number, string>();

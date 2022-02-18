@@ -1,4 +1,4 @@
-import { useMemo } from "../../cobalt/mod.ts";
+import { useMemo } from "../../rembrandt/mod.ts";
 import { TONEBOOK_TONE_DESCRIPTIONS } from "./tone_descriptions.ts";
 import { useLocation } from "./use_location.ts";
 
