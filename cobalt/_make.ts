@@ -1,14 +1,17 @@
 #!/usr/bin/env -S deno run -A --no-check
 import * as path from "https://deno.land/std@0.121.0/path/mod.ts";
+import * as log from "https://deno.land/std@0.121.0/log/mod.ts";
 import * as esbuild from "https://deno.land/x/esbuild@v0.13.14/mod.js";
 import * as esbuildPluginHttp from "../esbuild_plugin_http/mod.ts";
 import * as tonebook from "../tonebook/mod.ts";
 import * as make from "../make/mod.ts";
+import * as mod from "../mod/mod.ts";
+
+const currentDir = path.dirname(path.fromFileUrl(import.meta.url));
+const inputDir = path.join(currentDir, "./_tones");
+const outputDir = path.join(currentDir, "./build");
 
 async function buildTonebook(dev: boolean) {
-  const currentDir = path.dirname(path.fromFileUrl(import.meta.url));
-  const inputDir = path.join(currentDir, "./_tones");
-  const outputDir = path.join(currentDir, "./build");
   const indexHtml = `
     <!DOCTYPE html>
     <html lang="en">
@@ -73,4 +76,9 @@ async function buildTonebook(dev: boolean) {
 
 make.task("dev", () => buildTonebook(true));
 make.task("doc", () => buildTonebook(false));
+make.task("size", async () => {
+  await mod.sizeModule(path.join(currentDir, "mod.ts"), {
+    logger: log.getLogger(),
+  });
+});
 await make.exec(Deno.args);
