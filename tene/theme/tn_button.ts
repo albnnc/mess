@@ -8,7 +8,7 @@ const basicKinds = new Set([
   "danger",
 ]);
 
-function getBasicKind(kind: string) {
+function getBasicKindTheme(kind: string) {
   if (!basicKinds.has(kind)) {
     return "";
   }
@@ -40,6 +40,6 @@ export const tnButton: ElementTheme = ({ kind }) => css`
     &:focus {
       outline: solid var(--color-outline);
     }
-    ${getBasicKind(kind)}
+    ${getBasicKindTheme(kind)}
   }
 `;
