@@ -1,8 +1,18 @@
-import { createContext, useContext } from "./deps.ts";
+import { createContext, useContext, useElement } from "./deps.ts";
 
-export const ThemeContext = createContext<Record<string, string>>("THEME");
+export type ElementTheme =
+  | string
+  | ((element: Element & Record<string, string>) => string); // FIXME
+export type Theme = Record<string, ElementTheme>;
 
-export function useThemeStyle(key: string) {
+export const ThemeContext = createContext<Theme>("THEME");
+
+export function useThemeStyle(tagName?: string) {
+  const element = useElement();
+  const targetTagName = tagName ?? element.tagName.toLocaleLowerCase();
   const theme = useContext(ThemeContext) ?? {};
-  return theme[key];
+  const elementTheme = theme[targetTagName];
+  return elementTheme instanceof Function
+    ? elementTheme(element as any) // FIXME
+    : elementTheme;
 }

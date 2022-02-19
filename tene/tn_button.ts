@@ -1,7 +1,7 @@
 import { createCustomElement, html, useThemeStyle } from "./deps.ts";
 
 export const TnButton = createCustomElement(() => {
-  const style = useThemeStyle("button");
+  const style = useThemeStyle();
   return html`
     <style>
       ${style}
