@@ -56,11 +56,11 @@ export const tnSystem: ElementTheme = css`
     --font-size-xl: 22px;
     --font-size-xxl: 40px;
 
-    --font-family-normal: Roboto, "Helvetica Neue", sans-serif;
-    --font-family-monospace: Menlo, monospace;
-
     --font-weight-normal: 400;
     --font-weight-heading: 300;
+
+    --font-family-normal: Roboto, "Helvetica Neue", sans-serif;
+    --font-family-monospace: Menlo, monospace;
 
     --shadow-xxs: 0px 2px 1px -1px rgba(0, 0, 0, 0.12),
       0px 1px 1px 0px rgba(0, 0, 0, 0.12), 0px 1px 3px 0px rgba(0, 0, 0, 0.12);
@@ -77,5 +77,9 @@ export const tnSystem: ElementTheme = css`
     --shadow-xxl: 0px 6px 6px -3px rgba(0, 0, 0, 0.12),
       0px 10px 14px 1px rgba(0, 0, 0, 0.12),
       0px 4px 18px 3px rgba(0, 0, 0, 0.12);
+
+    font-size: var(--font-size-m);
+    font-weight: var(--font-weight-normal);
+    font-family: var(--font-family-normal);
   }
 `;
