@@ -3,18 +3,27 @@ import {
   html,
   ThemeContext,
   useContextProvider,
-  useState,
 } from "../deps.ts";
 import { theme } from "../mod.ts";
 
 const AppRoot = createCustomElement(() => {
   useContextProvider(ThemeContext, theme);
-  const [x, setX] = useState(0);
   return html`
     <tn-system>
-      <tn-button .kind="primary" @click=${() => setX((v) => v + 1)}>
-        Increment ${x}
-      </tn-button>
+      <style>
+        div {
+          display: flex;
+          flex-direction: column;
+          gap: var(--space-s);
+        }
+      </style>
+      <div>
+        <tn-button .kind="primary">Primary</tn-button>
+        <tn-button .kind="secondary">Secondary</tn-button>
+        <tn-button .kind="success">Success</tn-button>
+        <tn-button .kind="warning">Warning</tn-button>
+        <tn-button .kind="danger">Danger</tn-button>
+      </div>
     </tn-system>
   `;
 });
