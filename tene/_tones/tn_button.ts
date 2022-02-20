@@ -18,6 +18,7 @@ const AppRoot = createCustomElement(() => {
         }
       </style>
       <div>
+        <tn-button>Default</tn-button>
         <tn-button .kind="primary">Primary</tn-button>
         <tn-button .kind="secondary">Secondary</tn-button>
         <tn-button .kind="success">Success</tn-button>

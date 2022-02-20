@@ -27,15 +27,16 @@ function getBasicKindTheme(kind: string) {
 
 export const tnButton: ElementTheme = ({ kind }) => css`
   button {
-    outline: none;
+    margin: 0;
+    padding: 0;
     border: none;
-    border-radius: var(--radius-s);
-    cursor: pointer;
-    font-size: inherit;
-    font-family: inherit;
+    border-radius: var(--radius-m);
+    outline: none;
     background: transparent;
     color: inherit;
-    border: none;
+    font-size: inherit;
+    font-family: inherit;
+    cursor: pointer;
     user-select: none;
     &:focus {
       outline: solid var(--color-outline);
