@@ -6,18 +6,24 @@ export const tnInput: ElementTheme = css`
     padding: var(--space-s);
     line-height: calc(1.5 * 1rem);
     font-size: var(--font-size-m);
-    border: 1px solid var(--color-border);
+    /* border: 1px solid var(--color-border); */
+    border: none;
     border-radius: var(--radius-m);
     outline: none;
-    background: transparent;
-    color: var(--color-surface-on);
+    /* background: transparent; */
+    /* color: var(--color-surface-on); */
+    background-color: var(--color-secondary);
+    color: var(--color-secondary-on);
+    opacity: 0.7;
     &:focus {
-      border: 1px solid var(--color-primary);
-      box-shadow: inset 0 0 0 1px var(--color-primary);
+      opacity: 1;
+      outline: solid var(--color-outline);
+      /* border: 1px solid var(--color-primary); */
+      /* box-shadow: inset 0 0 0 1px var(--color-primary); */
     }
-    &:disabled {
+    /* &:disabled {
       border: 1px dashed var(--color-border);
       pointer-events: none;
-    }
+    } */
   }
 `;

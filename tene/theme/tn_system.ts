@@ -29,11 +29,11 @@ export const tnSystem: ElementTheme = css`
     --color-exterior: #202224;
     --color-exterior-accent: #2b2e31;
     --color-exterior-on: #fafafa;
-    --color-outline: #ffffff;
-    --color-outline-accent: #ffffff;
+    --color-outline: #ffffffd9;
+    --color-outline-accent: #ffffffd9;
     --color-outline-on: #333333;
-    --color-border: rgba(255, 255, 255, 0.15);
-    --color-border-accent: rgba(255, 255, 255, 0.45);
+    --color-border: #ffffff26;
+    --color-border-accent: #ffffff73;
     --color-border-on: #fafafa;
 
     --space-xxs: 2px;

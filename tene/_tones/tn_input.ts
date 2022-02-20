@@ -10,7 +10,16 @@ const AppRoot = createCustomElement(() => {
   useContextProvider(ThemeContext, theme);
   return html`
     <tn-system>
-      <tn-input></tn-input>
+      <style>
+        div {
+          display: flex;
+          flex-direction: column;
+          gap: var(--space-s);
+        }
+      </style>
+      <div>
+        <tn-input .value=${"Default"}></tn-input>
+      </div>
     </tn-system>
   `;
 });

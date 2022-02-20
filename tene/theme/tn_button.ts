@@ -38,7 +38,7 @@ export const tnButton: ElementTheme = ({ kind }) => css`
     font-family: inherit;
     cursor: pointer;
     user-select: none;
-    &:focus {
+    &:focus-visible {
       outline: solid var(--color-outline);
     }
     ${getBasicKindTheme(kind)}
