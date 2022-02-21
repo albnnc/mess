@@ -1,7 +1,8 @@
-import { Initializer } from "../types.ts";
+import { Initializer, RenderableElement } from "../types.ts";
 import { useElement } from "./use_element.ts";
 import { useState } from "./use_state.ts";
 import { useEffect } from "./use_effect.ts";
+import { getInitialValue } from "../utils/mod.ts";
 
 export interface PropOptions {
   name: string;
@@ -12,7 +13,14 @@ export const useProp = <T>(
   { name }: PropOptions
 ) => {
   const element = useElement();
-  const [value, setValue] = useState(initializer);
+  // TODO: Consider defining getter / setter pair bofore
+  // one is able to set properties (e.g. in element constructor)
+  // in order to remove this check.
+  const [value, setValue] = useState(() =>
+    name in element
+      ? (element as RenderableElement & Record<string, T>)[name]
+      : getInitialValue(initializer)
+  );
   useEffect(() => {
     Object.defineProperty(element, name, {
       configurable: true,
