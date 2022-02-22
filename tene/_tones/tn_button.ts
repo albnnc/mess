@@ -1,5 +1,5 @@
 import { createCustomElement, html } from "../deps.ts";
-import "../mod.ts";
+import "../register.ts";
 
 const AppRoot = createCustomElement(() => {
   return html`

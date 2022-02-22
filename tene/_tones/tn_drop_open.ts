@@ -1,5 +1,6 @@
 import { createCustomElement, html, useQuery } from "../deps.ts";
 import { useDrop } from "../mod.ts";
+import "../register.ts";
 
 const AppButton = createCustomElement(() => {
   const openDrop = useDrop();

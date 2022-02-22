@@ -11,5 +11,3 @@ export const TnDrop = createCustomElement(() => {
     </div>
   `;
 });
-
-customElements.define("tn-drop", TnDrop);

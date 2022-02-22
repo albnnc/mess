@@ -10,7 +10,9 @@ import {
 } from "../deps.ts";
 import { theme } from "../mod.ts";
 
-const TnSystemPortalHolder = createCustomElement(() => html`<div></div>`);
+export const TnSystemPortalHolder = createCustomElement(
+  () => html`<div></div>`
+);
 
 export const TnSystem = createCustomElement(() => {
   const style = useThemeStyle();
@@ -29,6 +31,3 @@ export const TnSystem = createCustomElement(() => {
     <tn-system-portal-holder></tn-system-portal-holder>
   `;
 });
-
-customElements.define("tn-system-portal-holder", TnSystemPortalHolder);
-customElements.define("tn-system", TnSystem);

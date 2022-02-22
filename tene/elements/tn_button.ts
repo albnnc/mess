@@ -11,5 +11,3 @@ export const TnButton = createCustomElement(() => {
     </button>
   `;
 });
-
-customElements.define("tn-button", TnButton);

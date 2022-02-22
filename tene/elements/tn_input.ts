@@ -16,5 +16,3 @@ export const TnInput = createCustomElement(() => {
     />
   `;
 });
-
-customElements.define("tn-input", TnInput);
