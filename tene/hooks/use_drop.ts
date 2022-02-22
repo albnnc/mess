@@ -1,6 +1,6 @@
 import { systemContext } from "../contexts/mod.ts";
 import {
-  popper,
+  floating,
   TemplateNode,
   updateChildren,
   useContext,
@@ -9,23 +9,34 @@ import {
 
 export interface DropOptions {
   render: () => TemplateNode | TemplateNode[];
-  kind?: string;
-  placement?: popper.Placement;
+  tailored?: boolean;
+  placement?: floating.Placement;
 }
 
 export function useDrop() {
   const { portal } = useContext(systemContext) ?? {};
   return useMemoFn(
-    (anchor: Element, { render, kind, ...rest }: DropOptions) => {
+    (anchor: Element, { render, tailored, placement }: DropOptions) => {
       if (!portal) {
         return;
       }
       const data = render();
       const drop = document.createElement("tn-drop");
-      Object.assign(drop, { kind });
       updateChildren(drop, Array.isArray(data) ? data : [data]);
       portal.appendChild(drop);
-      popper.createPopper(anchor, drop, rest);
+      const applyStyle = ({ x = 0, y = 0, strategy = "absolute" }) => {
+        Object.assign(drop.style, {
+          position: strategy,
+          left: `${x}px`,
+          top: `${y}px`,
+        });
+        if (tailored) {
+          const box = anchor.getBoundingClientRect();
+          drop.style.width = `${box.width}px`;
+        }
+      };
+      applyStyle({});
+      floating.computePosition(anchor, drop, { placement }).then(applyStyle);
       const handleClick = (ev: MouseEvent) => {
         if (ev.composedPath().includes(drop)) {
           return;

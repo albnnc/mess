@@ -4,18 +4,19 @@ import { useDrop } from "../mod.ts";
 const AppButton = createCustomElement(() => {
   const openDrop = useDrop();
   const [anchor] = useQuery("tn-button");
-  return html`<tn-button
-    .kind="primary"
-    @click=${() => {
-      openDrop(anchor, {
-        render: () => html`Lorem ipsum`,
-        kind: "slide-in",
-        placement: "bottom-start",
-      });
-    }}
-  >
-    Open Drop
-  </tn-button>`;
+  return html`
+    <tn-button
+      .kind="primary"
+      @click=${() => {
+        openDrop(anchor, {
+          render: () => html`Lorem ipsum`,
+          tailored: true,
+        });
+      }}
+    >
+      Open Drop
+    </tn-button>
+  `;
 });
 
 const AppRoot = createCustomElement(() => {

@@ -1,22 +1,20 @@
 import { css, ElementTheme } from "../deps.ts";
 
-export const tnDrop: ElementTheme = ({ kind }) => css`
+export const tnDrop: ElementTheme = css`
+  :host {
+    box-sizing: border-box;
+  }
   div {
     box-sizing: border-box;
-    padding: var(--space-m);
     border-radius: var(--radius-m);
     background-color: var(--color-surface);
     color: var(--color-surface-on);
     box-shadow: var(--shadow-m);
-    ${{
-      "slide-in": css`
-        animation: 0.15s ease-out slide-in;
-      `,
-    }[kind ?? ""] ?? ""}
+    animation: 0.15s ease-out slide;
   }
-  @keyframes slide-in {
+  @keyframes slide {
     from {
-      transform: translateY(1rem);
+      transform: translateY(-1rem);
       opacity: 0;
     }
     to {
