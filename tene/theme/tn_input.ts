@@ -16,7 +16,7 @@ export const tnInput: ElementTheme = css`
     outline: none;
     background-color: var(--color-secondary);
     color: var(--color-secondary-on);
-    opacity: 0.7;
+    opacity: 0.75;
     &:focus {
       opacity: 1;
       outline: solid var(--color-outline);
@@ -24,6 +24,12 @@ export const tnInput: ElementTheme = css`
     &:disabled {
       opacity: 0.5;
       pointer-events: none;
+    }
+    &::placeholder {
+      color: inherit;
+      font-size: inherit;
+      font-weight: inherit;
+      opacity: 0.5;
     }
   }
 `;
