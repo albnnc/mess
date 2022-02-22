@@ -1,13 +1,7 @@
-import {
-  createCustomElement,
-  html,
-  ThemeContext,
-  useContextProvider,
-} from "../deps.ts";
-import { theme } from "../mod.ts";
+import { createCustomElement, html } from "../deps.ts";
+import "../mod.ts";
 
 const AppRoot = createCustomElement(() => {
-  useContextProvider(ThemeContext, theme);
   return html`
     <tn-system>
       <style>

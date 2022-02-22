@@ -2,6 +2,7 @@ import { css, ElementTheme } from "../deps.ts";
 
 export const tnInput: ElementTheme = css`
   input {
+    box-sizing: border-box;
     width: 100%;
     padding: var(--space-s);
     line-height: calc(1.5 * 1rem);

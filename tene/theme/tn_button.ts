@@ -27,6 +27,7 @@ function getBasicKindTheme(kind: string) {
 
 export const tnButton: ElementTheme = ({ kind }) => css`
   button {
+    box-sizing: border-box;
     margin: 0;
     padding: 0;
     border: none;
