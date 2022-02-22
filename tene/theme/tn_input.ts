@@ -22,8 +22,11 @@ export const tnInput: ElementTheme = css`
       outline: solid var(--color-outline);
     }
     &:disabled {
-      opacity: 0.5;
-      pointer-events: none;
+      opacity: 0.35;
+    }
+    &:invalid,
+    &.invalid {
+      outline: solid var(--color-danger);
     }
     &::placeholder {
       color: inherit;
