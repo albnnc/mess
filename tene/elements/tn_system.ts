@@ -10,12 +10,12 @@ import {
 } from "../deps.ts";
 import { theme } from "../mod.ts";
 
-const TnSystemPortal = createCustomElement(() => html`<div></div>`);
+const TnSystemPortalHolder = createCustomElement(() => html`<div></div>`);
 
 export const TnSystem = createCustomElement(() => {
   const style = useThemeStyle();
   // TODO: Consider better portal mechanics.
-  const [systemPortal] = useQuery("tn-system-portal");
+  const [systemPortal] = useQuery("tn-system-portal-holder");
   const portal = systemPortal?.shadowRoot?.firstChild as Element | undefined;
   const systemContextValue = useMemo(() => ({ portal }), [portal]);
   useContextProvider(systemContext, systemContextValue);
@@ -26,9 +26,9 @@ export const TnSystem = createCustomElement(() => {
       ${style}
     </style>
     <slot></slot>
-    <tn-system-portal></tn-system-portal>
+    <tn-system-portal-holder></tn-system-portal-holder>
   `;
 });
 
-customElements.define("tn-system-portal", TnSystemPortal);
+customElements.define("tn-system-portal-holder", TnSystemPortalHolder);
 customElements.define("tn-system", TnSystem);
