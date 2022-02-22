@@ -1,4 +1,4 @@
-import { createCustomElement, html, useThemeStyle } from "./deps.ts";
+import { createCustomElement, html, useThemeStyle } from "../deps.ts";
 
 export const TnButton = createCustomElement(() => {
   const style = useThemeStyle();
