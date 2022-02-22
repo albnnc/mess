@@ -78,7 +78,6 @@ export const tnSystem: ElementTheme = css`
       0px 10px 14px 1px rgba(0, 0, 0, 0.12),
       0px 4px 18px 3px rgba(0, 0, 0, 0.12);
 
-    box-sizing: border-box;
     display: block;
     font-size: var(--font-size-m);
     font-weight: var(--font-weight-normal);

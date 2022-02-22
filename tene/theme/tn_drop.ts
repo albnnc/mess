@@ -2,10 +2,11 @@ import { css, ElementTheme } from "../deps.ts";
 
 export const tnDrop: ElementTheme = css`
   :host {
-    box-sizing: border-box;
+    display: block;
   }
   div {
     box-sizing: border-box;
+    overflow: hidden;
     border-radius: var(--radius-m);
     background-color: var(--color-surface);
     color: var(--color-surface-on);

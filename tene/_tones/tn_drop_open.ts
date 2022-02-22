@@ -10,7 +10,14 @@ const AppButton = createCustomElement(() => {
       .kind="primary"
       @click=${() => {
         openDrop(anchor, {
-          render: () => html`Lorem ipsum`,
+          render: () => html`
+            <tn-drop-menu>
+              <tn-drop-menu-item>1</tn-drop-menu-item>
+              <tn-drop-menu-item>2</tn-drop-menu-item>
+              <tn-drop-menu-item>3</tn-drop-menu-item>
+              <tn-drop-menu-item>Lorem ipsum dolor sit amet</tn-drop-menu-item>
+            </tn-drop-menu>
+          `,
           tailored: true,
         });
       }}

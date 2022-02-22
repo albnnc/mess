@@ -2,7 +2,6 @@ import { css, ElementTheme } from "../deps.ts";
 
 export const tnInput: ElementTheme = css`
   :host {
-    box-sizing: border-box;
     display: block;
   }
   input {
