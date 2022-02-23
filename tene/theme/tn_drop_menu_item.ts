@@ -19,6 +19,9 @@ export const tnDropMenuItem: ElementTheme = css`
     text-align: left;
     cursor: pointer;
     user-select: none;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
     &:hover,
     &:focus-visible {
       background-color: var(--color-surface-accent);

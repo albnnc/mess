@@ -10,5 +10,6 @@ export const tnDropMenu: ElementTheme = css`
     display: flex;
     flex-direction: column;
     max-height: 300px;
+    overflow-y: auto;
   }
 `;
