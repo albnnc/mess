@@ -7,8 +7,8 @@ export const TnDropMenuItem = createCustomElement(() => {
     <style>
       ${style}
     </style>
-    <div>
+    <button>
       <slot></slot>
-    </div>
+    </button>
   `;
 });

@@ -4,14 +4,23 @@ export const tnDropMenuItem: ElementTheme = css`
   :host {
     display: block;
   }
-  div {
+  button {
     box-sizing: border-box;
+    display: block;
+    width: 100%;
+    margin: 0;
     padding: var(--space-s);
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    border: none;
+    outline: none;
+    background: var(--color-surface);
+    color: inherit;
+    font-size: inherit;
+    font-family: inherit;
+    text-align: left;
     cursor: pointer;
-    &:hover {
+    user-select: none;
+    &:hover,
+    &:focus-visible {
       background-color: var(--color-surface-accent);
     }
   }
