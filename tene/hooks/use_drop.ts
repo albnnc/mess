@@ -4,6 +4,7 @@ import {
   TemplateNode,
   updateChildren,
   useContext,
+  useMemo,
   useMemoFn,
 } from "../deps.ts";
 
@@ -11,14 +12,18 @@ export interface DropOptions {
   render: () => TemplateNode | TemplateNode[];
   tailored?: boolean;
   placement?: floating.Placement;
+  onClose?: () => void;
 }
 
 export function useDrop() {
   const { portal } = useContext(systemContext) ?? {};
-  return useMemoFn(
-    (anchor: Element, { render, tailored, placement }: DropOptions) => {
+  const openDrop = useMemoFn(
+    (
+      anchor: Element,
+      { render, tailored, placement, onClose }: DropOptions
+    ) => {
       if (!portal) {
-        return;
+        throw new Error("Portal is undefined");
       }
       const data = render();
       const drop = document.createElement("tn-drop");
@@ -37,12 +42,16 @@ export function useDrop() {
       };
       applyStyle({});
       floating.computePosition(anchor, drop, { placement }).then(applyStyle);
+      const close = () => {
+        portal.removeChild(drop);
+        document.removeEventListener("click", handleClick);
+        onClose?.();
+      };
       const handleClick = (ev: MouseEvent) => {
         if (ev.composedPath().includes(drop)) {
           return;
         }
-        portal.removeChild(drop);
-        document.removeEventListener("click", handleClick);
+        close();
       };
       // TODO: Consider removing RAF call here.
       // It is used now in order to ignore initiating event that
@@ -50,7 +59,25 @@ export function useDrop() {
       requestAnimationFrame(() => {
         document.addEventListener("click", handleClick);
       });
+      return [drop, close] as const;
     },
     [portal]
   );
+  const openDropMenu = useMemoFn(
+    (anchor: Element, options: DropOptions) =>
+      new Promise((resolve) => {
+        const [drop, dispose] = openDrop(anchor, {
+          ...options,
+          onClose: () => resolve(undefined),
+        });
+        drop.addEventListener("click", (ev: MouseEvent) => {
+          const { value } = ev.target as Element & Record<string, unknown>; // FIXME
+          console.log(ev.target);
+          resolve(value);
+          dispose();
+        });
+      }),
+    [openDrop]
+  );
+  return useMemo(() => ({ openDrop, openDropMenu }), [openDrop, openDropMenu]);
 }

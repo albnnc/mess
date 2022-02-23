@@ -3,23 +3,26 @@ import { useDrop } from "../mod.ts";
 import "../register.ts";
 
 const AppButton = createCustomElement(() => {
-  const openDrop = useDrop();
+  const { openDropMenu } = useDrop();
   const [anchor] = useQuery("tn-button");
   return html`
     <tn-button
       .kind="primary"
-      @click=${() => {
-        openDrop(anchor, {
+      @click=${async () => {
+        const value = await openDropMenu(anchor, {
           render: () => html`
             <tn-drop-menu>
-              <tn-drop-menu-item>1</tn-drop-menu-item>
-              <tn-drop-menu-item>2</tn-drop-menu-item>
-              <tn-drop-menu-item>3</tn-drop-menu-item>
-              <tn-drop-menu-item>Lorem ipsum dolor sit amet</tn-drop-menu-item>
+              <tn-drop-menu-item .value=${1}>1</tn-drop-menu-item>
+              <tn-drop-menu-item .value=${2}>2</tn-drop-menu-item>
+              <tn-drop-menu-item .value=${3}>3</tn-drop-menu-item>
+              <tn-drop-menu-item .value=${4}>
+                Lorem ipsum dolor sit amet
+              </tn-drop-menu-item>
             </tn-drop-menu>
           `,
           tailored: true,
         });
+        console.log("value", value);
       }}
     >
       Open Drop
