@@ -15,7 +15,6 @@ export const TnInput = createCustomElement(() => {
       .value=${value}
       .placeholder=${placeholder}
       .disabled=${disabled}
-      .invalid=${invalid}
       @input=${(ev: InputEvent) => {
         const input = ev.currentTarget as HTMLInputElement;
         setValue(input.value ?? "");

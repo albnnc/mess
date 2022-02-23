@@ -1,15 +1,16 @@
-import { createCustomElement, html, useQuery } from "../deps.ts";
+import { createCustomElement, html, useQuery, useState } from "../deps.ts";
 import { useDrop } from "../mod.ts";
 import "../register.ts";
 
 const AppButton = createCustomElement(() => {
   const { openDropMenu } = useDrop();
+  const [value, setValue] = useState<number | undefined>(undefined);
   const [anchor] = useQuery("tn-button");
   return html`
     <tn-button
       .kind="primary"
       @click=${async () => {
-        const value = await openDropMenu(anchor, {
+        const value = await openDropMenu<number>(anchor, {
           render: () => html`
             <tn-drop-menu>
               <tn-drop-menu-item .value=${1}>1</tn-drop-menu-item>
@@ -22,10 +23,10 @@ const AppButton = createCustomElement(() => {
           `,
           tailored: true,
         });
-        console.log("value", value);
+        setValue(value);
       }}
     >
-      Open Drop
+      ${value ? `Value is ${value}` : "Open Drop"}
     </tn-button>
   `;
 });

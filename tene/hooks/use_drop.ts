@@ -64,17 +64,16 @@ export function useDrop() {
     [portal]
   );
   const openDropMenu = useMemoFn(
-    (anchor: Element, options: DropOptions) =>
-      new Promise((resolve) => {
-        const [drop, dispose] = openDrop(anchor, {
+    <T>(anchor: Element, options: DropOptions) =>
+      new Promise<T | undefined>((resolve) => {
+        const [drop, close] = openDrop(anchor, {
           ...options,
           onClose: () => resolve(undefined),
         });
         drop.addEventListener("click", (ev: MouseEvent) => {
           const { value } = ev.target as Element & Record<string, unknown>; // FIXME
-          console.log(ev.target);
-          resolve(value);
-          dispose();
+          resolve(value as T);
+          close();
         });
       }),
     [openDrop]
