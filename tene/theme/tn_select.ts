@@ -2,10 +2,13 @@ import { css, ElementTheme } from "../deps.ts";
 
 export const tnSelect: ElementTheme = css`
   :host {
+    --arrow-size: 5px;
+
     display: block;
   }
   button {
     box-sizing: border-box;
+    position: relative;
     padding: var(--space-s);
     width: 100%;
     min-width: 250px;
@@ -30,6 +33,17 @@ export const tnSelect: ElementTheme = css`
     }
     &.invalid {
       outline: solid var(--color-danger);
+    }
+    &::after {
+      content: "";
+      display: block;
+      position: absolute;
+      top: calc(50% + var(--arrow-size) / 2);
+      right: var(--space-s);
+      transform: translateY(-50%);
+      border: var(--arrow-size) solid transparent;
+      border-top-color: var(--color-secondary-on);
+      opacity: 0.65;
     }
     & .placeholder {
       color: inherit;
