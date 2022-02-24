@@ -3,7 +3,6 @@ import { css, ElementTheme } from "../deps.ts";
 export const tnSelect: ElementTheme = css`
   :host {
     --arrow-size: 5px;
-
     display: block;
   }
   button {
