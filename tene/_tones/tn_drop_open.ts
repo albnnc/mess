@@ -22,7 +22,7 @@ const AppButton = createCustomElement(() => {
             </tn-drop-menu>
           `,
           tailored: true,
-        });
+        }).catch(() => -1);
         setValue(value);
       }}
     >

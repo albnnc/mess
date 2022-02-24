@@ -78,10 +78,10 @@ export function useDrop() {
   );
   const openDropMenu = useMemoFn(
     <T>(anchor: Element, options: DropOptions) =>
-      new Promise<T | undefined>((resolve) => {
+      new Promise<T | undefined>((resolve, reject) => {
         const [drop, close] = openDrop(anchor, {
           ...options,
-          onClose: () => resolve(undefined),
+          onClose: () => reject(),
         });
         drop.addEventListener("click", (ev: MouseEvent) => {
           const { value } = ev.target as Element & Record<string, unknown>; // FIXME

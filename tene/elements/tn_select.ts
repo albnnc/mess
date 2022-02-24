@@ -17,6 +17,9 @@ export interface TnSelectOption {
 
 export const TnSelect = createCustomElement(() => {
   const style = useThemeStyle();
+  const [placeholder] = useProp("", { name: "placeholder" });
+  const [disabled] = useProp(false, { name: "disabled" });
+  const [invalid] = useProp(false, { name: "invalid" });
   const [button] = useQuery("button");
   const { openDropMenu } = useDrop();
   const [options] = useProp<TnSelectOption[] | undefined>(undefined, {
@@ -31,9 +34,29 @@ export const TnSelect = createCustomElement(() => {
     () => renderTitle(options?.find((v) => v.value === value)?.title),
     [options, value]
   );
-  const [placeholder] = useProp("", { name: "placeholder" });
-  const [disabled] = useProp(false, { name: "disabled" });
-  const [invalid] = useProp(false, { name: "invalid" });
+  const handleClick = useMemoFn(() => {
+    if (!button) {
+      return;
+    }
+    const targets = options?.length
+      ? options
+      : [{ value: undefined, title: "No Data" }];
+    openDropMenu(button, {
+      tailored: true,
+      render: () => html`
+        ${targets.map(
+          (v) =>
+            html`
+              <tn-drop-menu-item .value=${v.value}>
+                ${renderTitle(v.title)}
+              </tn-drop-menu-item>
+            `
+        )}
+      `,
+    })
+      .then(setValue)
+      .catch(() => undefined);
+  }, [button, openDropMenu, options, renderTitle]);
   return html`
     <style>
       ${style}
@@ -43,28 +66,7 @@ export const TnSelect = createCustomElement(() => {
         .filter(Boolean)
         .join(" ")}
       .disabled=${disabled}
-      @click=${async () => {
-        if (!button) {
-          return;
-        }
-        const targets = options?.length
-          ? options
-          : [{ value: undefined, title: "No Data" }];
-        const pick = await openDropMenu(button, {
-          tailored: true,
-          render: () => html`
-            ${targets.map(
-              (v) =>
-                html`
-                  <tn-drop-menu-item .value=${v.value}>
-                    ${renderTitle(v.title)}
-                  </tn-drop-menu-item>
-                `
-            )}
-          `,
-        });
-        setValue(pick);
-      }}
+      @click=${handleClick}
     >
       ${title ||
       (placeholder && html`<span class="placeholder">${placeholder}</span>`)}
