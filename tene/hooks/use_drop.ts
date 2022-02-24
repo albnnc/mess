@@ -15,15 +15,25 @@ export interface DropOptions {
   onClose?: () => void;
 }
 
+export type DropDescription = readonly [HTMLElement, () => void];
+
 export function useDrop() {
   const { portal } = useContext(systemContext) ?? {};
+  const anchorDrops = useMemo(
+    () => new WeakMap<Element, DropDescription>(),
+    []
+  );
   const openDrop = useMemoFn(
     (
       anchor: Element,
       { render, tailored, placement, onClose }: DropOptions
-    ) => {
+    ): DropDescription => {
       if (!portal) {
         throw new Error("Portal is undefined");
+      }
+      const existing = anchorDrops.get(anchor);
+      if (existing) {
+        return existing;
       }
       const data = render();
       const drop = document.createElement("tn-drop");
@@ -44,6 +54,7 @@ export function useDrop() {
       floating.computePosition(anchor, drop, { placement }).then(applyStyle);
       const close = () => {
         portal.removeChild(drop);
+        anchorDrops.delete(anchor);
         document.removeEventListener("click", handleClick);
         onClose?.();
       };
@@ -59,7 +70,9 @@ export function useDrop() {
       requestAnimationFrame(() => {
         document.addEventListener("click", handleClick);
       });
-      return [drop, close] as const;
+      const description = [drop, close] as const;
+      anchorDrops.set(anchor, description);
+      return description;
     },
     [portal]
   );
