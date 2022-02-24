@@ -9,8 +9,8 @@ const AppButton = createCustomElement(() => {
   return html`
     <tn-button
       .kind="primary"
-      @click=${async () => {
-        const value = await openDropMenu<number>(anchor, {
+      @click=${() => {
+        openDropMenu<number>(anchor, {
           render: () => html`
             <tn-drop-menu>
               <tn-drop-menu-item .value=${1}>1</tn-drop-menu-item>
@@ -22,8 +22,9 @@ const AppButton = createCustomElement(() => {
             </tn-drop-menu>
           `,
           tailored: true,
-        }).catch(() => -1);
-        setValue(value);
+        })
+          .then(setValue)
+          .catch(() => undefined);
       }}
     >
       ${value ? `Value is ${value}` : "Open Drop"}
