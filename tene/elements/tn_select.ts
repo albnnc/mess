@@ -45,17 +45,19 @@ export const TnSelect = createCustomElement(() => {
     openDropMenu(button, {
       tailored: true,
       render: () => html`
-        ${targets.map(
-          (v) => html`
-            <tn-drop-menu-item
-              .value=${v.value}
-              .disabled=${v.disabled}
-              .active=${v.value === value}
-            >
-              ${renderTitle(v.title)}
-            </tn-drop-menu-item>
-          `
-        )}
+        <tn-drop-menu>
+          ${targets.map(
+            (v) => html`
+              <tn-drop-menu-item
+                .value=${v.value}
+                .disabled=${v.disabled}
+                .active=${v.value === value}
+              >
+                ${renderTitle(v.title)}
+              </tn-drop-menu-item>
+            `
+          )}
+        </tn-drop-menu>
       `,
     })
       .then(setValue)
