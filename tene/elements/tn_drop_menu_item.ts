@@ -4,11 +4,12 @@ export const TnDropMenuItem = createCustomElement(() => {
   const style = useThemeStyle();
   useProp<unknown>(undefined, { name: "value" });
   useProp<boolean>(false, { name: "active" });
+  const [disabled] = useProp<boolean>(false, { name: "disabled" });
   return html`
     <style>
       ${style}
     </style>
-    <button>
+    <button .disabled=${disabled}>
       <slot></slot>
     </button>
   `;

@@ -13,6 +13,7 @@ import { useDrop } from "../hooks/mod.ts";
 export interface TnSelectOption {
   title: string | (() => TemplateNode | TemplateNode[]);
   value: unknown;
+  disabled?: boolean;
 }
 
 export const TnSelect = createCustomElement(() => {
@@ -40,13 +41,17 @@ export const TnSelect = createCustomElement(() => {
     }
     const targets = options?.length
       ? options
-      : [{ value: undefined, title: "No Data" }];
+      : [{ value: Symbol(), title: "No Data", disabled: true }];
     openDropMenu(button, {
       tailored: true,
       render: () => html`
         ${targets.map(
           (v) => html`
-            <tn-drop-menu-item .active=${v.value === value} .value=${v.value}>
+            <tn-drop-menu-item
+              .value=${v.value}
+              .disabled=${v.disabled}
+              .active=${v.value === value}
+            >
               ${renderTitle(v.title)}
             </tn-drop-menu-item>
           `

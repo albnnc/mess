@@ -27,6 +27,10 @@ export const tnDropMenuItem: ElementTheme = ({ active }) => css`
     &:focus-visible {
       background-color: var(--color-surface-accent);
     }
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
     ${active &&
     css`
       &::after {
