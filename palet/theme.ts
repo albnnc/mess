@@ -13,6 +13,7 @@ export function useThemeStyle(tagName?: string) {
   const theme = useContext(themeContext) ?? {};
   const elementTheme = theme[targetTagName];
   return elementTheme instanceof Function
-    ? elementTheme(element as any) // FIXME
+    ? // deno-lint-ignore no-explicit-any
+      elementTheme(element as any) // FIXME
     : elementTheme;
 }
