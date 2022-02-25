@@ -1,5 +1,25 @@
 import { css, ElementTheme } from "../deps.ts";
 
+const chevron = `
+  <svg
+    stroke="currentColor"
+    fill="currentColor"
+    stroke-width="0"
+    viewBox="0 0 512 512"
+    height="1em"
+    width="1em"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      fill="none"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      stroke-width="48"
+      d="M112 184l144 144 144-144"
+    ></path>
+  </svg>
+`;
+
 export const tnSelect: ElementTheme = css`
   :host {
     --arrow-size: 5px;
@@ -37,11 +57,14 @@ export const tnSelect: ElementTheme = css`
       content: "";
       display: block;
       position: absolute;
-      top: calc(50% + var(--arrow-size) / 2);
+      top: 50%;
       right: var(--space-s);
       transform: translateY(-50%);
-      border: var(--arrow-size) solid transparent;
-      border-top-color: var(--color-secondary-on);
+      width: 1.2rem;
+      height: 1.2rem;
+      mask: url("data:image/svg+xml;base64,${btoa(chevron)}") no-repeat 50% 50%;
+      mask-size: cover;
+      background-color: currentColor;
       opacity: 0.65;
     }
     & .placeholder {

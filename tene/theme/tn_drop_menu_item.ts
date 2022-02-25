@@ -42,7 +42,6 @@ export const tnDropMenuItem: ElementTheme = ({ active }) => css`
         transform: translateY(-50%);
         width: 1.2rem;
         height: 1.2rem;
-        vertical-align: middle;
         mask: url("data:image/svg+xml;base64,${btoa(checkmark)}") no-repeat 50%
           50%;
         mask-size: cover;
