@@ -14,15 +14,13 @@ export const tnInput: ElementTheme = css`
     border: none;
     border-radius: var(--radius-m);
     outline: none;
-    background-color: var(--color-secondary);
-    color: var(--color-secondary-on);
-    opacity: 0.75;
+    background-color: var(--color-surface-accent);
+    color: var(--color-surface-on);
     &:focus {
-      opacity: 1;
       outline: solid var(--color-outline);
     }
     &:disabled {
-      opacity: 0.35;
+      opacity: 0.5;
     }
     &:invalid,
     &.invalid {

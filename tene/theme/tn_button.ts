@@ -45,6 +45,9 @@ export const tnButton: ElementTheme = ({ kind }) => css`
     &:focus-visible {
       outline: solid var(--color-outline);
     }
+    &:disabled {
+      opacity: 0.5;
+    }
     ${getBasicKindTheme(kind)}
   }
 `;

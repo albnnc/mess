@@ -29,8 +29,8 @@ export const tnSystem: ElementTheme = css`
     --color-exterior: #202224;
     --color-exterior-accent: #2b2e31;
     --color-exterior-on: #fafafa;
-    --color-outline: #ffffffd9;
-    --color-outline-accent: #ffffffd9;
+    --color-outline: #ffffffd0;
+    --color-outline-accent: #ffffffd0;
     --color-outline-on: #333333;
     --color-border: #ffffff26;
     --color-border-accent: #ffffff73;
