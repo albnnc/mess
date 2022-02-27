@@ -1,5 +1,6 @@
 import { Theme } from "../deps.ts";
 import { tnButton } from "./tn_button.ts";
+import { tnCheckbox } from "./tn_checkbox.ts";
 import { tnDrop } from "./tn_drop.ts";
 import { tnDropMenu } from "./tn_drop_menu.ts";
 import { tnDropMenuItem } from "./tn_drop_menu_item.ts";
@@ -15,4 +16,5 @@ export const theme: Theme = {
   "tn-drop": tnDrop,
   "tn-input": tnInput,
   "tn-select": tnSelect,
+  "tn-checkbox": tnCheckbox,
 };
