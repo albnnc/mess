@@ -1,4 +1,5 @@
 import { css, ElementTheme } from "../deps.ts";
+import { checkmarkIcon } from "./_common.ts";
 
 export const tnDropMenuItem: ElementTheme = ({ active }) => css`
   :host {
@@ -42,31 +43,11 @@ export const tnDropMenuItem: ElementTheme = ({ active }) => css`
         transform: translateY(-50%);
         width: 1.2rem;
         height: 1.2rem;
-        mask: url("data:image/svg+xml;base64,${btoa(checkmark)}") no-repeat 50%
-          50%;
+        mask: url("data:image/svg+xml;base64,${btoa(checkmarkIcon)}") no-repeat
+          50% 50%;
         mask-size: cover;
         background-color: currentColor;
       }
     `}
   }
-`;
-
-const checkmark = `
-  <svg
-    stroke="currentColor"
-    fill="currentColor"
-    stroke-width="0"
-    viewBox="0 0 512 512"
-    height="1em"
-    width="1em"
-    xmlns="http://www.w3.org/2000/svg"
-  >
-    <path
-      fill="none"
-      stroke-linecap="round"
-      stroke-linejoin="round"
-      stroke-width="32"
-      d="M416 128L192 384l-96-96"
-    ></path>
-  </svg>
 `;
