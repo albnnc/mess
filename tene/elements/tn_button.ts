@@ -1,13 +1,3 @@
-import { createCustomElement, html, useThemeStyle } from "../deps.ts";
+import { createContainerElement } from "../utils/mod.ts";
 
-export const TnButton = createCustomElement(() => {
-  const style = useThemeStyle();
-  return html`
-    <style>
-      ${style}
-    </style>
-    <button>
-      <slot></slot>
-    </button>
-  `;
-});
+export const TnButton = createContainerElement("button");

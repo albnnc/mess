@@ -1,13 +1,21 @@
-import { createCustomElement, html, useThemeStyle } from "../deps.ts";
+import { createCustomElement, html, useProp, useThemeStyle } from "../deps.ts";
+import { createContainerElement } from "../utils/mod.ts";
 
-export const TnDrop = createCustomElement(() => {
+export const TnDrop = createContainerElement("div");
+
+export const TnDropMenu = createContainerElement("div");
+
+export const TnDropMenuItem = createCustomElement(() => {
   const style = useThemeStyle();
+  useProp<unknown>(undefined, { name: "value" });
+  useProp<boolean>(false, { name: "active" });
+  const [disabled] = useProp<boolean>(false, { name: "disabled" });
   return html`
     <style>
       ${style}
     </style>
-    <div>
+    <button .disabled=${disabled}>
       <slot></slot>
-    </div>
+    </button>
   `;
 });
