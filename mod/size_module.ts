@@ -1,5 +1,5 @@
-import { bytes, compress, esbuild, esbuildPluginHttp } from "./deps.ts";
-import { log } from "./deps.ts";
+import { log, bytes, compress, esbuild } from "./deps.ts";
+import { createEsbuildPluginHttp } from "./esbuild_plugin_http.ts";
 
 export interface SizeModuleOptions {
   esbuildPlugins?: esbuild.Plugin[];
@@ -17,7 +17,7 @@ export async function sizeModule(
     write: false,
     bundle: true,
     minify: true,
-    plugins: esbuildPlugins ?? [await esbuildPluginHttp.create()],
+    plugins: esbuildPlugins ?? [await createEsbuildPluginHttp()],
   });
   esbuild.stop();
   const compressedContents = compress.gzip(contents);

@@ -2,7 +2,6 @@
 import * as path from "https://deno.land/std@0.121.0/path/mod.ts";
 import * as log from "https://deno.land/std@0.121.0/log/mod.ts";
 import * as esbuild from "https://deno.land/x/esbuild@v0.13.14/mod.js";
-import * as esbuildPluginHttp from "../esbuild_plugin_http/mod.ts";
 import * as tonebook from "../tonebook/mod.ts";
 import * as make from "../make/mod.ts";
 import * as mod from "../mod/mod.ts";
@@ -55,7 +54,7 @@ async function buildTonebook(dev: boolean) {
         write: false,
         bundle: true,
         minify: !dev,
-        plugins: [await esbuildPluginHttp.create()],
+        plugins: [await mod.createEsbuildPluginHttp()],
       });
       const decoder = new TextDecoder();
       const indexJs = outputFiles.find((v) => v.path === "<stdout>");

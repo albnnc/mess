@@ -1,5 +1,5 @@
 import { createReloadScript } from "./create_reload_script.ts";
-import { path, esbuild, log, fs, esbuildPluginHttp } from "./deps.ts";
+import { path, esbuild, log, fs, mod } from "./deps.ts";
 import { ToneDescription } from "./describe_tone.ts";
 
 export interface BuildUiOptions {
@@ -26,7 +26,7 @@ export async function buildUi({
     write: true,
     bundle: true,
     minify: true,
-    plugins: [await esbuildPluginHttp.create()],
+    plugins: [await mod.createEsbuildPluginHttp()],
   });
   esbuild.stop();
 }
