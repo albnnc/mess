@@ -3,7 +3,6 @@ import { css, ElementTheme } from "../deps.ts";
 const levels = `h1, h2, h3, h4, h5, h6`;
 
 export const tnHeading: ElementTheme = ({ kind }) => {
-  console.log("kind", kind);
   return css`
     :host {
       display: block;
