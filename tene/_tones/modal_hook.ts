@@ -9,7 +9,16 @@ const AppButton = createCustomElement(() => {
       .kind="primary"
       @click=${() => {
         openModal({
-          render: () => html`<tn-modal-body>Content</tn-modal-body>`,
+          kind: "small",
+          render: ({ close }) => html`
+            <tn-modal-header>
+              <tn-heading .kind="modal">Header</tn-heading>
+            </tn-modal-header>
+            <tn-modal-body>Content</tn-modal-body>
+            <tn-modal-footer>
+              <tn-button .kind="primary" @click=${close}>Close</tn-button>
+            </tn-modal-footer>
+          `,
         });
       }}
     >
