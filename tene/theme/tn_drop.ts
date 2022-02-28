@@ -3,10 +3,8 @@ import { checkmarkIcon } from "./_common.ts";
 
 export const tnDrop: ElementTheme = css`
   :host {
-    display: block;
-  }
-  div {
     box-sizing: border-box;
+    display: block;
     overflow: hidden;
     border-radius: var(--radius-m);
     background-color: var(--color-surface);
@@ -28,11 +26,9 @@ export const tnDrop: ElementTheme = css`
 
 export const tnDropMenu: ElementTheme = css`
   :host {
-    display: block;
-  }
-  div {
-    width: 100%;
     box-sizing: border-box;
+    display: block;
+    width: 100%;
     display: flex;
     flex-direction: column;
     max-height: 300px;

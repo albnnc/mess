@@ -1,9 +1,9 @@
 import { createCustomElement, html, useProp, useThemeStyle } from "../deps.ts";
 import { createContainerElement } from "../utils/mod.ts";
 
-export const TnDrop = createContainerElement("div");
+export const TnDrop = createContainerElement();
 
-export const TnDropMenu = createContainerElement("div");
+export const TnDropMenu = createContainerElement();
 
 export const TnDropMenuItem = createCustomElement(() => {
   const style = useThemeStyle();

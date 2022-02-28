@@ -72,34 +72,33 @@ export const tnModal: ElementTheme = ({ kind }) => css`
 
 export const tnModalHeader: ElementTheme = css`
   :host {
-    display: block;
-  }
-  div {
     box-sizing: border-box;
-    padding-top: var(--space-m);
-    padding-left: var(--space-m);
-    padding-right: var(--space-m);
+    display: block;
+    padding: var(--space-m);
+    border-bottom: 1px solid var(--color-border);
   }
 `;
 
 export const tnModalBody: ElementTheme = css`
   :host {
-    display: block;
-  }
-  div {
     box-sizing: border-box;
+    display: block;
     padding: var(--space-m);
   }
 `;
 
-export const tnModalFooter: ElementTheme = css`
+export const tnModalFooter: ElementTheme = ({ kind }) => css`
   :host {
-    display: block;
-  }
-  div {
     box-sizing: border-box;
-    padding-bottom: var(--space-m);
-    padding-left: var(--space-m);
-    padding-right: var(--space-m);
+    display: block;
+    padding: var(--space-m);
+    border-top: 1px solid var(--color-border);
+    ${{
+      actions: css`
+        display: flex;
+        justify-content: end;
+        gap: var(--space-s);
+      `,
+    }[kind ?? ""] ?? ""}
   }
 `;

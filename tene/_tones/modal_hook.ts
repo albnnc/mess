@@ -14,9 +14,15 @@ const AppButton = createCustomElement(() => {
             <tn-modal-header>
               <tn-heading .kind="modal">Header</tn-heading>
             </tn-modal-header>
-            <tn-modal-body>Content</tn-modal-body>
-            <tn-modal-footer>
-              <tn-button .kind="primary" @click=${close}>Close</tn-button>
+            <tn-modal-body>
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+              eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
+              enim ad minim veniam, quis nostrud exercitation ullamco laboris
+              nisi ut aliquip ex ea commodo consequat.
+            </tn-modal-body>
+            <tn-modal-footer .kind="actions">
+              <tn-button .kind="secondary" @click=${close}>Cancel</tn-button>
+              <tn-button .kind="primary" @click=${close}>Save</tn-button>
             </tn-modal-footer>
           `,
         });

@@ -14,8 +14,8 @@ export const TnModal = createCustomElement(() => {
   `;
 });
 
-export const TnModalHeader = createContainerElement("div");
+export const TnModalHeader = createContainerElement();
 
-export const TnModalBody = createContainerElement("div");
+export const TnModalBody = createContainerElement();
 
-export const TnModalFooter = createContainerElement("div");
+export const TnModalFooter = createContainerElement();
