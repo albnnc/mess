@@ -1,18 +1,16 @@
 import { css, ElementTheme } from "../deps.ts";
 
+const levels = `h1, h2, h3, h4, h5, h6`;
+
 export const tnHeading: ElementTheme = ({ kind }) => {
   console.log("kind", kind);
   return css`
     :host {
       display: block;
     }
-    h1,
-    h2,
-    h3,
-    h4,
-    h5,
-    h6 {
+    ${levels} {
       box-sizing: border-box;
+      margin: 0;
       font-size: var(--font-size-l);
       font-weight: var(--font-weight-heading);
       text-transform: uppercase;
@@ -22,8 +20,12 @@ export const tnHeading: ElementTheme = ({ kind }) => {
 
     ${{
       card: css`
-        h3 {
-          margin: 0;
+        ${levels} {
+          font-size: var(--font-size-l);
+        }
+      `,
+      modal: css`
+        ${levels} {
           font-size: var(--font-size-l);
         }
       `,

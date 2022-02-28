@@ -5,6 +5,12 @@ import { tnCheckbox } from "./tn_checkbox.ts";
 import { tnDrop, tnDropMenu, tnDropMenuItem } from "./tn_drop.ts";
 import { tnHeading } from "./tn_heading.ts";
 import { tnInput } from "./tn_input.ts";
+import {
+  tnModal,
+  tnModalBody,
+  tnModalFooter,
+  tnModalHeader,
+} from "./tn_modal.ts";
 import { tnSelect } from "./tn_select.ts";
 import { tnSystem } from "./tn_system.ts";
 
@@ -21,5 +27,9 @@ export const theme: Theme = {
   "tn-card-header": tnCardHeader,
   "tn-card-body": tnCardBody,
   "tn-card-footer": tnCardFooter,
+  "tn-modal": tnModal,
+  "tn-modal-header": tnModalHeader,
+  "tn-modal-body": tnModalBody,
+  "tn-modal-footer": tnModalFooter,
   "tn-heading": tnHeading,
 };

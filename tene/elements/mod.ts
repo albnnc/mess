@@ -4,5 +4,6 @@ export * from "./tn_checkbox.ts";
 export * from "./tn_drop.ts";
 export * from "./tn_heading.ts";
 export * from "./tn_input.ts";
+export * from "./tn_modal.ts";
 export * from "./tn_select.ts";
 export * from "./tn_system.ts";
