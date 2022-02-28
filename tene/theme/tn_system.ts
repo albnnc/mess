@@ -52,8 +52,8 @@ export const tnSystem: ElementTheme = css`
     --font-size-xs: 12px;
     --font-size-s: 14px;
     --font-size-m: 16px;
-    --font-size-l: 18px;
-    --font-size-xl: 22px;
+    --font-size-l: 20px;
+    --font-size-xl: 24px;
     --font-size-xxl: 40px;
 
     --font-weight-normal: 400;

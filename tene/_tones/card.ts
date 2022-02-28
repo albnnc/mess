@@ -10,7 +10,9 @@ const AppRoot = createCustomElement(() => {
     </style>
     <tn-system>
       <tn-card>
-        <tn-card-header>Header</tn-card-header>
+        <tn-card-header>
+          <tn-heading .kind="card">Header</tn-heading>
+        </tn-card-header>
         <tn-card-body>Body</tn-card-body>
         <tn-card-footer>Footer</tn-card-footer>
       </tn-card>
