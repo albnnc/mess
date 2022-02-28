@@ -3,20 +3,20 @@ import { css, ElementTheme } from "../deps.ts";
 export const tnModal: ElementTheme = ({ kind }) => css`
   :host {
     display: block;
-    &::before {
-      content: "";
-      display: block;
-      z-index: 9000;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      background-color: rgba(0, 0, 0, 0.5);
-      animation: 0.15s ease-out fade;
-    }
   }
-  div {
+  [part="backdrop"] {
+    content: "";
+    display: block;
+    z-index: 9000;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.65);
+    animation: 0.15s ease-out fade;
+  }
+  [part="content"] {
     box-sizing: border-box;
     z-index: 9100;
     position: fixed;
@@ -25,27 +25,27 @@ export const tnModal: ElementTheme = ({ kind }) => css`
     transform: translate(-50%, -50%);
     border-radius: var(--radius-l);
     background-color: var(--color-surface);
-    box-shadow: var(--shadow-s);
+    box-shadow: var(--shadow-xl);
     animation: 0.15s ease-out slide;
   }
   ${{
     small: css`
-      div {
+      [part="content"] {
         width: 400px;
       }
     `,
     medium: css`
-      div {
+      [part="content"] {
         width: 550px;
       }
     `,
     large: css`
-      div {
+      [part="content"] {
         width: 650px;
       }
     `,
     question: css`
-      div {
+      [part="content"] {
         width: 400px;
       }
     `,
