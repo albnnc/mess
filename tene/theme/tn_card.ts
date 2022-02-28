@@ -18,19 +18,23 @@ export const tnCardHeader: ElementTheme = css`
   }
   div {
     box-sizing: border-box;
-    padding-top: var(--space-m);
-    padding-left: var(--space-m);
-    padding-right: var(--space-m);
+    padding: var(--space-m);
+    border-bottom: 1px solid var(--color-border);
   }
 `;
 
-export const tnCardBody: ElementTheme = css`
+export const tnCardBody: ElementTheme = ({ kind }) => css`
   :host {
     display: block;
   }
   div {
     box-sizing: border-box;
     padding: var(--space-m);
+    ${{
+      list: css`
+        padding: 0;
+      `,
+    }[kind ?? ""] ?? ""}
   }
 `;
 
@@ -40,8 +44,7 @@ export const tnCardFooter: ElementTheme = css`
   }
   div {
     box-sizing: border-box;
-    padding-bottom: var(--space-m);
-    padding-left: var(--space-m);
-    padding-right: var(--space-m);
+    padding: var(--space-m);
+    border-top: 1px solid var(--color-border);
   }
 `;

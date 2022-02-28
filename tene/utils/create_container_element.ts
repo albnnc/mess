@@ -1,15 +1,20 @@
 import { createCustomElement, html, useThemeStyle } from "../deps.ts";
 
-export function createContainerElement(tag: string) {
+export function createContainerElement(tag?: string) {
   return createCustomElement(() => {
+    console.log("tag", tag);
     const style = useThemeStyle();
     return html`
       <style>
         ${style}
       </style>
-      <${tag}>
-        <slot></slot>
-      </${tag}>
+      ${tag
+        ? html`
+          <${tag}>
+            <slot></slot>
+          </${tag}>
+        `
+        : html`<slot></slot>`}
     `;
   });
 }
