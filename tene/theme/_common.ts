@@ -37,3 +37,11 @@ export const checkmarkIcon = `
     ></path>
   </svg>
 `;
+
+export const colorKinds = new Set([
+  "primary",
+  "secondary",
+  "success",
+  "warning",
+  "danger",
+]);

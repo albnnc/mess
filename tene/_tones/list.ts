@@ -19,7 +19,7 @@ const AppRoot = createCustomElement(() => {
             <tn-list-item>2</tn-list-item>
             <tn-list-item .kind="pair">
               <span>3</span>
-              <span>Pair Value</span>
+              <tn-badge .kind="secondary">Pair Value</tn-badge>
             </tn-list-item>
             <tn-list-item>4</tn-list-item>
           </tn-list>

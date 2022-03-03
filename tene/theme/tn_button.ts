@@ -1,15 +1,8 @@
 import { css, ElementTheme } from "../deps.ts";
+import { colorKinds } from "./_common.ts";
 
-const basicKinds = new Set([
-  "primary",
-  "secondary",
-  "success",
-  "warning",
-  "danger",
-]);
-
-function getBasicKindTheme(kind: string) {
-  if (!basicKinds.has(kind)) {
+function getColorKindTheme(kind: string) {
+  if (!colorKinds.has(kind)) {
     return "";
   }
   return css`
@@ -48,6 +41,6 @@ export const tnButton: ElementTheme = ({ kind }) => css`
     &:disabled {
       opacity: 0.5;
     }
-    ${getBasicKindTheme(kind)}
+    ${getColorKindTheme(kind)}
   }
 `;
