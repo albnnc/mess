@@ -9,3 +9,4 @@ export * from "./tn_list.ts";
 export * from "./tn_modal.ts";
 export * from "./tn_select.ts";
 export * from "./tn_system.ts";
+export * from "./tn_tooltip.ts";

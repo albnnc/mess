@@ -15,6 +15,7 @@ import {
 } from "./tn_modal.ts";
 import { tnSelect } from "./tn_select.ts";
 import { tnSystem } from "./tn_system.ts";
+import { tnTooltip, tnTooltipContent } from "./tn_tooltip.ts";
 
 export const theme: Theme = {
   "tn-badge": tnBadge,
@@ -37,4 +38,6 @@ export const theme: Theme = {
   "tn-modal": tnModal,
   "tn-select": tnSelect,
   "tn-system": tnSystem,
+  "tn-tooltip": tnTooltip,
+  "tn-tooltip-content": tnTooltipContent,
 };
