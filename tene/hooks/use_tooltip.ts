@@ -11,11 +11,18 @@ import {
 export interface TooltipOptions {
   anchor?: Element;
   triggers?: [string, string];
+  offset?: number;
+  placement?: floating.Placement;
 }
 
 export function useTooltip(
   render: () => TemplateNode | TemplateNode[],
-  { anchor, triggers = ["mouseenter", "mouseleave"] }: TooltipOptions
+  {
+    anchor,
+    triggers = ["mouseenter", "mouseleave"],
+    offset = 10,
+    placement,
+  }: TooltipOptions
 ) {
   const content = useMemo(() => render(), [render]);
   const state = useMemo(() => ({ open: false }), []);
@@ -46,7 +53,12 @@ export function useTooltip(
         tooltip &&
         floating
           .computePosition(anchor, tooltip, {
-            middleware: [floating.autoPlacement(), floating.shift()],
+            placement,
+            middleware: [
+              floating.autoPlacement(),
+              floating.shift(),
+              floating.offset(offset),
+            ],
           })
           .then(applyStyle);
       update();

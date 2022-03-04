@@ -6,7 +6,7 @@ export const tnTooltip: ElementTheme = css`
     display: block;
     padding: var(--space-m);
     border-radius: var(--radius-m);
-    background-color: rgba(0, 0, 0, 0.7);
+    background-color: rgba(0, 0, 0, 0.5);
     color: white;
     pointer-events: none;
   }
