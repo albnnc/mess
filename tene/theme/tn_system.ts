@@ -79,8 +79,6 @@ export const tnSystem: ElementTheme = css`
       0px 4px 18px 3px rgba(0, 0, 0, 0.12);
 
     display: block;
-    width: 100%;
-    height: 100%;
     color-scheme: dark;
     font-size: var(--font-size-m);
     font-weight: var(--font-weight-normal);
