@@ -19,9 +19,9 @@ const AppRoot = createCustomElement(() => {
             { value: "2", title: "2" },
             { value: "3", title: () => JSON.stringify({ value: 1 }) },
           ]}
-        ></tn-select>
-        <tn-select .disabled .placeholder="Disabled"></tn-select>
-        <tn-select .invalid .placeholder="Invalid"></tn-select>
+        />
+        <tn-select .disabled .placeholder="Disabled" />
+        <tn-select .invalid .placeholder="Invalid" />
       </div>
     </tn-system>
   `;

@@ -12,10 +12,10 @@ const AppRoot = createCustomElement(() => {
         }
       </style>
       <div>
-        <tn-input .value="With default value"></tn-input>
-        <tn-input .placeholder="Placeholder"></tn-input>
-        <tn-input .disabled .value="Disabled"></tn-input>
-        <tn-input .invalid .value="Invalid"></tn-input>
+        <tn-input .value="With default value" />
+        <tn-input .placeholder="Placeholder" />
+        <tn-input .disabled .value="Disabled" />
+        <tn-input .invalid .value="Invalid" />
       </div>
     </tn-system>
   `;
