@@ -34,7 +34,7 @@ async function buildServer() {
   await Promise.all([process.output(), process.status()]);
 }
 
-let serverProcess: Deno.Process;
+let serverProcess: undefined | Deno.Process;
 function startServer() {
   if (serverProcess) {
     log.info("Restarting server");
@@ -54,6 +54,7 @@ make.task("build", async () => {
   await buildClient(false);
   await buildServer();
 });
+
 make.task("dev", async () => {
   await buildClient(true);
   startServer();
@@ -85,4 +86,5 @@ make.task("dev", async () => {
   };
   await Promise.all([watchClient(), watchServer()]);
 });
+
 await make.exec(Deno.args);
