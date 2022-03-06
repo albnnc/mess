@@ -9,7 +9,10 @@ const XRoot = createCustomElement(() => {
       <x-layout>
         <x-navbar />
         <x-layout-body>
-          <x-layout-container>BODY</x-layout-container>
+          <x-layout-container>
+            <x-route .path="/a">A</x-route>
+            <x-route .path="/b">B</x-route>
+          </x-layout-container>
         </x-layout-body>
         <x-layout-footer>
           <x-layout-container>FOOTER</x-layout-container>
