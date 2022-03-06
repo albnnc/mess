@@ -16,7 +16,7 @@ export const tnAcnhor: ElementTheme = css`
       text-decoration: none;
       outline: none;
     }
-    &:focus {
+    &:focus-visible {
       outline: solid var(--color-outline);
     }
   }
