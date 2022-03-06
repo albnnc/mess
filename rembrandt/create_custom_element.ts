@@ -16,7 +16,7 @@ export const createCustomElement = (fn: RenderFn) => {
     disconnectedCallback() {
       dispatchLocalEvent(this, "disconnected");
     }
-    render() {
+    renderShadowContent() {
       let template: TemplateNode | TemplateNode[];
       claimElement(this, () => {
         template = fn();

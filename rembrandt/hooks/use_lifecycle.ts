@@ -14,7 +14,7 @@ const getData = (element: RenderableElement) => {
     updating: false,
     update: () => {
       data.updating = false;
-      const templateOutput = element.render();
+      const templateOutput = element.renderShadowContent();
       const templateNode: TemplateNode = {
         tag: "",
         events: {},
