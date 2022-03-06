@@ -5,7 +5,8 @@ import { start } from "./start.ts";
 if (import.meta.main) {
   const dev = !!Deno.args[0];
   const currentDir = path.dirname(path.fromFileUrl(import.meta.url));
-  const clientDir = Deno.args[0] ?? path.join(currentDir, "client");
+  const clientDir =
+    Deno.args[0] ?? path.resolve(path.dirname(Deno.execPath()), "client");
   const clientEntry = path.resolve(currentDir, "../client/mod.ts");
   start({
     dev,
