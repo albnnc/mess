@@ -22,8 +22,9 @@ const template = `
       </style>
     </head>
     <body>
+      <x-root></x-root>
       <script type="module" src="/mod.js"></script>
-      <app-root></app-root>
+      <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
     </body>
   </html>
 `;

@@ -1,6 +1,6 @@
 import { createContainerElement, css } from "../deps.ts";
 
-export const AppLayout = createContainerElement({
+export const XLayout = createContainerElement({
   style: css`
     :host {
       display: flex;
@@ -13,19 +13,19 @@ export const AppLayout = createContainerElement({
   `,
 });
 
-export const AppLayoutHeader = createContainerElement({
+export const XLayoutHeader = createContainerElement({
   style: css`
     :host {
       display: block;
       flex: 0 0 auto;
-      background-color: var(--color-surface);
-      color: var(--color-surface-on);
+      background-color: var(--color-exterior);
+      color: var(--color-exterior-on);
       padding: var(--space-xl) 0;
     }
   `,
 });
 
-export const AppLayoutBody = createContainerElement({
+export const XLayoutBody = createContainerElement({
   style: css`
     :host {
       display: block;
@@ -35,22 +35,23 @@ export const AppLayoutBody = createContainerElement({
   `,
 });
 
-export const AppLayoutFooter = createContainerElement({
+export const XLayoutFooter = createContainerElement({
   style: css`
     :host {
       display: block;
       flex: 0 0 auto;
-      background-color: var(--color-surface);
-      color: var(--color-surface-on);
+      background-color: var(--color-exterior);
+      color: var(--color-exterior-on);
       padding: var(--space-xl) 0;
     }
   `,
 });
 
-export const AppLayoutContainer = createContainerElement({
+export const XLayoutContainer = createContainerElement({
   style: css`
     :host {
       display: block;
+      width: 100%;
       max-width: 1200px;
       padding: 0 var(--space-l);
       margin: 0 auto;

@@ -78,9 +78,6 @@ export const tnSystem: ElementTheme = css`
       0px 10px 14px 1px rgba(0, 0, 0, 0.12),
       0px 4px 18px 3px rgba(0, 0, 0, 0.12);
 
-    display: block;
-    width: 100%;
-    min-height: 100vh;
     color-scheme: dark;
     background-color: var(--color-background);
     color: var(--color-background-on);

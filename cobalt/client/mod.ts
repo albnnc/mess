@@ -3,22 +3,20 @@ import * as elements from "./elements/mod.ts";
 
 registerElements(elements);
 
-const AppRoot = createCustomElement(() => {
+const XRoot = createCustomElement(() => {
   return html`
     <tn-system>
-      <app-layout>
-        <app-layout-header>
-          <app-layout-container>HEADER</app-layout-container>
-        </app-layout-header>
-        <app-layout-body>
-          <app-layout-container>BODY</app-layout-container>
-        </app-layout-body>
-        <app-layout-footer>
-          <app-layout-container>FOOTER</app-layout-container>
-        </app-layout-footer>
-      </app-layout>
+      <x-layout>
+        <x-navbar />
+        <x-layout-body>
+          <x-layout-container>BODY</x-layout-container>
+        </x-layout-body>
+        <x-layout-footer>
+          <x-layout-container>FOOTER</x-layout-container>
+        </x-layout-footer>
+      </x-layout>
     </tn-system>
   `;
 });
 
-customElements.define("app-root", AppRoot);
+customElements.define("x-root", XRoot);
