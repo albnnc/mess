@@ -27,9 +27,8 @@ export const XNavbar = createCustomElement(() => {
           }
           ion-icon {
             margin: -0.5em 0;
-            margin-right: 0.25em;
-            transform: translateY(-0.05em);
-            vertical-align: middle;
+            margin-right: -0.25em;
+            color: var(--color-primary);
           }
           tn-anchor {
             opacity: 0.65;
@@ -41,10 +40,8 @@ export const XNavbar = createCustomElement(() => {
       </style>
       <div>
         <span>
-          <tn-anchor>
-            <ion-icon size="large" name="radio-button-on-outline" />
-            UNNAMED
-          </tn-anchor>
+          <ion-icon size="large" name="radio-button-on-outline" />
+          <tn-anchor> UNNAMED </tn-anchor>
         </span>
         <span>
           <tn-anchor .push .href="/a">EXPLORE</tn-anchor>
