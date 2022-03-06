@@ -1,4 +1,5 @@
 import { Theme } from "../deps.ts";
+import { tnAcnhor } from "./tn_anchor.ts";
 import { tnBadge } from "./tn_badge.ts";
 import { tnButton } from "./tn_button.ts";
 import { tnCard, tnCardBody, tnCardFooter, tnCardHeader } from "./tn_card.ts";
@@ -18,6 +19,7 @@ import { tnSystem } from "./tn_system.ts";
 import { tnTooltip } from "./tn_tooltip.ts";
 
 export const theme: Theme = {
+  "tn-anchor": tnAcnhor,
   "tn-badge": tnBadge,
   "tn-button": tnButton,
   "tn-card-body": tnCardBody,

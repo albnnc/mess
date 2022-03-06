@@ -1,3 +1,4 @@
+export * from "./tn_anchor.ts";
 export * from "./tn_badge.ts";
 export * from "./tn_button.ts";
 export * from "./tn_card.ts";

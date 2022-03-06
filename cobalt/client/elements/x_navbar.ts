@@ -23,21 +23,32 @@ export const XNavbar = createCustomElement(() => {
           span {
             display: flex;
             align-items: center;
-            gap: var(--space-s);
+            gap: var(--space-m);
           }
           ion-icon {
             margin: -0.5em 0;
+            margin-right: 0.25em;
+            transform: translateY(-0.05em);
+            vertical-align: middle;
+          }
+          tn-anchor {
+            opacity: 0.65;
+            &:hover {
+              opacity: 1;
+            }
           }
         `}
       </style>
       <div>
         <span>
-          <ion-icon size="large" name="radio-button-on-outline" />
-          UNNAMED
+          <tn-anchor>
+            <ion-icon size="large" name="radio-button-on-outline" />
+            UNNAMED
+          </tn-anchor>
         </span>
         <span>
-          <a href="">EXPLORE</a>
-          <a href="">AUTH</a>
+          <tn-anchor .push .href="/a">EXPLORE</tn-anchor>
+          <tn-anchor .push .href="/b">AUTH</tn-anchor>
         </span>
       </div>
     </x-layout-container>
