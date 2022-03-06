@@ -10,13 +10,11 @@ const TooltipButton = createCustomElement(() => {
 
 const AppRoot = createCustomElement(() => {
   return html`
-    <tn-system>
-      <tn-card>
-        <tn-card-body>
-          <tooltip-button></tooltip-button>
-        </tn-card-body>
-      </tn-card>
-    </tn-system>
+    <tn-card>
+      <tn-card-body>
+        <tooltip-button></tooltip-button>
+      </tn-card-body>
+    </tn-card>
   `;
 });
 

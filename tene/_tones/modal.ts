@@ -34,11 +34,7 @@ const AppButton = createCustomElement(() => {
 });
 
 const AppRoot = createCustomElement(() => {
-  return html`
-    <tn-system>
-      <app-button></app-button>
-    </tn-system>
-  `;
+  return html` <app-button></app-button> `;
 });
 
 customElements.define("app-button", AppButton);

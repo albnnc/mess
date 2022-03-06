@@ -37,9 +37,11 @@ async function buildTonebook(dev?: boolean) {
       </head>
       <body>
         <script type="module" src="index.js"></script>
-        <div class="container">
-          <app-root></app-root>
-        </div>
+        <tn-system>
+          <div class="container">
+            <app-root></app-root>
+          </div>
+        </tn-system>
         ${dev ? `<script>${tonebook.createReloadScript()}</script>` : ""}
       </body>
     </html>
