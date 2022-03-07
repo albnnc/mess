@@ -51,9 +51,8 @@ export const XLayoutContainer = createContainerElement({
   style: css`
     :host {
       display: block;
-      width: 100%;
+      width: calc(100% - 2 * var(--space-l));
       max-width: 1200px;
-      padding: 0 var(--space-l);
       margin: 0 auto;
     }
   `,

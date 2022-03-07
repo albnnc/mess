@@ -1,7 +1,9 @@
 import { createCustomElement, html, registerElements } from "./deps.ts";
 import * as elements from "./elements/mod.ts";
+import * as pages from "./pages/mod.ts";
 
 registerElements(elements);
+registerElements(pages);
 
 const XRoot = createCustomElement(() => {
   return html`
@@ -11,7 +13,7 @@ const XRoot = createCustomElement(() => {
         <x-layout-body>
           <x-layout-container>
             <x-route .path="/a" .render=${() => "A"} />
-            <x-route .path="/b" .render=${() => "B"} />
+            <x-route .path="/login" .render=${() => html`<x-login-page />`} />
           </x-layout-container>
         </x-layout-body>
         <x-layout-footer>

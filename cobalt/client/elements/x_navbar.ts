@@ -45,7 +45,7 @@ export const XNavbar = createCustomElement(() => {
         </span>
         <span>
           <tn-anchor .push .href="/a">EXPLORE</tn-anchor>
-          <tn-anchor .push .href="/b">AUTH</tn-anchor>
+          <tn-anchor .push .href="/login">LOGIN</tn-anchor>
         </span>
       </div>
     </x-layout-container>
