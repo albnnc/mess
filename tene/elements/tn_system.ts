@@ -13,7 +13,6 @@ import { theme } from "../mod.ts";
 export const TnSystemPortalHolder = createCustomElement(() => html`<div />`);
 
 export const TnSystem = createCustomElement(() => {
-  const style = useThemeStyle();
   // TODO: Consider better portal mechanics.
   const [systemPortal] = useQuery("tn-system-portal-holder");
   const portal = systemPortal?.shadowRoot?.firstChild as Element | undefined;
@@ -21,11 +20,14 @@ export const TnSystem = createCustomElement(() => {
   useContextProvider(systemContext, systemContextValue);
   // TODO: Make theme configurable.
   useContextProvider(themeContext, theme);
+  // Has to be called after provider definition
+  // in order to grab context defined on itself.
+  const style = useThemeStyle();
   return html`
     <style>
       ${style}
     </style>
-    <slot></slot>
+    <slot />
     <tn-system-portal-holder />
   `;
 });
