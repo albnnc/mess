@@ -2,10 +2,10 @@ import { createCustomElement, html, useProp, useThemeStyle } from "../deps.ts";
 
 export const TnInput = createCustomElement(() => {
   const style = useThemeStyle();
-  const [value, setValue] = useProp("", { name: "value" });
-  const [placeholder] = useProp("", { name: "placeholder" });
-  const [disabled] = useProp(false, { name: "disabled" });
-  const [invalid] = useProp(false, { name: "invalid" });
+  const [value, setValue] = useProp("value", "");
+  const [placeholder] = useProp("placeholder", "");
+  const [disabled] = useProp("disabled", false);
+  const [invalid] = useProp("invalid", false);
   return html`
     <style>
       ${style}

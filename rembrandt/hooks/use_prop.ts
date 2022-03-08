@@ -4,14 +4,7 @@ import { useState } from "./use_state.ts";
 import { useEffect } from "./use_effect.ts";
 import { getInitialValue } from "../utils/mod.ts";
 
-export interface PropOptions {
-  name: string;
-}
-
-export const useProp = <T>(
-  initializer: Initializer<T>,
-  { name }: PropOptions
-) => {
+export const useProp = <T>(name: string, initializer: Initializer<T>) => {
   const element = useElement();
   // TODO: Consider defining getter / setter pair bofore
   // one is able to set properties (e.g. in element constructor)

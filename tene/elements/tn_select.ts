@@ -18,15 +18,13 @@ export interface TnSelectOption {
 
 export const TnSelect = createCustomElement(() => {
   const style = useThemeStyle();
-  const [placeholder] = useProp("", { name: "placeholder" });
-  const [disabled] = useProp(false, { name: "disabled" });
-  const [invalid] = useProp(false, { name: "invalid" });
+  const [placeholder] = useProp("placeholder", "");
+  const [disabled] = useProp("disabled", false);
+  const [invalid] = useProp("invalid", false);
+  const [options] = useProp<TnSelectOption[] | undefined>("options", undefined);
+  const [value, setValue] = useProp<unknown>("value", undefined);
   const [button] = useQuery("button");
   const { openDropMenu } = useDrop();
-  const [options] = useProp<TnSelectOption[] | undefined>(undefined, {
-    name: "options",
-  });
-  const [value, setValue] = useProp<unknown>(undefined, { name: "value" });
   const renderTitle = useMemoFn(
     (v?: TnSelectOption["title"]) => (v instanceof Function ? v() : v),
     []

@@ -10,9 +10,9 @@ import {
 export const TnAnchor = createCustomElement(() => {
   const element = useElement();
   const style = useThemeStyle();
-  const [push] = useProp(false, { name: "push" });
-  const [replace] = useProp(false, { name: "replace" });
-  const [href] = useProp(undefined, { name: "href" });
+  const [push] = useProp("push", false);
+  const [replace] = useProp("replace", false);
+  const [href] = useProp("href", undefined);
   const handleClick = useMemoFn((ev: PointerEvent) => {
     if (!push && !replace) {
       return;

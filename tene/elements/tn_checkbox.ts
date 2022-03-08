@@ -8,9 +8,9 @@ import {
 
 export const TnCheckbox = createCustomElement(() => {
   const style = useThemeStyle();
-  const [checked, setChecked] = useProp(false, { name: "checked" });
-  const [disabled] = useProp(false, { name: "disabled" });
-  const [invalid] = useProp(false, { name: "invalid" });
+  const [checked, setChecked] = useProp("checked", false);
+  const [disabled] = useProp("disabled", false);
+  const [invalid] = useProp("invalid", false);
   const handleKeypress = useMemoFn((ev: KeyboardEvent) => {
     if (ev.key === "Enter") {
       setChecked((v) => !v);

@@ -7,9 +7,9 @@ export const TnDropMenu = createContainerElement();
 
 export const TnDropMenuItem = createCustomElement(() => {
   const style = useThemeStyle();
-  useProp<unknown>(undefined, { name: "value" });
-  useProp<boolean>(false, { name: "active" });
-  const [disabled] = useProp<boolean>(false, { name: "disabled" });
+  useProp<unknown>("value", undefined);
+  useProp<boolean>("active", false);
+  const [disabled] = useProp<boolean>("disabled", false);
   return html`
     <style>
       ${style}
