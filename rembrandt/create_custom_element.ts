@@ -1,9 +1,9 @@
 import { claimElement, useLifecycle } from "./hooks/mod.ts";
-import { RenderFn, Template } from "./types.ts";
+import { CustomElement, RenderFn, Template } from "./types.ts";
 import { dispatchLocalEvent } from "./utils/mod.ts";
 
-export const createCustomElement = (fn: RenderFn) => {
-  return class CustomElement extends HTMLElement {
+export function createCustomElement<P = Record<never, never>>(fn: RenderFn) {
+  return class extends HTMLElement {
     constructor() {
       super();
       this.attachShadow({ mode: "open" });
@@ -21,5 +21,5 @@ export const createCustomElement = (fn: RenderFn) => {
       claimElement(this, () => (template = fn()));
       return template;
     }
-  };
-};
+  } as { new (): CustomElement<P> };
+}

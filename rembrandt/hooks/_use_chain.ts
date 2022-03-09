@@ -1,4 +1,4 @@
-import { RenderableElement } from "../types.ts";
+import { CustomElement } from "../types.ts";
 import { ensureKey } from "../utils/mod.ts";
 import { useElement } from "./use_element.ts";
 
@@ -11,8 +11,9 @@ export function useChain<T>(
   key: string | number | symbol,
   fn: (prior: T | undefined) => T
 ) {
-  const element = useElement() as RenderableElement &
-    Record<string | number | symbol, unknown>;
+  const element = useElement() as CustomElement<
+    Record<string | number | symbol, unknown>
+  >;
   const data = ensureKey<ChainData<T>>(element, key, initializeData);
   if (data.index === -1) {
     data.index = 0;

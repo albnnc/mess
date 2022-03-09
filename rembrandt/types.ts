@@ -2,9 +2,12 @@
 /// <reference lib="dom" />
 /// <reference lib="deno.ns" />
 
-export interface RenderableElement extends HTMLElement {
-  renderShadowContent(): Template;
-}
+export type CustomElement<P = Record<never, never>> = HTMLElement &
+  P & {
+    connectedCallback(): void;
+    disconnectedCallback(): void;
+    renderShadowContent(): Template;
+  };
 
 export interface RenderFn {
   (): Template;
