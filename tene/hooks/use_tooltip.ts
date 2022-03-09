@@ -1,7 +1,7 @@
 import { systemContext } from "../contexts/mod.ts";
 import {
   floating,
-  TemplateNode,
+  Template,
   updateChildren,
   useContext,
   useEffect,
@@ -16,7 +16,7 @@ export interface TooltipOptions {
 }
 
 export function useTooltip(
-  render: () => TemplateNode | TemplateNode[],
+  render: () => Template,
   {
     anchor,
     triggers = ["mouseenter", "mouseleave"],
@@ -39,7 +39,7 @@ export function useTooltip(
       }
       state.open = true;
       tooltip = document.createElement("tn-tooltip");
-      updateChildren(tooltip, Array.isArray(content) ? content : [content]);
+      updateChildren(tooltip, content);
       portal.appendChild(tooltip);
       const applyStyle = ({ x = 0, y = 0, strategy = "absolute" }) => {
         Object.assign(tooltip?.style ?? {}, {

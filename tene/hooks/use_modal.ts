@@ -1,6 +1,6 @@
 import { systemContext } from "../contexts/mod.ts";
 import {
-  TemplateNode,
+  Template,
   updateChildren,
   useContext,
   useMemo,
@@ -12,7 +12,7 @@ export interface ModalRendererOptions {
 }
 
 export interface ModalOptions {
-  render: (options: ModalRendererOptions) => TemplateNode | TemplateNode[];
+  render: (options: ModalRendererOptions) => Template;
   kind?: string;
   onClose?: () => void;
 }

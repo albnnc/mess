@@ -1,8 +1,11 @@
 import { NODE_TYPE_TEXT, NODE_TYPE_ELEMENT } from "../constants.ts";
-import { TemplateNode } from "../types.ts";
+import { Template, TemplateNode } from "../types.ts";
 import { updateNode } from "./update_node.ts";
 
-export const updateChildren = (parent: Node, templateNodes: TemplateNode[]) => {
+export const updateChildren = (parent: Node, template: Template) => {
+  const templateNodes: TemplateNode[] = Array.isArray(template)
+    ? template
+    : [template];
   const nodeCounts = {};
   const tokenNodeMap = new Map<string, Node>();
   const nodeTokenMap = new Map<Node, string>();

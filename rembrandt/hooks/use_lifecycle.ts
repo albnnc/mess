@@ -20,9 +20,7 @@ const getData = (element: RenderableElement) => {
         events: {},
         attributes: {},
         props: {},
-        children: Array.isArray(templateOutput)
-          ? templateOutput
-          : [templateOutput],
+        children: templateOutput,
       };
       updateNode(element.shadowRoot!, templateNode); // FIXME
       dispatchLocalEvent(element, "updated");

@@ -1,7 +1,7 @@
 import { systemContext } from "../contexts/mod.ts";
 import {
   floating,
-  TemplateNode,
+  Template,
   updateChildren,
   useContext,
   useMemo,
@@ -9,7 +9,7 @@ import {
 } from "../deps.ts";
 
 export interface DropOptions {
-  render: () => TemplateNode | TemplateNode[];
+  render: () => Template;
   tailored?: boolean;
   placement?: floating.Placement;
   onClose?: () => void;
@@ -35,9 +35,9 @@ export function useDrop() {
       if (existing) {
         return existing;
       }
-      const data = render();
       const drop = document.createElement("tn-drop");
-      updateChildren(drop, Array.isArray(data) ? data : [data]);
+      const content = render();
+      updateChildren(drop, content);
       portal.appendChild(drop);
       const applyStyle = ({ x = 0, y = 0, strategy = "absolute" }) => {
         Object.assign(drop.style, {

@@ -3,11 +3,11 @@
 /// <reference lib="deno.ns" />
 
 export interface RenderableElement extends HTMLElement {
-  renderShadowContent(): TemplateNode | TemplateNode[];
+  renderShadowContent(): Template;
 }
 
 export interface RenderFn {
-  (): TemplateNode | TemplateNode[];
+  (): Template;
 }
 
 export type Deps = unknown[];
@@ -34,7 +34,8 @@ export interface TemplateNodeObject {
   attributes: Record<string, string>;
   events: Record<string, (e: Event) => void>;
   props: Record<string, unknown>;
-  children: TemplateNode[];
+  children: Template;
 }
 export type TemplateNodePrimitive = string | number | null | undefined | false;
 export type TemplateNode = TemplateNodeObject | TemplateNodePrimitive;
+export type Template = TemplateNode | TemplateNode[];

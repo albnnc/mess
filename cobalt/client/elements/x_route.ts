@@ -1,6 +1,6 @@
 import {
   createCustomElement,
-  TemplateNode,
+  Template,
   urlPattern,
   useMemo,
   useProp,
@@ -9,10 +9,7 @@ import { useLocation } from "../hooks/mod.ts";
 
 export const XRoute = createCustomElement(() => {
   const [path] = useProp("path", undefined);
-  const [render] = useProp<undefined | (() => TemplateNode | TemplateNode[])>(
-    "render",
-    undefined
-  );
+  const [render] = useProp<undefined | (() => Template)>("render", undefined);
   const pattern = useMemo(
     () => (path ? new urlPattern.URLPattern(path, location.origin) : undefined),
     []

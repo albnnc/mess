@@ -1,5 +1,5 @@
 import { claimElement, useLifecycle } from "./hooks/mod.ts";
-import { RenderFn, TemplateNode } from "./types.ts";
+import { RenderFn, Template } from "./types.ts";
 import { dispatchLocalEvent } from "./utils/mod.ts";
 
 export const createCustomElement = (fn: RenderFn) => {
@@ -17,11 +17,9 @@ export const createCustomElement = (fn: RenderFn) => {
       dispatchLocalEvent(this, "disconnected");
     }
     renderShadowContent() {
-      let template: TemplateNode | TemplateNode[];
-      claimElement(this, () => {
-        template = fn();
-      });
-      return template!; // FIXME
+      let template: Template;
+      claimElement(this, () => (template = fn()));
+      return template;
     }
   };
 };

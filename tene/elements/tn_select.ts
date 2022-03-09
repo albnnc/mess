@@ -1,7 +1,7 @@
 import {
   createCustomElement,
   html,
-  TemplateNode,
+  Template,
   useMemo,
   useMemoFn,
   useProp,
@@ -11,7 +11,7 @@ import {
 import { useDrop } from "../hooks/mod.ts";
 
 export interface TnSelectOption {
-  title: string | (() => TemplateNode | TemplateNode[]);
+  title: string | (() => Template);
   value: unknown;
   disabled?: boolean;
 }
