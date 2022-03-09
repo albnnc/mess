@@ -9,9 +9,3 @@ export class ContextRequestEvent<T extends Context<unknown>> extends Event {
     super("context-request", { bubbles: true, composed: true });
   }
 }
-
-declare global {
-  interface HTMLElementEventMap {
-    "context-request": ContextRequestEvent<Context<unknown>>;
-  }
-}

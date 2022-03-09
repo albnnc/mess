@@ -30,7 +30,7 @@ export function useContextProvider<T>(context: Context<T>, value: T) {
       ((ev) => {
         const { context, callback, multiple } = ev as ContextRequestEvent<
           Context<unknown>
-        >; // FIXME
+        >;
         for (const v of items.values()) {
           if (context.name === v.context.name) {
             callback(v.value);
