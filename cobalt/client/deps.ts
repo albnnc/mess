@@ -1,4 +1,4 @@
-import "../../tene/register.ts";
+import "../../tene/define.ts";
 
 // This import is huge, it costs us 45kb. Consider removing.
 export * as urlPattern from "https://cdn.skypack.dev/urlpattern-polyfill@1.0.0-rc5?dts";

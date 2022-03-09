@@ -1,6 +1,6 @@
 import { createCustomElement, html, useQuery } from "../deps.ts";
 import { useTooltip } from "../mod.ts";
-import "../register.ts";
+import "../define.ts";
 
 const TooltipButton = createCustomElement(() => {
   const [tnButton] = useQuery("tn-button");

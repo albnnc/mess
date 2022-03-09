@@ -1,6 +1,6 @@
 import { createCustomElement, html, useQuery, useState } from "../deps.ts";
 import { useDrop } from "../mod.ts";
-import "../register.ts";
+import "../define.ts";
 
 const AppButton = createCustomElement(() => {
   const { openDropMenu } = useDrop();

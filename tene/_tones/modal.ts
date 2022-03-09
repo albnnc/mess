@@ -1,6 +1,6 @@
 import { createCustomElement, html } from "../deps.ts";
 import { useModal } from "../mod.ts";
-import "../register.ts";
+import "../define.ts";
 
 const AppButton = createCustomElement(() => {
   const { openModal } = useModal();

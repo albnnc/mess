@@ -1,6 +1,6 @@
 import { toKebabCase } from "./to_kebab_case.ts";
 
-export function registerElements(
+export function defineCustomElements(
   elements: Record<string, CustomElementConstructor>
 ) {
   Object.keys(elements).forEach((k) => {
