@@ -1,9 +1,9 @@
-import { createCustomElement, html, registerElements } from "./deps.ts";
+import { createCustomElement, html, defineCustomElements } from "./deps.ts";
 import * as elements from "./elements/mod.ts";
 import * as pages from "./pages/mod.ts";
 
-registerElements(elements);
-registerElements(pages);
+defineCustomElements(elements);
+defineCustomElements(pages);
 
 const XRoot = createCustomElement(() => {
   return html`
