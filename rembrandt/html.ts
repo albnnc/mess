@@ -10,12 +10,12 @@ const h = (
   const events: TemplateNodeObject["events"] = {};
   const props: TemplateNodeObject["props"] = {};
   Object.entries(options ?? {}).forEach(([key, value]) => {
-    if (key.startsWith("@")) {
-      events[key.slice(1)] = value as (e: Event) => void; // FIXME
+    if (key.startsWith("@") && value instanceof Function) {
+      events[key.slice(1)] = value as (e: Event) => void;
     } else if (key.startsWith(".")) {
       props[key.slice(1)] = value;
-    } else {
-      attributes[key] = value as string; // FIXME
+    } else if (typeof value === "string") {
+      attributes[key] = value;
     }
   });
   return {
