@@ -1,5 +1,5 @@
 import { CONTEXT_HOOK_KEY } from "../constants.ts";
-import { ContextRequestEvent } from "../context_request_event.ts";
+import { ContextRequestEvent } from "../events/mod.ts";
 import { Context, ContextCallback } from "../types.ts";
 import { useEffect } from "./use_effect.ts";
 import { useEventListener } from "./use_event_listener.ts";

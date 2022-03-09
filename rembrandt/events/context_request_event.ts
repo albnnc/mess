@@ -1,4 +1,4 @@
-import { Context, ContextCallback, ContextValue } from "./types.ts";
+import { Context, ContextCallback, ContextValue } from "../types.ts";
 
 export class ContextRequestEvent<T extends Context<unknown>> extends Event {
   public constructor(

@@ -1,4 +1,4 @@
-import { ContextRequestEvent } from "../context_request_event.ts";
+import { ContextRequestEvent } from "../events/mod.ts";
 import { Context } from "../types.ts";
 import { useEffect } from "./use_effect.ts";
 import { useElement } from "./use_element.ts";

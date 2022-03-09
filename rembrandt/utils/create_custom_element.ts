@@ -1,6 +1,6 @@
-import { claimElement, useLifecycle } from "./hooks/mod.ts";
-import { CustomElement, RenderFn, Template } from "./types.ts";
-import { dispatchLocalEvent } from "./utils/mod.ts";
+import { claimElement, useLifecycle } from "../hooks/mod.ts";
+import { CustomElement, RenderFn, Template } from "../types.ts";
+import { dispatchLocalEvent } from "./dispatch_local_event.ts";
 
 export function createCustomElement<P = Record<never, never>>(fn: RenderFn) {
   return class extends HTMLElement {
