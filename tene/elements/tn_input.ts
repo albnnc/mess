@@ -1,6 +1,11 @@
 import { createCustomElement, html, useProp, useThemeStyle } from "../deps.ts";
 
-export const TnInput = createCustomElement(() => {
+export const TnInput = createCustomElement<{
+  value?: string;
+  placeholder?: string;
+  disabled?: boolean;
+  invalid?: boolean;
+}>(() => {
   const style = useThemeStyle();
   const [value, setValue] = useProp("value", "");
   const [placeholder] = useProp("placeholder", "");

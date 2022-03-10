@@ -9,7 +9,7 @@ export const TnModal = createCustomElement(() => {
     </style>
     <div part="backdrop"></div>
     <div part="content">
-      <slot></slot>
+      <slot />
     </div>
   `;
 });

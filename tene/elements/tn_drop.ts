@@ -5,7 +5,11 @@ export const TnDrop = createContainerElement();
 
 export const TnDropMenu = createContainerElement();
 
-export const TnDropMenuItem = createCustomElement(() => {
+export const TnDropMenuItem = createCustomElement<{
+  value?: unknown;
+  active?: boolean;
+  disabled?: boolean;
+}>(() => {
   const style = useThemeStyle();
   useProp<unknown>("value", undefined);
   useProp<boolean>("active", false);

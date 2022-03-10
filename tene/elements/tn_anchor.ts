@@ -7,12 +7,16 @@ import {
   useThemeStyle,
 } from "../deps.ts";
 
-export const TnAnchor = createCustomElement(() => {
+export const TnAnchor = createCustomElement<{
+  push?: boolean;
+  replace?: boolean;
+  href?: string;
+}>(() => {
   const element = useElement();
   const style = useThemeStyle();
   const [push] = useProp("push", false);
   const [replace] = useProp("replace", false);
-  const [href] = useProp("href", undefined);
+  const [href] = useProp<string | undefined>("href", undefined);
   const handleClick = useMemoFn((ev: PointerEvent) => {
     if (!push && !replace) {
       return;

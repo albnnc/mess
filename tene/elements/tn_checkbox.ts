@@ -6,7 +6,11 @@ import {
   useThemeStyle,
 } from "../deps.ts";
 
-export const TnCheckbox = createCustomElement(() => {
+export const TnCheckbox = createCustomElement<{
+  checked?: boolean;
+  disabled?: boolean;
+  invalid?: boolean;
+}>(() => {
   const style = useThemeStyle();
   const [checked, setChecked] = useProp("checked", false);
   const [disabled] = useProp("disabled", false);

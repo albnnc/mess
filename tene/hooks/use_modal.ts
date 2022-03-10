@@ -31,10 +31,10 @@ export function useModal() {
         backdrop.removeEventListener("click", close);
         onClose?.();
       };
-      const data = render({ close });
       const modal = document.createElement("tn-modal");
+      const content = render({ close });
       Object.assign(modal, { kind });
-      updateChildren(modal, Array.isArray(data) ? data : [data]);
+      updateChildren(modal, content);
       portal.appendChild(modal);
       const backdrop = modal.shadowRoot?.querySelector(
         `[part="backdrop"]`
