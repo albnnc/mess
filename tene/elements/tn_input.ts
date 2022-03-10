@@ -1,20 +1,16 @@
-import { createCustomElement, html, useProp, useThemeStyle } from "../deps.ts";
+import { html, useProp } from "../deps.ts";
+import { createThemedElement } from "../utils/mod.ts";
 
-export const TnInput = createCustomElement<{
-  value?: string;
+export const TnInput = createThemedElement<{
   placeholder?: string;
   disabled?: boolean;
   invalid?: boolean;
 }>(() => {
-  const style = useThemeStyle();
   const [value, setValue] = useProp("value", "");
   const [placeholder] = useProp("placeholder", "");
   const [disabled] = useProp("disabled", false);
   const [invalid] = useProp("invalid", false);
   return html`
-    <style>
-      ${style}
-    </style>
     <input
       class=${invalid ? "invalid" : undefined}
       .value=${value}

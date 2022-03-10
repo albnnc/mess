@@ -1,4 +1,4 @@
-import { createCustomElement, html, useThemeStyle } from "../deps.ts";
+import { createCustomElement, html, useProp, useThemeStyle } from "../deps.ts";
 
 export interface ContainerElementOptions {
   style?: string;
@@ -7,14 +7,15 @@ export interface ContainerElementOptions {
 export function createContainerElement({
   style,
 }: ContainerElementOptions = {}) {
-  return createCustomElement(() => {
+  return createCustomElement<{ kind?: string }>(() => {
+    useProp<string | undefined>("kind", undefined);
     const themeStyle = useThemeStyle();
     return html`
       <style>
         ${themeStyle}
         ${style}
       </style>
-      <slot></slot>
+      <slot />
     `;
   });
 }

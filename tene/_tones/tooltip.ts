@@ -12,7 +12,7 @@ const AppRoot = createCustomElement(() => {
   return html`
     <tn-card>
       <tn-card-body>
-        <tooltip-button></tooltip-button>
+        <tooltip-button />
       </tn-card-body>
     </tn-card>
   `;

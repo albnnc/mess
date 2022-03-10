@@ -19,7 +19,7 @@ const ContextProvider = createCustomElement(() => {
       <div>
         <button @click=${() => setValue((v) => v + 1)}>Increment</button>
       </div>
-      <slot></slot>
+      <slot />
     </p>
   `;
 });
@@ -40,7 +40,7 @@ const ContextConsumer = createCustomElement(() => {
 const AppRoot = createCustomElement(() => {
   return html`
     <context-provider>
-      <context-consumer></context-consumer>
+      <context-consumer />
     </context-provider>
   `;
 });

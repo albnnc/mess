@@ -1,17 +1,11 @@
-import {
-  createCustomElement,
-  html,
-  useMemoFn,
-  useProp,
-  useThemeStyle,
-} from "../deps.ts";
+import { html, useMemoFn, useProp } from "../deps.ts";
+import { createThemedElement } from "../utils/mod.ts";
 
-export const TnCheckbox = createCustomElement<{
+export const TnCheckbox = createThemedElement<{
   checked?: boolean;
   disabled?: boolean;
   invalid?: boolean;
 }>(() => {
-  const style = useThemeStyle();
   const [checked, setChecked] = useProp("checked", false);
   const [disabled] = useProp("disabled", false);
   const [invalid] = useProp("invalid", false);
@@ -21,9 +15,6 @@ export const TnCheckbox = createCustomElement<{
     }
   }, []);
   return html`
-    <style>
-      ${style}
-    </style>
     <input
       id="checkbox"
       type="checkbox"
@@ -33,7 +24,7 @@ export const TnCheckbox = createCustomElement<{
       @keypress=${handleKeypress}
     />
     <label for="checkbox">
-      <slot></slot>
+      <slot />
     </label>
   `;
 });

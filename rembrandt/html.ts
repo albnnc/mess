@@ -1,11 +1,11 @@
 import { htm } from "./deps.ts";
-import { TemplateNodeObject, TemplateNode } from "./types.ts";
+import { Template, TemplateNodeObject } from "./types.ts";
 
 const h = (
   tag: string,
   options: Record<string, unknown>,
-  ...children: TemplateNode[]
-): TemplateNode => {
+  ...children: Template[]
+): Template => {
   const attributes: TemplateNodeObject["attributes"] = {};
   const events: TemplateNodeObject["events"] = {};
   const props: TemplateNodeObject["props"] = {};
@@ -18,13 +18,10 @@ const h = (
       attributes[key] = value;
     }
   });
-  return {
-    tag,
-    attributes,
-    events,
-    props,
-    children: children.flat(Infinity),
-  };
+  return { tag, attributes, events, props, children };
 };
 
-export const html = htm.bind(h);
+export const html = htm.bind(h) as (
+  strings: TemplateStringsArray,
+  ...values: unknown[]
+) => Template;

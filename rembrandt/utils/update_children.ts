@@ -4,7 +4,7 @@ import { updateNode } from "./update_node.ts";
 
 export const updateChildren = (parent: Node, template: Template) => {
   const templateNodes: TemplateNode[] = Array.isArray(template)
-    ? template
+    ? template.flat(Infinity)
     : [template];
   const nodeCounts = {};
   const tokenNodeMap = new Map<string, Node>();

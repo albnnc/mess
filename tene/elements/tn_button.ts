@@ -1,14 +1,11 @@
-import { createCustomElement, html, useProp, useThemeStyle } from "../deps.ts";
+import { html, useProp } from "../deps.ts";
+import { createThemedElement } from "../utils/mod.ts";
 
-export const TnButton = createCustomElement<{
+export const TnButton = createThemedElement<{
   disabled?: boolean;
 }>(() => {
-  const style = useThemeStyle();
   const [disabled] = useProp("disabled", false);
   return html`
-    <style>
-      ${style}
-    </style>
     <button .disabled=${disabled}>
       <slot />
     </button>

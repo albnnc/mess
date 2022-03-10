@@ -26,7 +26,7 @@ const AppRoot = createCustomElement(() => {
   const [shown, setShown] = useState(false);
   return html`
     <p><button @click=${() => setShown((v) => !v)}>Toggle Content</button></p>
-    <p>${shown && html`<app-content></app-content>`}</p>
+    <p>${shown && html`<app-content />`}</p>
   `;
 });
 

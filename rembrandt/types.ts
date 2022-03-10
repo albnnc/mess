@@ -32,6 +32,7 @@ export type ContextValue<T extends Context<unknown>> = T extends Context<
   : never;
 export type ContextCallback<T> = (value: T, dispose?: () => void) => void;
 
+export type TemplateNodePrimitive = string | number | null | undefined | false;
 export interface TemplateNodeObject {
   tag: string;
   attributes: Record<string, string>;
@@ -39,6 +40,6 @@ export interface TemplateNodeObject {
   props: Record<string, unknown>;
   children: Template;
 }
-export type TemplateNodePrimitive = string | number | null | undefined | false;
-export type TemplateNode = TemplateNodeObject | TemplateNodePrimitive;
-export type Template = TemplateNode | TemplateNode[];
+export type TemplateNode = TemplateNodePrimitive | TemplateNodeObject;
+export type TemplateArray = Template[];
+export type Template = TemplateNode | TemplateArray;

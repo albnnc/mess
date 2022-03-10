@@ -1,12 +1,8 @@
-import { createCustomElement, html, useThemeStyle } from "../deps.ts";
-import { createContainerElement } from "../utils/mod.ts";
+import { html } from "../deps.ts";
+import { createContainerElement, createThemedElement } from "../utils/mod.ts";
 
-export const TnModal = createCustomElement(() => {
-  const style = useThemeStyle();
+export const TnModal = createThemedElement(() => {
   return html`
-    <style>
-      ${style}
-    </style>
     <div part="backdrop"></div>
     <div part="content">
       <slot />

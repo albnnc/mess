@@ -23,9 +23,9 @@ export const AppRoot = createCustomElement(() => {
       `}
     </style>
     <div class="container">
-      <app-menu></app-menu>
+      <app-menu />
       ${currentToneDescription &&
-      html`<iframe src=${`tones/${currentToneDescription.id}/`}></iframe>`}
+      html`<iframe src=${`tones/${currentToneDescription.id}/`} />`}
     </div>
   `;
 });

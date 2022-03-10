@@ -1,14 +1,13 @@
 import {
-  createCustomElement,
   html,
   Template,
   useMemo,
   useMemoFn,
   useProp,
   useQuery,
-  useThemeStyle,
 } from "../deps.ts";
 import { useDrop } from "../hooks/mod.ts";
+import { createThemedElement } from "../utils/mod.ts";
 
 export interface TnSelectOption {
   title: string | (() => Template);
@@ -16,14 +15,13 @@ export interface TnSelectOption {
   disabled?: boolean;
 }
 
-export const TnSelect = createCustomElement<{
+export const TnSelect = createThemedElement<{
   options?: TnSelectOption;
   value?: unknown;
   placeholder?: string;
   disabled?: boolean;
   invalid?: boolean;
 }>(() => {
-  const style = useThemeStyle();
   const [options] = useProp<TnSelectOption[] | undefined>("options", undefined);
   const [value, setValue] = useProp<unknown>("value", undefined);
   const [placeholder] = useProp("placeholder", "");
@@ -68,9 +66,6 @@ export const TnSelect = createCustomElement<{
       .catch(() => undefined);
   }, [button, value, options, openDropMenu, renderTitle]);
   return html`
-    <style>
-      ${style}
-    </style>
     <button
       class=${[disabled && "disabled", invalid && "invalid"]
         .filter(Boolean)
