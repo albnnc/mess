@@ -13,6 +13,7 @@ const AppRoot = createCustomElement(() => {
     <div>
       <tn-input .value="With default value" />
       <tn-input .placeholder="Placeholder" />
+      <tn-input .type="number" .placeholder=${`type="number"`} />
       <tn-input .disabled .value="Disabled" />
       <tn-input .invalid .value="Invalid" />
     </div>

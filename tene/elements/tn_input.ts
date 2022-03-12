@@ -6,6 +6,7 @@ export const TnInput = createThemedElement<{
   invalid?: boolean;
 }>(() => {
   const [value, setValue] = useProp("value", "");
+  const [type] = useProp("type", "");
   const [placeholder] = useProp("placeholder", "");
   const [disabled] = useProp("disabled", false);
   const [invalid] = useProp("invalid", false);
@@ -13,6 +14,7 @@ export const TnInput = createThemedElement<{
     <input
       class=${invalid ? "invalid" : undefined}
       .value=${value}
+      .type=${type}
       .placeholder=${placeholder}
       .disabled=${disabled}
       @input=${(ev: InputEvent) => {
