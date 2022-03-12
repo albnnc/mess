@@ -1,5 +1,10 @@
-import { html, useElement, useMemoFn, useProp } from "../deps.ts";
-import { createThemedElement } from "../utils/mod.ts";
+import {
+  createThemedElement,
+  html,
+  useElement,
+  useMemoFn,
+  useProp,
+} from "../deps.ts";
 
 export const TnAnchor = createThemedElement<{
   push?: boolean;

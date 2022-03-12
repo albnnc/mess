@@ -1,5 +1,4 @@
-import { html, useProp } from "../deps.ts";
-import { createThemedElement } from "../utils/mod.ts";
+import { createThemedElement, html, useProp } from "../deps.ts";
 
 export const TnInput = createThemedElement<{
   placeholder?: string;
@@ -17,7 +16,7 @@ export const TnInput = createThemedElement<{
       .placeholder=${placeholder}
       .disabled=${disabled}
       @input=${(ev: InputEvent) => {
-        const input = ev.currentTarget as HTMLInputElement;
+        const input = ev.target as HTMLInputElement;
         setValue(input.value ?? "");
       }}
     />

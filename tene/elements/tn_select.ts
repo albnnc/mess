@@ -1,4 +1,5 @@
 import {
+  createThemedElement,
   html,
   Template,
   useMemo,
@@ -7,7 +8,6 @@ import {
   useQuery,
 } from "../deps.ts";
 import { useDrop } from "../hooks/mod.ts";
-import { createThemedElement } from "../utils/mod.ts";
 
 export interface TnSelectOption {
   title: string | (() => Template);

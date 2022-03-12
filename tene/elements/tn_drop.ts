@@ -1,5 +1,5 @@
-import { html, useProp } from "../deps.ts";
-import { createContainerElement, createThemedElement } from "../utils/mod.ts";
+import { createThemedElement, html, useProp } from "../deps.ts";
+import { createContainerElement } from "../utils/mod.ts";
 
 export const TnDrop = createContainerElement();
 

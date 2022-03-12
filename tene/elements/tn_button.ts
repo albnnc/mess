@@ -1,5 +1,4 @@
-import { html, useProp } from "../deps.ts";
-import { createThemedElement } from "../utils/mod.ts";
+import { createThemedElement, html, useProp } from "../deps.ts";
 
 export const TnButton = createThemedElement<{
   disabled?: boolean;

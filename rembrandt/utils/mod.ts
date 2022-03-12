@@ -4,5 +4,6 @@ export * from "./create_custom_element.ts";
 export * from "./dispatch_local_event.ts";
 export * from "./ensure_key.ts";
 export * from "./get_initial_value.ts";
+export * from "./to_props.ts";
 export * from "./update_children.ts";
 export * from "./update_node.ts";

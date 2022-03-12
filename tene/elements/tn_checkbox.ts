@@ -1,5 +1,4 @@
-import { html, useMemoFn, useProp } from "../deps.ts";
-import { createThemedElement } from "../utils/mod.ts";
+import { createThemedElement, html, useMemoFn, useProp } from "../deps.ts";
 
 export const TnCheckbox = createThemedElement<{
   checked?: boolean;

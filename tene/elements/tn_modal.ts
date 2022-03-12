@@ -1,5 +1,5 @@
-import { html } from "../deps.ts";
-import { createContainerElement, createThemedElement } from "../utils/mod.ts";
+import { createThemedElement, html } from "../deps.ts";
+import { createContainerElement } from "../utils/mod.ts";
 
 export const TnModal = createThemedElement(() => {
   return html`
