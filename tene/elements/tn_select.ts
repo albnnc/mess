@@ -2,6 +2,7 @@ import {
   createThemedElement,
   html,
   Template,
+  useElement,
   useMemo,
   useMemoFn,
   useProp,
@@ -28,6 +29,7 @@ export const TnSelect = createThemedElement<{
   const [disabled] = useProp("disabled", false);
   const [invalid] = useProp("invalid", false);
   const [button] = useQuery("button");
+  const element = useElement();
   const { openDropMenu } = useDrop();
   const renderTitle = useMemoFn(
     (v?: TnSelectOption["title"]) => (v instanceof Function ? v() : v),
@@ -62,7 +64,15 @@ export const TnSelect = createThemedElement<{
         </tn-drop-menu>
       `,
     })
-      .then(setValue)
+      .then((v) => {
+        setValue(v);
+        element.dispatchEvent(
+          new InputEvent("input", {
+            bubbles: true,
+            composed: true,
+          })
+        );
+      })
       .catch(() => undefined);
   }, [button, value, options, openDropMenu, renderTitle]);
   return html`

@@ -17,7 +17,9 @@ export const JsfInputField = createCustomElement<FieldProps>(() => {
     }[schema.type as string];
   if (!inputType) {
     return html`
-      <jsf-panic ...${toProps(props)}>Invalid schema type</jsf-panic>
+      <jsf-panic-layout ...${toProps(props)}>
+        Invalid schema type
+      </jsf-panic-layout>
     `;
   }
   const step =
