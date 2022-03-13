@@ -1,8 +1,12 @@
-import { html, toProps, useEffect, useElement } from "../../deps.ts";
-import { createCustomElement } from "../../deps.ts";
+import {
+  createCustomElement,
+  html,
+  toProps,
+  useEffect,
+  useElement,
+} from "../../deps.ts";
 import { JsfValueEvent } from "../../events/mod.ts";
-import { useFieldProps } from "../../hooks/mod.ts";
-import { useDefaults } from "../../hooks/mod.ts";
+import { useDefaults, useFieldProps } from "../../hooks/mod.ts";
 import { FieldProps, Schema } from "../../types/mod.ts";
 import { getControlElementName, getSchemaProperties } from "../../utils/mod.ts";
 
