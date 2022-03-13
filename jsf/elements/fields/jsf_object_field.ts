@@ -9,7 +9,7 @@ import { JsfValidityEvent, JsfValueEvent } from "../../events/mod.ts";
 import { useDefaults, useFieldProps } from "../../hooks/mod.ts";
 import { FieldProps, Schema } from "../../types/mod.ts";
 import {
-  getControlElementName,
+  getControlElementTag,
   getSchemaConditionals,
   getSchemaProperties,
 } from "../../utils/mod.ts";
@@ -77,7 +77,7 @@ export const JsfObjectField = createCustomElement<FieldProps>(() => {
             </jsf-panic-layout>
           `;
         }
-        const tag = getControlElementName(controlProps.schema);
+        const tag = getControlElementTag(controlProps.schema);
         return html`
           <${tag}
             ...${toProps(controlProps)}

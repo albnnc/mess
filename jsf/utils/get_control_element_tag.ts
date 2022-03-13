@@ -1,6 +1,6 @@
 import { Schema } from "../types/mod.ts";
 
-export function getControlElementName(schema: Schema) {
+export function getControlElementTag(schema: Schema) {
   if (typeof schema.type !== "string") {
     return uknownElementName;
   }
@@ -9,9 +9,11 @@ export function getControlElementName(schema: Schema) {
       string: inputElementName,
       number: inputElementName,
       integer: inputElementName,
+      object: objectElementName,
     }[schema.type as string] ?? uknownElementName
   );
 }
 
 const inputElementName = "jsf-input-field";
+const objectElementName = "jsf-object-field";
 const uknownElementName = "jsf-unknown-field";

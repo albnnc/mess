@@ -6,8 +6,17 @@ import { useFormManager } from "../hooks/mod.ts";
 const ToneRoot = createCustomElement(() => {
   const manager = useFormManager({
     schema: {
-      title: "Input",
-      type: "string",
+      type: "object",
+      properties: {
+        username: {
+          title: "Username",
+          type: "string",
+        },
+        password: {
+          title: "Password",
+          type: "string",
+        },
+      },
     },
   });
   return html`
