@@ -13,8 +13,8 @@ export const getSchemaConditionals = (
       return prev;
     }
     const validator = new jsonSchema.Validator(curr.if as jsonSchema.Schema);
-    const specCompilantValue = JSON.parse(JSON.stringify(value));
-    const conditionalSchema = validator.validate(specCompilantValue).valid
+    const specCompliantValue = JSON.parse(JSON.stringify(value));
+    const conditionalSchema = validator.validate(specCompliantValue).valid
       ? curr.then
       : curr.else;
     return conditionalSchema && typeof conditionalSchema === "object"
