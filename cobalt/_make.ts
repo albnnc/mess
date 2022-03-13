@@ -7,7 +7,7 @@ import * as mod from "../mod/mod.ts";
 import { buildClient } from "./server/mod.ts";
 
 const currentDir = path.dirname(path.fromFileUrl(import.meta.url));
-const outputDir = path.join(currentDir, "build");
+const outputDir = path.join(currentDir, "_build");
 const clientDir = path.join(outputDir, "client");
 const clientEntry = path.join(currentDir, "client/mod.ts");
 const serverEntry = path.join(currentDir, "server/mod.ts");

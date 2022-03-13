@@ -8,7 +8,7 @@ import * as mod from "../mod/mod.ts";
 async function buildTonebook(dev?: boolean) {
   const currentDir = path.dirname(path.fromFileUrl(import.meta.url));
   const inputDir = path.join(currentDir, "./_tones");
-  const outputDir = path.join(currentDir, "./build");
+  const outputDir = path.join(currentDir, "./_build");
   const indexHtml = `
     <!DOCTYPE html>
     <html lang="en">
