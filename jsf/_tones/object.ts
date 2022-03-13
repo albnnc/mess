@@ -19,6 +19,22 @@ const ToneRoot = createCustomElement(() => {
               type: "string",
             },
           },
+          if: {
+            type: "object",
+            properties: {
+              username: { const: "admin" },
+            },
+            required: ["username"],
+          },
+          then: {
+            type: "object",
+            properties: {
+              secretPassword: {
+                title: "Secret Password",
+                type: "string",
+              },
+            },
+          },
         }}
       />
     </tn-system>

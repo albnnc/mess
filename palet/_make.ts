@@ -1,6 +1,6 @@
 #!/usr/bin/env -S deno run -A --no-check
 import * as path from "https://deno.land/std@0.121.0/path/mod.ts";
-import * as esbuild from "https://deno.land/x/esbuild@v0.13.14/mod.js";
+import * as esbuild from "https://deno.land/x/esbuild@v0.14.25/mod.js";
 import * as tonebook from "../tonebook/mod.ts";
 import * as make from "../make/mod.ts";
 import * as mod from "../mod/mod.ts";

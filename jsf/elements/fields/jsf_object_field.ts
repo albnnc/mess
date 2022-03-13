@@ -5,10 +5,14 @@ import {
   useEffect,
   useElement,
 } from "../../deps.ts";
-import { JsfValueEvent } from "../../events/mod.ts";
+import { JsfValidityEvent, JsfValueEvent } from "../../events/mod.ts";
 import { useDefaults, useFieldProps } from "../../hooks/mod.ts";
 import { FieldProps, Schema } from "../../types/mod.ts";
-import { getControlElementName, getSchemaProperties } from "../../utils/mod.ts";
+import {
+  getControlElementName,
+  getSchemaConditionals,
+  getSchemaProperties,
+} from "../../utils/mod.ts";
 
 export const JsfObjectField = createCustomElement<FieldProps>(() => {
   const element = useElement();
@@ -20,15 +24,14 @@ export const JsfObjectField = createCustomElement<FieldProps>(() => {
     value,
     setValue,
     validity = {},
+    setValidity,
   } = props;
   const objectifiedValue = (
     value && typeof value === "object" ? value : {}
   ) as Record<string, unknown>;
   const properties = getSchemaProperties(schema) ?? {};
-  const availables = { ...properties };
-  // const conditionals = getConditionals(schema, value) ?? {};
-  // const availables = { ...properties, ...conditionals };
-
+  const conditionals = getSchemaConditionals(schema, value);
+  const availables = { ...properties, ...conditionals };
   const availableKeys = new Set(Object.keys(availables));
   const keys = (Array.isArray(order) ? order : [])
     .map((v) => v?.toString() ?? "")
@@ -41,13 +44,12 @@ export const JsfObjectField = createCustomElement<FieldProps>(() => {
       return prev;
     }, [] as string[])
     .concat(Array.from(availableKeys));
-
   useEffect(() => {
     // An object without values from removed fields.
     const filtered = { ...objectifiedValue };
     const availableKeys = new Set(Object.keys(availables));
     let hasToUpdate = false;
-    Object.keys(objectifiedValue ?? {}).forEach((k) => {
+    Object.keys(objectifiedValue).forEach((k) => {
       if (!availableKeys.has(k)) {
         filtered[k] = undefined;
         hasToUpdate = true;
@@ -58,9 +60,6 @@ export const JsfObjectField = createCustomElement<FieldProps>(() => {
       element.dispatchEvent(new JsfValueEvent(filtered));
     }
   }, [keys.join()]);
-
-  console.log("keys", keys);
-
   return html`
     <jsf-object-template ...${toProps(props)}>
       ${keys.map((key) => {
@@ -70,19 +69,6 @@ export const JsfObjectField = createCustomElement<FieldProps>(() => {
           schema: availables[key] as Schema,
           value: objectifiedValue[key],
           validity: validity.properties?.[key],
-          // onValue: (v) => {
-          //   onValue?.(
-          //     merge(clone(value), { [key]: v }, (a, b) =>
-          //       Array.isArray(a) ? b : undefined
-          //     )
-          //   );
-          // },
-          // onValidity: e =>
-          //   onValidity?.(
-          //     merge(clone(validity), { properties: { [key]: e } }, (a, b, k) =>
-          //       k === 'errors' ? b : undefined
-          //     )
-          //   )
         };
         if (typeof controlProps.schema !== "object") {
           return html`
@@ -103,6 +89,18 @@ export const JsfObjectField = createCustomElement<FieldProps>(() => {
               };
               setValue(nextValue);
               element.dispatchEvent(new JsfValueEvent(nextValue));
+            }}
+            @jsf-validity=${(ev: JsfValidityEvent) => {
+              ev.stopPropagation();
+              const nextValidity = {
+                ...validity,
+                properties: {
+                  ...validity.properties,
+                  [key]: ev.validity,
+                },
+              };
+              setValidity(nextValidity);
+              element.dispatchEvent(new JsfValidityEvent(nextValidity));
             }}
           />
         `;

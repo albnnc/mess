@@ -1,27 +1,24 @@
-// import Ajv from 'ajv';
-// import { Schema } from '../models';
-// import { clone } from './clone';
-// import { isObject } from './guards';
-// import { merge } from './merge';
+import { jsonSchema } from "../deps.ts";
+import { Schema } from "../types/mod.ts";
 
-// const ajv = new Ajv();
-
-// export const getConditionals = (
-//   schema: Schema,
-//   value: any
-// ): Schema['properties'] => {
-//   if (value === undefined) {
-//     return {};
-//   }
-//   return [schema, ...(schema.allOf ?? [])].reduce((prev, curr) => {
-//     if (typeof curr !== 'object' || typeof curr.if !== 'object') {
-//       return prev;
-//     }
-//     const validate = ajv.compile(curr.if);
-//     const target = validate(value) ? curr.then : curr.else;
-//     if (isObject(target)) {
-//       merge(prev, clone(target.properties));
-//     }
-//     return prev;
-//   }, {} as Schema['properties']);
-// };
+export const getSchemaConditionals = (
+  schema: Schema,
+  value: unknown
+): Schema["properties"] => {
+  if (value === undefined) {
+    return {};
+  }
+  return [schema, ...(schema.allOf ?? [])].reduce((prev, curr) => {
+    if (typeof curr !== "object" || typeof curr.if !== "object") {
+      return prev;
+    }
+    const validator = new jsonSchema.Validator(curr.if as jsonSchema.Schema);
+    const specCompilantValue = JSON.parse(JSON.stringify(value));
+    const conditionalSchema = validator.validate(specCompilantValue).valid
+      ? curr.then
+      : curr.else;
+    return conditionalSchema && typeof conditionalSchema === "object"
+      ? { ...prev, ...conditionalSchema.properties }
+      : prev;
+  }, {} as Schema["properties"]);
+};

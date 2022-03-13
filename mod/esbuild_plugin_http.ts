@@ -25,8 +25,17 @@ export async function createEsbuildPluginHttp({
         const cacheFile = await locateCacheFile(args.path, {
           cacheDir,
         });
+        const loader = (
+          args.path.includes(".ts")
+            ? "ts"
+            : args.path.includes(".tsx")
+            ? "tsx"
+            : args.path.includes("jsx")
+            ? "jsx"
+            : "js"
+        ) as esbuild.Loader;
         if (cacheFile) {
-          return { contents: await Deno.readTextFile(cacheFile) };
+          return { contents: await Deno.readTextFile(cacheFile), loader };
         }
         const getContents = async (url: string): Promise<string> => {
           const response = await fetch(url);
@@ -36,7 +45,7 @@ export async function createEsbuildPluginHttp({
           }
           return await response.text();
         };
-        return { contents: await getContents(args.path) };
+        return { contents: await getContents(args.path), loader };
       });
     },
   };

@@ -4,5 +4,5 @@ export * as path from "https://deno.land/std@0.121.0/path/mod.ts";
 export * as fs from "https://deno.land/std@0.121.0/fs/mod.ts";
 export * as log from "https://deno.land/std@0.121.0/log/mod.ts";
 export * as async from "https://deno.land/std@0.121.0/async/mod.ts";
-export * as esbuild from "https://deno.land/x/esbuild@v0.13.14/mod.js";
+export * as esbuild from "https://deno.land/x/esbuild@v0.14.25/mod.js";
 export * as mod from "../../mod/mod.ts";
