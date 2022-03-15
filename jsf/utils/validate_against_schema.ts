@@ -1,39 +1,29 @@
+import { jsonSchema } from "../deps.ts";
 import { Validity } from "../types/mod.ts";
 import { ValidateAgainstSchemaOptions } from "../types/validate_against_schema_fn.ts";
-
-// export interface ValidateAgainstSchemaOptions
-//   extends ValidateAgainstSchemaOptions {
-//   transformErrors?: (errors: unknown[]) => unknown[];
-// }
+import { get, set } from "../_internal/mod.ts";
 
 export function validateAgainstSchema({
   schema,
   value,
 }: ValidateAgainstSchemaOptions): Validity {
-  // try {
-  //   const validateViaAjv = ajv.compile(schema);
-  //   validateViaAjv(value);
-  //   const ajvErrors =
-  //     transformAjvErrors?.(validateViaAjv.errors ?? []) ??
-  //     validateViaAjv.errors ??
-  //     [];
-  //   const validity =
-  //     ajvErrors.reduce((prev, curr) => {
-  //       const path = curr.instancePath
-  //         .replace(/\/(\D)/g, '/properties/$1')
-  //         .replace(/\/(\d)/g, '/items/$1')
-  //         .split('/')
-  //         .map(v => v.replace(/~0/g, '~').replace(/~1/g, '/'))
-  //         .slice(1);
-  //       path.push('errors');
-  //       const existingValue = get(prev, path) ?? [];
-  //       set(prev, path, [...existingValue, curr.message]);
-  //       return prev;
-  //     }, {}) ?? {};
-  //   return validity;
-  // } catch (e) {
-  //   console.warn(e);
-  //   return {};
-  // }
-  return {};
+  try {
+    const validator = new jsonSchema.Validator(schema as jsonSchema.Schema);
+    const specCompliantValue = JSON.parse(JSON.stringify(value));
+    const { valid, errors } = validator.validate(specCompliantValue);
+    if (valid) {
+      return {};
+    }
+    return errors
+      .filter((v) => v.keyword !== "properties")
+      .reduce((p, v) => {
+        const path = v.keywordLocation.split("/").slice(1, -1);
+        const existing = get(p, path, [] as string[]);
+        set(p as Record<string, unknown>, path, existing.concat([v.error]));
+        return p;
+      }, {} as Validity);
+  } catch (e) {
+    console.warn(e);
+    return {};
+  }
 }

@@ -1,27 +1,27 @@
 import { createCustomElement, html } from "../deps.ts";
+
 import "../define.ts";
 import "../../tene/define.ts";
-import { useFormManager } from "../hooks/mod.ts";
+
+const schema = {
+  type: "object",
+  properties: {
+    username: {
+      title: "Username",
+      type: "string",
+    },
+    password: {
+      title: "Password",
+      type: "string",
+      minLength: 8,
+    },
+  },
+};
 
 const ToneRoot = createCustomElement(() => {
-  const manager = useFormManager({
-    schema: {
-      type: "object",
-      properties: {
-        username: {
-          title: "Username",
-          type: "string",
-        },
-        password: {
-          title: "Password",
-          type: "string",
-        },
-      },
-    },
-  });
   return html`
     <tn-system>
-      <jsf-form .manager=${manager} />
+      <jsf-form .schema=${schema} />
     </tn-system>
   `;
 });
