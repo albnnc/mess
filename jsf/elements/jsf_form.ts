@@ -20,6 +20,7 @@ import { useMergeQueue } from "../_internal/mod.ts";
 
 export const JsfForm = createCustomElement<{
   schema: Schema;
+  value?: unknown;
 }>(() => {
   const [schema] = useProp<Schema>("schema", {});
   const [value, setValue] = useProp<unknown>("value", undefined);
