@@ -1,7 +1,6 @@
-import { jsonSchema } from "../deps.ts";
+import { algo, jsonSchema } from "../deps.ts";
 import { Validity } from "../types/mod.ts";
 import { ValidateAgainstSchemaOptions } from "../types/validate_against_schema_fn.ts";
-import { get, set } from "../_internal/mod.ts";
 
 export function validateAgainstSchema({
   schema,
@@ -21,8 +20,12 @@ export function validateAgainstSchema({
           .split("/")
           .slice(1, -1)
           .concat(["errors"]);
-        const existing = get(p, path, [] as string[]);
-        set(p as Record<string, unknown>, path, existing.concat([v.error]));
+        const existing = algo.get(p, path, [] as string[]);
+        algo.set(
+          p as Record<string, unknown>,
+          path,
+          existing.concat([v.error])
+        );
         return p;
       }, {} as Validity);
   } catch (e) {

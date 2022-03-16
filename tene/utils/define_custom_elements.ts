@@ -1,4 +1,4 @@
-import { toKebabCase } from "./to_kebab_case.ts";
+import { algo } from "../deps.ts";
 
 export function defineCustomElements(
   elements: Record<string, CustomElementConstructor>
@@ -7,6 +7,6 @@ export function defineCustomElements(
     if (typeof k !== "string" || k.startsWith("_")) {
       return;
     }
-    customElements.define(toKebabCase(k), elements[k]);
+    customElements.define(algo.toKebabCase(k), elements[k]);
   });
 }

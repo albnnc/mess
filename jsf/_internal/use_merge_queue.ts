@@ -1,5 +1,4 @@
-import { useMemo, useMemoFn, useState } from "../deps.ts";
-import { flatPromise } from "./flat_promise.ts";
+import { algo, useMemo, useMemoFn, useState } from "../deps.ts";
 
 export type MergeFn = (
   a: Record<string, unknown>,
@@ -20,7 +19,7 @@ export function useMergeQueue<T extends Record<never, never>>(
     let replacement: Promise<void>;
     const lock = async () => {
       await current;
-      const value = await flatPromise(maybePromise);
+      const value = await algo.flatPromise(maybePromise);
       // setHead(merge(clone(head), value, fn));
       setHead((prior) => ({ ...prior, value }));
       if (lockRef.current === replacement) {

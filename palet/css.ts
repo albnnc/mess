@@ -1,5 +1,4 @@
-import { stylis } from "./deps.ts";
-import { cyrb53 } from "./cyrb53.ts";
+import { algo, stylis } from "./deps.ts";
 
 const cache = new Map<number, string>();
 const completeStyleRegExp = /^.[^:]*\{(.|\s)+\}$/gm;
@@ -8,7 +7,7 @@ export function css(statics: TemplateStringsArray, ...args: unknown[]) {
   const raw = statics
     .reduce((p, v, i) => (i < statics.length - 1 ? p + v + args[i] : p + v), "")
     .trim();
-  const hash = cyrb53(raw);
+  const hash = algo.cyrb53(raw);
   if (!cache.has(hash)) {
     const complete = raw.match(completeStyleRegExp);
     let style = complete ? raw : `[&]{${raw}}`;
