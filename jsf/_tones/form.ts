@@ -1,5 +1,6 @@
 import { createCustomElement, html } from "../deps.ts";
-
+import { theme as systemTheme } from "../../tene/mod.ts";
+import { theme as jsfTheme } from "../mod.ts";
 import "../define.ts";
 import "../../tene/define.ts";
 
@@ -18,9 +19,14 @@ const schema = {
   },
 };
 
+const theme = {
+  ...systemTheme,
+  ...jsfTheme,
+};
+
 const ToneRoot = createCustomElement(() => {
   return html`
-    <tn-system>
+    <tn-system .theme=${theme}>
       <jsf-form .schema=${schema} />
     </tn-system>
   `;

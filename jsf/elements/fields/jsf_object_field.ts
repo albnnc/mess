@@ -61,7 +61,7 @@ export const JsfObjectField = createCustomElement<FieldProps>(() => {
     }
   }, [keys.join()]);
   return html`
-    <jsf-object-template ...${toProps(props)}>
+    <jsf-object-layout ...${toProps(props)}>
       ${keys.map((key) => {
         const controlProps = {
           key,
@@ -105,6 +105,6 @@ export const JsfObjectField = createCustomElement<FieldProps>(() => {
           />
         `;
       })}
-    </jsf-object-template>
+    </jsf-object-layout>
   `;
 });

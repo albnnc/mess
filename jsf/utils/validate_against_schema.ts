@@ -17,7 +17,10 @@ export function validateAgainstSchema({
     return errors
       .filter((v) => v.keyword !== "properties")
       .reduce((p, v) => {
-        const path = v.keywordLocation.split("/").slice(1, -1);
+        const path = v.keywordLocation
+          .split("/")
+          .slice(1, -1)
+          .concat(["errors"]);
         const existing = get(p, path, [] as string[]);
         set(p as Record<string, unknown>, path, existing.concat([v.error]));
         return p;
