@@ -1,6 +1,13 @@
 import { css } from "../deps.ts";
 
 export const theme = {
+  "jsf-form": css`
+    :host {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-m);
+    }
+  `,
   "jsf-object-layout": css`
     :host {
       display: flex;

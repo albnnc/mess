@@ -31,7 +31,7 @@ export const updateNode = (node: Node, templateNode: TemplateNode) => {
     });
     Object.entries(attributes).forEach(([k, v]) => {
       if (el.getAttribute(k) !== v) {
-        el.setAttribute(k, v);
+        v ? el.setAttribute(k, v) : el.removeAttribute(k);
       }
     });
     Object.entries(props).forEach(([k, v]) => {

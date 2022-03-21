@@ -6,7 +6,7 @@ import { FieldProps } from "../../types/mod.ts";
 export const JsfInputField = createCustomElement<FieldProps>(() => {
   const props = useFieldProps();
   useDefaults(props);
-  const { schema, value, setValue } = props;
+  const { schema, value, setValue, validity } = props;
   const element = useElement();
   const inputType =
     typeof schema.type === "string" &&
@@ -35,6 +35,7 @@ export const JsfInputField = createCustomElement<FieldProps>(() => {
         max=${schema.maximum}
         step=${step}
         .value=${String(value ?? "")}
+        .invalid=${!!validity?.errors?.length}
         @input=${(ev: InputEvent) => {
           const input = ev.target as HTMLInputElement;
           let v: string | number | undefined = input.value;

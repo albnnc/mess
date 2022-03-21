@@ -16,15 +16,15 @@ export const tnInput: ElementTheme = css`
     outline: none;
     background-color: var(--color-surface-accent);
     color: var(--color-surface-on);
+    &:invalid,
+    &.invalid {
+      outline: solid var(--color-danger);
+    }
     &:focus {
       outline: solid var(--color-outline);
     }
     &:disabled {
       opacity: 0.5;
-    }
-    &:invalid,
-    &.invalid {
-      outline: solid var(--color-danger);
     }
     &::placeholder {
       color: inherit;

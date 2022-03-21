@@ -9,6 +9,7 @@ export const JsfPrimitiveLayout = createThemedElement<FieldProps>(() => {
     <div class="control">
       <slot />
     </div>
-    <jsf-error-list .errors=${validity?.errors} />
+    ${validity?.errors?.length &&
+    html`<jsf-error-list .errors=${validity?.errors} />`}
   `;
 });

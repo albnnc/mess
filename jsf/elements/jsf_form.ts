@@ -1,13 +1,14 @@
 import {
-  html,
-  createCustomElement,
   toProps,
   useProp,
   useElement,
   useState,
-  useMemo,
   useMemoFn,
   useEffect,
+  collections,
+  useEventListener,
+  createThemedElement,
+  html,
 } from "../deps.ts";
 import { Schema, Validity } from "../types/mod.ts";
 import { getControlElementTag, validateAgainstSchema } from "../utils/mod.ts";
@@ -18,78 +19,84 @@ import {
 } from "../events/mod.ts";
 import { useMergeQueue } from "../_internal/mod.ts";
 
-export const JsfForm = createCustomElement<{
+export const JsfForm = createThemedElement<{
   schema: Schema;
   value?: unknown;
+  liveValidated?: unknown;
 }>(() => {
   const [schema] = useProp<Schema>("schema", {});
   const [value, setValue] = useProp<unknown>("value", undefined);
+  const [liveValidated] = useProp<boolean>("liveValidated", false);
   const element = useElement();
   const [schemaValidity, setSchemaValidity] = useState<Validity>({});
   const [extensionValidity, extendValidity, wait] = useMergeQueue<Validity>({});
-  const validity = useMemo(
-    // () => merge(clone(schemaValidity), clone(extensionValidity)),
-    () => ({ ...schemaValidity, ...extensionValidity }),
-    [schemaValidity, extensionValidity]
-  );
-  const [_submitted, setSubmitted] = useState(false);
-  const valid = useMemo(() => {
-    const check = (value: unknown): boolean => {
-      if (!value || typeof value !== "object") {
-        return true;
-      }
-      const toBeChecked = value as Record<string | number | symbol, unknown>;
-      return Object.keys(toBeChecked).reduce(
-        (prev, curr) => prev && check(toBeChecked[curr]),
-        !Array.isArray(toBeChecked.errors) || toBeChecked.errors.length < 1
-      );
-    };
-    return check(validity);
-  }, [validity]);
-  const submit = useMemoFn(async () => {
-    await wait();
-    element.dispatchEvent(new JsfSubmitEvent(value));
-    setSubmitted(true);
-    return value;
-  }, [value]);
+  const [validity, setValidity] = useState<Validity>({});
   const validate = useMemoFn(
     (value: unknown) => {
-      const validity = validateAgainstSchema({ schema, value });
-      setSchemaValidity(validity);
+      const schemaValidity = validateAgainstSchema({ schema, value });
+      setSchemaValidity(schemaValidity);
     },
     [schema]
   );
+  const flushValidity = useMemoFn(() => {
+    const flushed = collections.deepMerge(
+      schemaValidity as Record<PropertyKey, unknown>,
+      extensionValidity as Record<PropertyKey, unknown>
+    );
+    setValidity(flushed);
+    return flushed;
+  }, [schemaValidity, extensionValidity]);
   useEffect(() => {
-    element.dispatchEvent(new JsfSubmitEvent(value));
+    validate(value);
+  }, []);
+  useEffect(() => {
+    element.dispatchEvent(new JsfValueEvent(value));
   }, [value]);
   useEffect(() => {
     element.dispatchEvent(new JsfValidityEvent(validity));
   }, [validity]);
+  useEventListener(
+    "jsf-submit-request",
+    async (ev: Event) => {
+      ev.stopPropagation();
+      await wait();
+      const validity = flushValidity();
+      if (checkValidity(validity)) {
+        element.dispatchEvent(new JsfSubmitEvent(value));
+      }
+    },
+    [value, flushValidity]
+  );
   const rootFieldProps = { schema, value, validity };
   const rootFieldTag = getControlElementTag(schema);
   return html`
-    <form
-      novalidate
-      @submit=${async (ev: SubmitEvent) => {
-        ev.preventDefault();
-        await wait();
-        if (!valid) {
-          return;
+    <${rootFieldTag}
+      ...${toProps(rootFieldProps)}
+      @jsf-value=${(ev: JsfValueEvent) => {
+        setValue(ev.value);
+        validate(ev.value);
+        if (liveValidated) {
+          flushValidity();
         }
-        submit();
       }}
-    >
-      <${rootFieldTag}
-        ...${toProps(rootFieldProps)}
-        @jsf-value=${(ev: JsfValueEvent) => {
-          setValue(ev.value);
-          validate(ev.value);
-        }}
-        @jsf-validity=${(ev: JsfValidityEvent) => {
-          extendValidity(ev.validity);
-        }}
-      />
-      <slot />
-    </form>
+      @jsf-validity=${(ev: JsfValidityEvent) => {
+        extendValidity(ev.validity);
+      }}
+    />
+    <slot />
   `;
 });
+
+function checkValidity(validity: Validity) {
+  const check = (value: unknown): boolean => {
+    if (!value || typeof value !== "object") {
+      return true;
+    }
+    const toBeChecked = value as Record<string | number | symbol, unknown>;
+    return Object.keys(toBeChecked).reduce(
+      (prev, curr) => prev && check(toBeChecked[curr]),
+      !Array.isArray(toBeChecked.errors) || toBeChecked.errors.length < 1
+    );
+  };
+  return check(validity);
+}

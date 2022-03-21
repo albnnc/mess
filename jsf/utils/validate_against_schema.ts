@@ -8,7 +8,7 @@ export function validateAgainstSchema({
 }: ValidateAgainstSchemaOptions): Validity {
   try {
     const validator = new jsonSchema.Validator(schema as jsonSchema.Schema);
-    const specCompliantValue = JSON.parse(JSON.stringify(value));
+    const specCompliantValue = JSON.parse(JSON.stringify(value ?? {}));
     const { valid, errors } = validator.validate(specCompliantValue);
     if (valid) {
       return {};
@@ -20,6 +20,13 @@ export function validateAgainstSchema({
           .split("/")
           .slice(1, -1)
           .concat(["errors"]);
+        if (v.keyword === "required") {
+          const [_, propertyName] = v.error.match(/property \"(.+)\"/) ?? [];
+          if (propertyName) {
+            path.splice(-1, 0, "properties", propertyName);
+            v.error = "Required field.";
+          }
+        }
         const existing = algo.get(p, path, [] as string[]);
         algo.set(
           p as Record<string, unknown>,

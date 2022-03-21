@@ -35,7 +35,7 @@ export type ContextCallback<T> = (value: T, dispose?: () => void) => void;
 export type TemplateNodePrimitive = string | number | null | undefined | false;
 export interface TemplateNodeObject {
   tag: string;
-  attributes: Record<string, string>;
+  attributes: Record<string, string | undefined>;
   events: Record<string, (e: Event) => void>;
   props: Record<string, unknown>;
   children: Template;

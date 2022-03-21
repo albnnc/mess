@@ -9,6 +9,7 @@ export const JsfObjectLayout = createThemedElement<FieldProps>(() => {
     <div class="properties">
       <slot />
     </div>
-    <jsf-error-list .errors=${validity?.errors} />
+    ${validity?.errors?.length &&
+    html`<jsf-error-list .errors=${validity?.errors} />`}
   `;
 });

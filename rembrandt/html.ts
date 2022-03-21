@@ -14,7 +14,7 @@ const h = (
       events[key.slice(1)] = value as (e: Event) => void;
     } else if (key.startsWith(".")) {
       props[key.slice(1)] = value;
-    } else if (typeof value === "string") {
+    } else if (typeof value === "string" || value === undefined) {
       attributes[key] = value;
     }
   });
