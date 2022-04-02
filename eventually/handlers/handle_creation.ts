@@ -1,36 +1,25 @@
-import { Ajv, nats } from "../deps.ts";
+import { Ajv, mongo } from "../deps.ts";
+import { handleMutation, MutationOptions } from "./handle_mutation.ts";
 
-export interface CreationOptions {
+export interface CreationOptions extends Omit<MutationOptions, "validate"> {
   schema: Record<string, unknown>;
-  codec: nats.Codec<Record<string, unknown>>;
-  connection: nats.NatsConnection;
-  subjectPrefix: string;
+  // collection: mongo.Collection<unknown>;
 }
 
 export async function handleCreation({
   schema,
-  codec,
-  connection,
-  subjectPrefix,
+  // collection,
+  ...rest
 }: CreationOptions) {
-  const ajv = new Ajv({ strict: "log", allErrors: true });
-  const validate = ajv.compile(schema);
-  const subscription = connection.subscribe(
-    subjectPrefix + "REQUEST.CREATE.DEFAULT"
-  );
-  for await (const message of subscription) {
-    connection.publish(subjectPrefix + "EVENT.CREATE.ATTEMPT", message.data);
-    try {
-      const data = codec.decode(message.data);
-      if (!validate(data)) {
+  const ajv = new Ajv();
+  const validateViaAjv = ajv.compile(schema);
+  await handleMutation({
+    validate: (data) => {
+      validateViaAjv(data);
+      if (ajv.errors) {
         throw new Error(ajv.errorsText());
       }
-      connection.publish(subjectPrefix + "EVENT.CREATE.SUCCESS", message.data);
-    } catch (e) {
-      connection.publish(
-        subjectPrefix + "EVENT.CREATE.FAILED",
-        codec.encode(e.toString())
-      );
-    }
-  }
+    },
+    ...rest,
+  });
 }

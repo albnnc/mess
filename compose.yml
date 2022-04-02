@@ -1,0 +1,16 @@
+services:
+  nats:
+    image: nats
+    ports: [4222:4222]
+  mongo:
+    image: mongo
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: root
+  test:
+    image: lukechannings/deno
+    volumes: [.:/code, ./.test_cache:/deno-dir]
+    working_dir: /code
+    depends_on: [nats]
+    entrypoint: deno
+    command: test --allow-net --no-check
