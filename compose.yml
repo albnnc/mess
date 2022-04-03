@@ -15,4 +15,6 @@ services:
     working_dir: /code
     depends_on: [nats]
     entrypoint: deno
-    command: test --allow-net --no-check
+    command: test --allow-env --allow-net --no-check
+    environment:
+      TEST_NATS_SERVER: nats://nats:4222

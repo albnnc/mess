@@ -3,7 +3,7 @@ import { nats } from "../deps.ts";
 import { handleMutation, MutationOptions } from "./handle_mutation.ts";
 
 Deno.test("handle mutation", async (t) => {
-  const nc = await nats.connect({ servers: "nats://nats:4222" });
+  const nc = await nats.connect({ servers: Deno.env.get("TEST_NATS_SERVER") });
   const options: MutationOptions = {
     nc,
     codec: nats.JSONCodec(),
