@@ -6,7 +6,7 @@ export interface MutationOptions {
   codec: nats.Codec<unknown>;
   streamName: string;
   subjectPrefix: string;
-  validate: (data: unknown) => void | Promise<void>;
+  process: (data: unknown) => unknown | Promise<unknown>;
 }
 
 export async function handleMutation({
@@ -14,7 +14,7 @@ export async function handleMutation({
   codec,
   streamName,
   subjectPrefix,
-  validate,
+  process,
 }: MutationOptions) {
   const js = nc.jetstream();
   const requestSubject = subjectPrefix + "REQUEST.CREATE.DEFAULT";
@@ -37,8 +37,8 @@ export async function handleMutation({
       await js.publish(eventSubjects.attempt, msg.data);
       try {
         const data = codec.decode(msg.data);
-        await validate(data);
-        await js.publish(eventSubjects.success, msg.data);
+        const processed = await process(data);
+        await js.publish(eventSubjects.success, codec.encode(processed));
       } catch (e) {
         await js.publish(eventSubjects.failed, codec.encode(e.toString()));
       }

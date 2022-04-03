@@ -9,7 +9,7 @@ Deno.test("handle mutation", async (t) => {
     codec: nats.JSONCodec(),
     streamName: "TEST",
     subjectPrefix: "TEST.",
-    validate: (v: unknown) => {
+    process: (v: unknown) => {
       if (typeof v !== "number") {
         throw new Error();
       }
