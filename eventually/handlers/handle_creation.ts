@@ -1,4 +1,4 @@
-import { Ajv } from "../deps.ts";
+import { scheming } from "../deps.ts";
 import { handleMutation, MutationOptions } from "./handle_mutation.ts";
 
 export interface CreationOptions extends Omit<MutationOptions, "process"> {
@@ -6,20 +6,12 @@ export interface CreationOptions extends Omit<MutationOptions, "process"> {
 }
 
 export async function handleCreation({ schema, ...rest }: CreationOptions) {
-  // TODO: Add additional validations to handle things like ids.
-  if (schema.type !== "object") {
-    throw new Error("Only object schemas supported");
-  }
-  const ajv = new Ajv({ allErrors: true });
-  const validateViaAjv = ajv.compile<Record<PropertyKey, unknown>>(schema);
+  const validate = scheming.createValidator(schema, { mode: "w" });
   await handleMutation({
     process: (data) => {
-      const valid = validateViaAjv(data);
-      if (!valid) {
-        throw new Error(ajv.errorsText(validateViaAjv.errors));
-      }
+      validate(data);
       const id = crypto.randomUUID();
-      return { id, ...data };
+      return { id, ...(data as Record<string, unknown>) };
     },
     ...rest,
   });
