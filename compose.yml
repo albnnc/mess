@@ -2,19 +2,35 @@ services:
   nats:
     image: nats
     ports: [4222:4222]
+    restart: always
     entrypoint: nats-server
     command: -js
-  # mongo:
-  #   image: mongo
-  #   environment:
-  #     MONGO_INITDB_ROOT_USERNAME: root
-  #     MONGO_INITDB_ROOT_PASSWORD: root
+    profiles: [environment]
+  mongo:
+    image: mongo
+    ports: [27017:27017]
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: root
+    profiles: [environment]
+  mongo-express:
+    image: mongo-express
+    ports: [8081:8081]
+    depends_on: [mongo]
+    restart: always
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: root
+      ME_CONFIG_MONGODB_ADMINPASSWORD: root
+      ME_CONFIG_MONGODB_URL: mongodb://root:root@mongo:27017
+    profiles: [environment]
   test:
     image: lukechannings/deno
+    depends_on: [nats]
     volumes: [.:/code, ./.test_cache:/deno-dir]
     working_dir: /code
-    depends_on: [nats]
     entrypoint: deno
     command: test --allow-env --allow-net --no-check
     environment:
       TEST_NATS_SERVER: nats://nats:4222
+    profiles: [test]
