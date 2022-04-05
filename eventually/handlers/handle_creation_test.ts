@@ -1,11 +1,16 @@
 import { assertEquals, getStreamMsgs } from "../../testing/mod.ts";
-import { nats } from "../deps.ts";
+import { mongo, nats } from "../deps.ts";
 import { CreationOptions, handleCreation } from "./handle_creation.ts";
 
 Deno.test("handle creation", async (t) => {
-  const nc = await nats.connect({ servers: Deno.env.get("TEST_NATS_SERVER") });
-  const options: CreationOptions = {
+  const nc = await nats.connect({ servers: Deno.env.get("NATS_URL") });
+  const mongoClient = new mongo.MongoClient();
+  await mongoClient.connect("mongodb://root:root@localhost:27017");
+  const db = mongoClient.database("test");
+  const options: CreationOptions<Record<string, unknown>> = {
     nc,
+    db,
+    collectionName: "tests",
     codec: nats.JSONCodec(),
     streamName: "TEST",
     subjectPrefix: "TEST.",
@@ -18,33 +23,46 @@ Deno.test("handle creation", async (t) => {
       required: ["username", "password"],
     },
   };
-  const getTestMsgs = async (input: unknown) => {
+  await handleCreation(options);
+  const prepareTesting = async () => {
     const jsm = await nc.jetstreamManager();
     await jsm.streams.purge(options.streamName);
-    await nc.request(
-      "TEST.REQUEST.CREATE.DEFAULT",
-      options.codec.encode(input)
-    );
-    return getStreamMsgs(nc, options.streamName);
+    if (
+      await db
+        .listCollectionNames()
+        .then((v) => v.includes(options.collectionName))
+    ) {
+      await db.collection(options.collectionName).drop();
+    }
   };
-  await handleCreation(options);
   await t.step({
     name: "handle success",
     fn: async () => {
-      const input = { username: "", password: "" };
-      const msgs = await getTestMsgs(input);
+      await prepareTesting();
+      const input = { username: "X", password: "Y" };
+      await nc.request(
+        "TEST.REQUEST.CREATE.DEFAULT",
+        options.codec.encode(input)
+      );
+      const msgs = await getStreamMsgs(nc, options.streamName);
       assertEquals(
         msgs.map((v) => v.subject),
         ["TEST.EVENT.CREATE.ATTEMPT", "TEST.EVENT.CREATE.SUCCESS"]
       );
-      const data = msgs.map(
+      const msgData = msgs.map(
         (v) => options.codec.decode(v.data) as Record<string, unknown>
       );
-      assertEquals(data.length, 2);
-      assertEquals(typeof data[1].id, "string");
-      delete data[1].id;
-      assertEquals(data[0], input);
-      assertEquals(data[1], input);
+      const { id, ...rest } = msgData[1];
+      assertEquals(msgData.length, 2);
+      assertEquals(msgData[0], input);
+      assertEquals(typeof id, "string");
+      assertEquals(rest, input);
+      const collection = db.collection(options.collectionName);
+      const dbData = await collection.findOne(
+        { id },
+        { projection: { _id: 0 } }
+      );
+      assertEquals(msgData[1], dbData);
     },
     sanitizeOps: false,
     sanitizeResources: false,
@@ -52,14 +70,20 @@ Deno.test("handle creation", async (t) => {
   await t.step({
     name: "handle failure",
     fn: async () => {
-      const msgs = await getTestMsgs(null);
+      await prepareTesting();
+      await nc.request("TEST.REQUEST.CREATE.DEFAULT", options.codec.encode(""));
+      const msgs = await getStreamMsgs(nc, options.streamName);
       assertEquals(
         msgs.map((v) => v.subject),
         ["TEST.EVENT.CREATE.ATTEMPT", "TEST.EVENT.CREATE.FAILED"]
       );
+      const collection = db.collection(options.collectionName);
+      const count = await collection.countDocuments();
+      assertEquals(count, 0);
     },
     sanitizeOps: false,
     sanitizeResources: false,
   });
   await nc.close();
+  await mongoClient.close();
 });
