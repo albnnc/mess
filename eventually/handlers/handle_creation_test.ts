@@ -1,19 +1,18 @@
-import { assertEquals, getStreamMsgs } from "../../testing/mod.ts";
+import { assertEquals, assertMatch, getStreamMsgs } from "../../testing/mod.ts";
 import { mongo, nats } from "../deps.ts";
-import { CreationOptions, handleCreation } from "./handle_creation.ts";
+import { handleCreation } from "./handle_creation.ts";
 
 Deno.test("handle creation", async (t) => {
   const nc = await nats.connect({ servers: Deno.env.get("NATS_URL") });
   const mongoClient = new mongo.MongoClient();
-  await mongoClient.connect("mongodb://root:root@localhost:27017");
+  await mongoClient.connect(Deno.env.get("MONGO_URL") ?? "");
   const db = mongoClient.database("test");
-  const options: CreationOptions<Record<string, unknown>> = {
+  const codec = nats.JSONCodec();
+  await handleCreation({
     nc,
     db,
-    collectionName: "tests",
-    codec: nats.JSONCodec(),
-    streamName: "TEST",
-    subjectPrefix: "TEST.",
+    codec,
+    entity: "ENTITY",
     schema: {
       type: "object",
       properties: {
@@ -22,17 +21,12 @@ Deno.test("handle creation", async (t) => {
       },
       required: ["username", "password"],
     },
-  };
-  await handleCreation(options);
+  });
   const prepareTesting = async () => {
     const jsm = await nc.jetstreamManager();
-    await jsm.streams.purge(options.streamName);
-    if (
-      await db
-        .listCollectionNames()
-        .then((v) => v.includes(options.collectionName))
-    ) {
-      await db.collection(options.collectionName).drop();
+    await jsm.streams.purge("ENTITY");
+    if (await db.listCollectionNames().then((v) => v.includes("ENTITY"))) {
+      await db.collection("ENTITY").drop();
     }
   };
   await t.step({
@@ -40,24 +34,20 @@ Deno.test("handle creation", async (t) => {
     fn: async () => {
       await prepareTesting();
       const input = { username: "X", password: "Y" };
-      await nc.request(
-        "TEST.REQUEST.CREATE.DEFAULT",
-        options.codec.encode(input)
-      );
-      const msgs = await getStreamMsgs(nc, options.streamName);
-      assertEquals(
-        msgs.map((v) => v.subject),
-        ["TEST.EVENT.CREATE.ATTEMPT", "TEST.EVENT.CREATE.SUCCESS"]
-      );
+      await nc.request("ENTITY.REQUEST.CREATE", codec.encode(input));
+      const msgs = await getStreamMsgs(nc, "ENTITY");
+      const msgSubjects = msgs.map((v) => v.subject);
+      assertMatch(msgSubjects[0], /^ENTITY\..+\.EVENT\.CREATE\.ATTEMPT$/);
+      assertMatch(msgSubjects[1], /^ENTITY\..+\.EVENT\.CREATE\.SUCCESS$/);
       const msgData = msgs.map(
-        (v) => options.codec.decode(v.data) as Record<string, unknown>
+        (v) => codec.decode(v.data) as Record<string, unknown>
       );
       const { id, ...rest } = msgData[1];
       assertEquals(msgData.length, 2);
       assertEquals(msgData[0], input);
       assertEquals(typeof id, "string");
       assertEquals(rest, input);
-      const collection = db.collection(options.collectionName);
+      const collection = db.collection("ENTITY");
       const dbData = await collection.findOne(
         { id },
         { projection: { _id: 0 } }
@@ -68,16 +58,15 @@ Deno.test("handle creation", async (t) => {
     sanitizeResources: false,
   });
   await t.step({
-    name: "handle failure",
+    name: "handle error",
     fn: async () => {
       await prepareTesting();
-      await nc.request("TEST.REQUEST.CREATE.DEFAULT", options.codec.encode(""));
-      const msgs = await getStreamMsgs(nc, options.streamName);
-      assertEquals(
-        msgs.map((v) => v.subject),
-        ["TEST.EVENT.CREATE.ATTEMPT", "TEST.EVENT.CREATE.FAILED"]
-      );
-      const collection = db.collection(options.collectionName);
+      await nc.request("ENTITY.REQUEST.CREATE", codec.encode(""));
+      const msgs = await getStreamMsgs(nc, "ENTITY");
+      const msgSubjects = msgs.map((v) => v.subject);
+      assertMatch(msgSubjects[0], /^ENTITY\..+\.EVENT\.CREATE\.ATTEMPT$/);
+      assertMatch(msgSubjects[1], /^ENTITY\..+\.EVENT\.CREATE\.ERROR$/);
+      const collection = db.collection("ENTITY");
       const count = await collection.countDocuments();
       assertEquals(count, 0);
     },

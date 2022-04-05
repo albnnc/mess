@@ -1,49 +1,46 @@
-import { assertEquals, getStreamMsgs } from "../../testing/mod.ts";
+import { assertMatch, getStreamMsgs } from "../../testing/mod.ts";
 import { nats } from "../deps.ts";
-import { handleMutation, MutationOptions } from "./handle_mutation.ts";
+import { handleMutation } from "./handle_mutation.ts";
 
 Deno.test("handle mutation", async (t) => {
   const nc = await nats.connect({ servers: Deno.env.get("NATS_URL") });
-  const options: MutationOptions = {
+  const codec = nats.JSONCodec();
+  await handleMutation({
     nc,
-    codec: nats.JSONCodec(),
-    streamName: "TEST",
-    subjectPrefix: "TEST.",
-    process: (v: unknown) => {
-      if (typeof v !== "number") {
-        throw new Error();
+    codec,
+    entity: "ENTITY",
+    mutation: "MUTATION",
+    pioneer: true,
+    process: (id, v) => {
+      if (typeof v !== "string") {
+        throw new Error("Wrong type");
       }
+      return { id };
     },
-  };
+  });
   const getTestSubjects = async (input: unknown) => {
     const jsm = await nc.jetstreamManager();
-    await jsm.streams.purge(options.streamName);
-    await nc.request(
-      "TEST.REQUEST.CREATE.DEFAULT",
-      options.codec.encode(input)
-    );
-    const msgs = await getStreamMsgs(nc, options.streamName);
+    await jsm.streams.purge("ENTITY");
+    await nc.request("ENTITY.REQUEST.MUTATION", codec.encode(input));
+    const msgs = await getStreamMsgs(nc, "ENTITY");
     return msgs.map((v) => v.subject);
   };
-  await handleMutation(options);
   await t.step({
     name: "handle success",
     fn: async () => {
-      assertEquals(await getTestSubjects(0), [
-        "TEST.EVENT.CREATE.ATTEMPT",
-        "TEST.EVENT.CREATE.SUCCESS",
-      ]);
+      const subjects = await getTestSubjects("");
+      assertMatch(subjects[0], /^ENTITY\..+\.EVENT\.MUTATION\.ATTEMPT$/);
+      assertMatch(subjects[1], /^ENTITY\..+\.EVENT\.MUTATION\.SUCCESS$/);
     },
     sanitizeOps: false,
     sanitizeResources: false,
   });
   await t.step({
-    name: "handle failure",
+    name: "handle error",
     fn: async () => {
-      assertEquals(await getTestSubjects(null), [
-        "TEST.EVENT.CREATE.ATTEMPT",
-        "TEST.EVENT.CREATE.FAILED",
-      ]);
+      const subjects = await getTestSubjects(null);
+      assertMatch(subjects[0], /^ENTITY\..+\.EVENT\.MUTATION\.ATTEMPT$/);
+      assertMatch(subjects[1], /^ENTITY\..+\.EVENT\.MUTATION\.ERROR$/);
     },
     sanitizeOps: false,
     sanitizeResources: false,
