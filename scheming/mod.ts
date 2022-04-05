@@ -1,3 +1,3 @@
 export * from "./adapt_schema.ts";
-export * from "./create_validator.ts";
 export * from "./types/mod.ts";
+export * from "./validate_via_schema.ts";
