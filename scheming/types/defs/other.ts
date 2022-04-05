@@ -1,0 +1,26 @@
+import { simplytyped } from "../../deps.ts";
+import { SchemaDefinition } from "../mod.ts";
+
+export type EnumSchema = Partial<{
+  enum: Array<string | number | boolean | null>;
+}>;
+
+export interface AllOf {
+  allOf: simplytyped.Vector<SchemaDefinition>;
+}
+
+export interface AnyOf {
+  anyOf: SchemaDefinition[];
+}
+
+export interface OneOf {
+  oneOf: SchemaDefinition[];
+}
+
+export interface Not {
+  not: SchemaDefinition;
+}
+
+export interface Ref {
+  $ref: string;
+}

@@ -19,5 +19,6 @@ export function createValidator(
     if (!valid) {
       throw new Error(ajv.errorsText(validateViaAjv.errors));
     }
+    return valid;
   };
 }
