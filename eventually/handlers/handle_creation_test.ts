@@ -7,6 +7,7 @@ Deno.test("handle creation", async (t) => {
   const mongoClient = new mongo.MongoClient();
   await mongoClient.connect(Deno.env.get("MONGO_URL") ?? "");
   const db = mongoClient.database("test");
+  const collection = db.collection("ENTITY");
   const codec = nats.JSONCodec();
   await handleCreation({
     nc,
@@ -26,32 +27,30 @@ Deno.test("handle creation", async (t) => {
     const jsm = await nc.jetstreamManager();
     await jsm.streams.purge("ENTITY");
     if (await db.listCollectionNames().then((v) => v.includes("ENTITY"))) {
-      await db.collection("ENTITY").drop();
+      await collection.drop();
     }
   };
   await t.step({
     name: "handle success",
     fn: async () => {
       await prepareTesting();
-      const input = { username: "X", password: "Y" };
-      await nc.request("ENTITY.REQUEST.CREATE", codec.encode(input));
+      const inputData = { username: "X", password: "Y" };
+      await nc.request("ENTITY.REQUEST.CREATE", codec.encode(inputData));
       const msgs = await getStreamMsgs(nc, "ENTITY");
       const msgSubjects = msgs.map((v) => v.subject);
-      assertMatch(msgSubjects[0], /^ENTITY\..+\.EVENT\.CREATE\.ATTEMPT$/);
-      assertMatch(msgSubjects[1], /^ENTITY\..+\.EVENT\.CREATE\.SUCCESS$/);
       const msgData = msgs.map(
         (v) => codec.decode(v.data) as Record<string, unknown>
       );
       const { id, ...rest } = msgData[1];
-      assertEquals(msgData.length, 2);
-      assertEquals(msgData[0], input);
-      assertEquals(typeof id, "string");
-      assertEquals(rest, input);
-      const collection = db.collection("ENTITY");
       const dbData = await collection.findOne(
         { id },
         { projection: { _id: 0 } }
       );
+      assertMatch(msgSubjects[0], /^ENTITY\..+\.EVENT\.CREATE\.ATTEMPT$/);
+      assertMatch(msgSubjects[1], /^ENTITY\..+\.EVENT\.CREATE\.SUCCESS$/);
+      assertEquals(msgData[0], inputData);
+      assertEquals(typeof id, "string");
+      assertEquals(rest, inputData);
       assertEquals(msgData[1], dbData);
     },
     sanitizeOps: false,
@@ -64,10 +63,9 @@ Deno.test("handle creation", async (t) => {
       await nc.request("ENTITY.REQUEST.CREATE", codec.encode(""));
       const msgs = await getStreamMsgs(nc, "ENTITY");
       const msgSubjects = msgs.map((v) => v.subject);
+      const count = await collection.countDocuments();
       assertMatch(msgSubjects[0], /^ENTITY\..+\.EVENT\.CREATE\.ATTEMPT$/);
       assertMatch(msgSubjects[1], /^ENTITY\..+\.EVENT\.CREATE\.ERROR$/);
-      const collection = db.collection("ENTITY");
-      const count = await collection.countDocuments();
       assertEquals(count, 0);
     },
     sanitizeOps: false,

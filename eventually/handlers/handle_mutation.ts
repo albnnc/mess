@@ -40,12 +40,12 @@ export async function handleMutation({
         : msg.subject.split(".")[1] ?? "UNKNOWN";
       await js.publish(eventSubjects.attempt.replace("*", id), msg.data);
       try {
-        const decoded = codec.decode(msg.data);
+        const decoded =
+          msg.data.length > 0 ? codec.decode(msg.data) : undefined;
         const processed = await process(id, decoded);
-        await js.publish(
-          eventSubjects.success.replace("*", id),
-          codec.encode(processed)
-        );
+        const encoded =
+          processed !== undefined ? codec.encode(processed) : undefined;
+        await js.publish(eventSubjects.success.replace("*", id), encoded);
       } catch (e) {
         await js.publish(
           eventSubjects.error.replace("*", id),

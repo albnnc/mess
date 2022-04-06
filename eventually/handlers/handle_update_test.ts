@@ -42,19 +42,19 @@ Deno.test("handle update", async (t) => {
       const update = { username: "X", password: "Y" };
       await nc.request("ENTITY.TEST.REQUEST.UPDATE", codec.encode(update));
       const msgs = await getStreamMsgs(nc, "ENTITY");
-      assertEquals(
-        msgs.map((v) => v.subject),
-        ["ENTITY.TEST.EVENT.UPDATE.ATTEMPT", "ENTITY.TEST.EVENT.UPDATE.SUCCESS"]
-      );
       const msgData = msgs.map(
         (v) => codec.decode(v.data) as Record<string, unknown>
       );
-      assertEquals(msgData[0], update);
-      assertEquals(msgData[1], { id: "TEST", ...update });
       const dbData = await collection.findOne(
         { id: "TEST" },
         { projection: { _id: 0 } }
       );
+      assertEquals(
+        msgs.map((v) => v.subject),
+        ["ENTITY.TEST.EVENT.UPDATE.ATTEMPT", "ENTITY.TEST.EVENT.UPDATE.SUCCESS"]
+      );
+      assertEquals(msgData[0], update);
+      assertEquals(msgData[1], { id: "TEST", ...update });
       assertEquals(dbData, { id: "TEST", ...update });
     },
     sanitizeOps: false,
@@ -70,13 +70,13 @@ Deno.test("handle update", async (t) => {
       );
       await nc.request("ENTITY.TEST.REQUEST.UPDATE", codec.encode(""));
       const msgs = await getStreamMsgs(nc, "ENTITY");
-      assertEquals(
-        msgs.map((v) => v.subject),
-        ["ENTITY.TEST.EVENT.UPDATE.ATTEMPT", "ENTITY.TEST.EVENT.UPDATE.ERROR"]
-      );
       const finalData = await collection.findOne(
         { id: "TEST" },
         { projection: { _id: 0 } }
+      );
+      assertEquals(
+        msgs.map((v) => v.subject),
+        ["ENTITY.TEST.EVENT.UPDATE.ATTEMPT", "ENTITY.TEST.EVENT.UPDATE.ERROR"]
       );
       assertEquals(initialData, finalData);
     },
