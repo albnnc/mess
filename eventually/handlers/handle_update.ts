@@ -30,11 +30,11 @@ export async function handleUpdate<T extends scheming.Schema>({
       if (!prior) {
         throw new Error("Unable to update non-existent entity");
       }
-      const baseExceptReadOnly = scheming.excludeViaSchema(schema, prior, {
+      const priorExceptReadOnly = scheming.excludeViaSchema(schema, prior, {
         readOnly: true,
       });
       const nextExceptReadOnly = collections.deepMerge(
-        baseExceptReadOnly,
+        priorExceptReadOnly,
         data as Record<PropertyKey, unknown>
       );
       scheming.validateViaSchema(schema, nextExceptReadOnly, { mode: "w" });
