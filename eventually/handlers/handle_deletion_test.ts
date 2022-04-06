@@ -2,20 +2,14 @@ import { assertEquals, getStreamMsgs } from "../../testing/mod.ts";
 import { mongo, nats } from "../deps.ts";
 import { handleDeletion } from "./handle_deletion.ts";
 
-Deno.test("handle update", async (t) => {
+Deno.test("handle deletion", async (t) => {
   const nc = await nats.connect({ servers: Deno.env.get("NATS_URL") });
   const mongoClient = new mongo.MongoClient();
   await mongoClient.connect(Deno.env.get("MONGO_URL") ?? "");
   const db = mongoClient.database("test");
   const collection = db.collection("ENTITY");
   const codec = nats.JSONCodec();
-  await handleDeletion({
-    nc,
-    db,
-    codec,
-    entity: "ENTITY",
-    schema: { type: "object" },
-  });
+  await handleDeletion({ nc, db, codec, entity: "ENTITY" });
   const prepareTesting = async () => {
     const jsm = await nc.jetstreamManager();
     await jsm.streams.purge("ENTITY");

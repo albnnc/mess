@@ -1,5 +1,5 @@
 import { nats } from "../deps.ts";
-import { ensureStream } from "../utils/mod.ts";
+import { createResponseHeaders, ensureStream } from "../utils/mod.ts";
 
 export interface MutationOptions {
   nc: nats.NatsConnection;
@@ -46,13 +46,18 @@ export async function handleMutation({
         const encoded =
           processed !== undefined ? codec.encode(processed) : undefined;
         await js.publish(eventSubjects.success.replace("*", id), encoded);
+        msg.respond(encoded, {
+          headers: createResponseHeaders("201"),
+        });
       } catch (e) {
         await js.publish(
           eventSubjects.error.replace("*", id),
           codec.encode(e.message ?? String(e))
         );
+        msg.respond(nats.Empty, {
+          headers: createResponseHeaders("500", e.message),
+        });
       }
-      msg.respond();
     }
   };
   handleSub();

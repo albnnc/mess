@@ -1,29 +1,27 @@
-import { mongo, scheming } from "../deps.ts";
+import { mongo } from "../deps.ts";
 import { handleMutation, MutationOptions } from "./handle_mutation.ts";
 
-export interface DeletionOptions<T extends scheming.Schema>
+export interface DeletionOptions
   extends Omit<MutationOptions, "mutation" | "pioneer" | "process"> {
   db: mongo.Database;
-  schema: T;
-  validate?: (data: scheming.FromSchema<T>) => void;
+  validate?: (data: unknown) => void;
 }
 
-export async function handleDeletion<T extends scheming.Schema>({
+export async function handleDeletion({
   db,
-  schema: _,
   validate,
   entity,
   ...rest
-}: DeletionOptions<T>) {
+}: DeletionOptions) {
   const collection = db.collection(entity);
   await handleMutation({
     entity,
     mutation: "DELETE",
     process: async (id) => {
-      const prior = (await collection.findOne(
+      const prior = await collection.findOne(
         { id },
         { projection: { _id: 0 } }
-      )) as scheming.FromSchema<T>;
+      );
       if (!prior) {
         throw new Error("Unable to delete non-existent entity");
       }
