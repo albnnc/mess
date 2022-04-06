@@ -20,6 +20,9 @@ export async function handleUpdate<T extends scheming.Schema>({
     entity,
     mutation: "UPDATE",
     process: async (id, data) => {
+      if (!data || typeof data !== "object") {
+        throw new Error("Entity update must be an object");
+      }
       const prior = await collection.findOne(
         { id },
         { projection: { _id: 0 } }
@@ -27,18 +30,19 @@ export async function handleUpdate<T extends scheming.Schema>({
       if (!prior) {
         throw new Error("Unable to update non-existent entity");
       }
-      if (!data || typeof data !== "object") {
-        throw new Error("Entity update must be an object");
-      }
-      const next = collections.deepMerge(
-        prior as Record<PropertyKey, unknown>,
+      const baseExceptReadOnly = scheming.excludeViaSchema(schema, prior, {
+        readOnly: true,
+      });
+      const nextExceptReadOnly = collections.deepMerge(
+        baseExceptReadOnly,
         data as Record<PropertyKey, unknown>
       );
-      if (prior.id !== next.id) {
-        throw new Error("Entity update cannot change `id` property");
-      }
-      scheming.validateViaSchema(schema, next, { mode: "w" });
-      validate?.(next);
+      scheming.validateViaSchema(schema, nextExceptReadOnly, { mode: "w" });
+      validate?.(nextExceptReadOnly);
+      const next = collections.deepMerge(
+        prior as Record<PropertyKey, unknown>,
+        nextExceptReadOnly
+      );
       await collection.replaceOne({ id }, next);
       return next;
     },

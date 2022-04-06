@@ -49,7 +49,7 @@ export async function handleMutation({
       } catch (e) {
         await js.publish(
           eventSubjects.error.replace("*", id),
-          codec.encode(e.message)
+          codec.encode(e.message ?? String(e))
         );
       }
       msg.respond();

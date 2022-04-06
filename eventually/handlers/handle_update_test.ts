@@ -2,7 +2,7 @@ import { assertEquals, getStreamMsgs } from "../../testing/mod.ts";
 import { mongo, nats } from "../deps.ts";
 import { handleUpdate } from "./handle_update.ts";
 
-Deno.test("handle creation", async (t) => {
+Deno.test("handle update", async (t) => {
   const nc = await nats.connect({ servers: Deno.env.get("NATS_URL") });
   const mongoClient = new mongo.MongoClient();
   await mongoClient.connect(Deno.env.get("MONGO_URL") ?? "");
@@ -17,10 +17,12 @@ Deno.test("handle creation", async (t) => {
     schema: {
       type: "object",
       properties: {
+        id: { type: "string", readOnly: true },
         username: { type: "string" },
         password: { type: "string", writeOnly: true },
       },
-      required: ["username", "password"],
+      required: ["id", "username", "password"],
+      additionalProperties: false,
     },
   });
   const prepareTesting = async () => {

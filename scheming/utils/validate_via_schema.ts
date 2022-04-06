@@ -1,6 +1,6 @@
-import { Ajv } from "./deps.ts";
+import { Ajv } from "../deps.ts";
+import { FromSchema, Schema } from "../types/mod.ts";
 import { adaptSchema } from "./adapt_schema.ts";
-import { FromSchema, Schema } from "./types/mod.ts";
 
 const ajv = new Ajv({ allErrors: true });
 

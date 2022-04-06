@@ -48,6 +48,8 @@ export interface SchemaMetaData {
   description: string;
   default: string;
   definitions: Record<string, SchemaDefinition>;
+  readOnly: boolean;
+  writeOnly: boolean;
 }
 
 export type Schema = SchemaDefinition & Partial<SchemaMetaData>;

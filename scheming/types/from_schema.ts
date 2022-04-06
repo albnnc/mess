@@ -28,7 +28,7 @@ type FromSchemaRequired<
   P extends object
 > = simplytyped.If<
   simplytyped.HasKey<S, "required">,
-  S["required"] extends any[]
+  S["required"] extends any[] | readonly any[]
     ? simplytyped.Required<P, simplytyped.UnionizeTuple<S["required"]>>
     : P,
   P

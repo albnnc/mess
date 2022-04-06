@@ -1,4 +1,4 @@
-import { assertEquals } from "../testing/mod.ts";
+import { assertEquals } from "../../testing/mod.ts";
 import { adaptSchema } from "./adapt_schema.ts";
 
 Deno.test("adapt schema", async (t) => {
