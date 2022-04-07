@@ -1,6 +1,6 @@
 import { assertEquals, getStreamMsgs } from "../../testing/mod.ts";
 import { mongo, nats } from "../deps.ts";
-import { handleUpdate } from "./handle_update.ts";
+import { handleUpdating } from "./handle_updating.ts";
 
 Deno.test("handle update", async (t) => {
   const nc = await nats.connect({ servers: Deno.env.get("NATS_URL") });
@@ -9,7 +9,7 @@ Deno.test("handle update", async (t) => {
   const db = mongoClient.database("test");
   const collection = db.collection("ENTITY");
   const codec = nats.JSONCodec();
-  await handleUpdate({
+  await handleUpdating({
     nc,
     db,
     codec,

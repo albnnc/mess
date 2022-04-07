@@ -1,20 +1,20 @@
 import { collections, mongo, scheming } from "../deps.ts";
 import { handleMutation, MutationOptions } from "./handle_mutation.ts";
 
-export interface UpdateOptions<T extends scheming.Schema>
+export interface UpdatingOptions<T extends scheming.Schema>
   extends Omit<MutationOptions, "mutation" | "pioneer" | "process"> {
   db: mongo.Database;
   schema: T;
   validate?: (data: scheming.FromSchema<T>) => void;
 }
 
-export async function handleUpdate<T extends scheming.Schema>({
+export async function handleUpdating<T extends scheming.Schema>({
   db,
   schema,
   validate,
   entity,
   ...rest
-}: UpdateOptions<T>) {
+}: UpdatingOptions<T>) {
   const collection = db.collection(entity);
   await handleMutation({
     entity,
