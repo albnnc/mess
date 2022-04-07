@@ -11,7 +11,7 @@ Deno.test("handle searching", async (t) => {
   const collection = db.collection("ENTITY");
   const collectionData = new Array(1000).fill(undefined).map((_, i) => ({
     id: i,
-    data: Math.random().toString().slice(-4),
+    data: crypto.randomUUID(),
   }));
   await handleSearching({
     nc,
@@ -25,7 +25,7 @@ Deno.test("handle searching", async (t) => {
     await collection.insertMany(collectionDataCopy);
   };
   await t.step({
-    name: "handle offset and limit",
+    name: "offset and limit",
     fn: async () => {
       await prepareTesting();
       const msg = await nc.request(
@@ -37,6 +37,24 @@ Deno.test("handle searching", async (t) => {
       );
       const msgData = codec.decode(msg.data) as Record<string, unknown>;
       assertEquals(msgData, collectionData.slice(10, 20));
+      assertEquals(msg.headers?.get("Status"), "200");
+    },
+    sanitizeOps: false,
+    sanitizeResources: false,
+  });
+  await t.step({
+    name: "filter",
+    fn: async () => {
+      await prepareTesting();
+      const targetData = collectionData.slice(10, 20);
+      const msg = await nc.request(
+        "ENTITY.REQUEST.SEARCH",
+        codec.encode({
+          filter: targetData.map((v) => `data==${v.data}`).join(","),
+        })
+      );
+      const msgData = codec.decode(msg.data) as Record<string, unknown>;
+      assertEquals(msgData, targetData);
       assertEquals(msg.headers?.get("Status"), "200");
     },
     sanitizeOps: false,

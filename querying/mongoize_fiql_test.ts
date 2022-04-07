@@ -13,4 +13,7 @@ Deno.test("fiql to mongo conversion", async (t) => {
       $and: [{ $or: [{ x: "0" }, { y: "0" }] }, { z: "0" }],
     });
   });
+  await t.step("empty handling", () => {
+    assertEquals(mongoizeFiql(""), {});
+  });
 });

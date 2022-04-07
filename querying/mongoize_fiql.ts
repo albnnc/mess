@@ -1,6 +1,9 @@
 import { ast, mongo, parser } from "./deps.ts";
 
 export function mongoizeFiql<T = unknown>(fiql: string) {
+  if (!fiql) {
+    return {};
+  }
   const parsed = parser.parse(fiql) as ast.Node;
   const convert = (node: ast.Node): Record<string, unknown> => {
     if (ast.isComparisonNode(node)) {
