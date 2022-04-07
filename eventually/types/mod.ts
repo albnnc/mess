@@ -1,1 +1,1 @@
-export * from "./ResponseHeaders.ts";
+export * from "./response_headers.ts";
