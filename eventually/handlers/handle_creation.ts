@@ -5,7 +5,7 @@ export interface CreationOptions<T extends scheming.Schema>
   extends Omit<MutationOptions, "mutation" | "pioneer" | "process"> {
   db: mongo.Database;
   schema: T;
-  process?: (data: scheming.FromSchema<T>) => void;
+  process?: (data: scheming.FromSchema<T>) => void | Promise<void>;
 }
 
 export async function handleCreation<T extends scheming.Schema>({
@@ -22,7 +22,7 @@ export async function handleCreation<T extends scheming.Schema>({
     pioneer: true,
     process: async (id, data) => {
       scheming.validateViaSchema(schema, data, { mode: "w" });
-      process?.(data);
+      await process?.(data);
       const identified = { id, ...data };
       await collection.insertOne({ ...identified });
       return identified;

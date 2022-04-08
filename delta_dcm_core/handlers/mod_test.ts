@@ -6,7 +6,6 @@ Deno.test("handle mutation", async (t) => {
   const { nc, db, codec, dispose } = await createTestEnvironment();
   await handleDatacenter({ nc, db });
   await handleRoom({ nc, db });
-
   const createFromDefs = (entity: string, data: unknown[]) =>
     Promise.all(
       data.map(async (v) => {
@@ -27,8 +26,11 @@ Deno.test("handle mutation", async (t) => {
     name: `Room ${i}`,
   }));
   const rooms = await createFromDefs("ROOM", roomDefs);
-  // await assertRejects(() =>
-  //   nc.request(`DATACENTER.${datacenters[0].id}.REQUEST.DELETE`)
-  // );
+  await assertRejects(async () => {
+    const msg = await nc.request(
+      `DATACENTER.${datacenters[0].id}.REQUEST.DELETE`
+    );
+    eventually.validateResponse(msg);
+  });
   await dispose();
 });
