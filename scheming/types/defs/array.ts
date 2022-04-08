@@ -1,3 +1,4 @@
+import { simplytyped } from "../../deps.ts";
 import { SchemaDefinition, TypeDef } from "../mod.ts";
 
 type ArrayOptions = Partial<{
@@ -13,7 +14,7 @@ export type ArraySchema = Partial<{
   TypeDef<"array">;
 
 export type TupleSchema = Partial<{
-  items: SchemaDefinition[];
+  items: simplytyped.Vector<SchemaDefinition>;
   additionalItems: boolean;
 }> &
   ArrayOptions &

@@ -35,13 +35,15 @@ export async function handleUpdating<T extends scheming.Schema>({
       });
       const nextExceptReadOnly = collections.deepMerge(
         priorExceptReadOnly,
-        data as Record<PropertyKey, unknown>
+        data as Record<PropertyKey, unknown>,
+        { arrays: "replace" }
       );
       scheming.validateViaSchema(schema, nextExceptReadOnly, { mode: "w" });
       process?.(nextExceptReadOnly);
       const next = collections.deepMerge(
         prior as Record<PropertyKey, unknown>,
-        nextExceptReadOnly
+        nextExceptReadOnly,
+        { arrays: "replace" }
       );
       await collection.replaceOne({ id }, next);
       return next;

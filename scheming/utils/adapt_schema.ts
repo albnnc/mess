@@ -1,4 +1,6 @@
-export function adaptSchema(schema: Record<string, unknown>, mode: "r" | "w") {
+import { Schema } from "../types/mod.ts";
+
+export function adaptSchema(schema: Schema, mode: "r" | "w") {
   const adapted: Record<string, unknown> = JSON.parse(JSON.stringify(schema));
   if (!isPickable(adapted.properties)) {
     return adapted;
@@ -19,7 +21,7 @@ export function adaptSchema(schema: Record<string, unknown>, mode: "r" | "w") {
       adapted.properties[key] = adaptSchema(prop, mode);
     }
   }
-  return adapted;
+  return adapted as Schema;
 }
 
 function isPickable(v: unknown): v is Record<PropertyKey, unknown> {

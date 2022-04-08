@@ -55,7 +55,7 @@ export async function handleMutation({
           codec.encode(e.message ?? String(e))
         );
         msg.respond(nats.Empty, {
-          headers: createResponseHeaders("500", e.message),
+          headers: createResponseHeaders("500", e.message || e.toString()),
         });
       }
     }
