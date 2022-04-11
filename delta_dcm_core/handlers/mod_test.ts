@@ -1,12 +1,18 @@
 import * as eventually from "../../eventually/mod.ts";
 import { assertRejects, createTestEnvironment } from "../../testing/mod.ts";
-import { handleDatacenter, handleRack, handleRoom } from "./mod.ts";
+import {
+  handleDatacenter,
+  handleDevice,
+  handleRack,
+  handleRoom,
+} from "./mod.ts";
 
 Deno.test("handle entities CRUD", async () => {
   const { nc, db, codec, dispose } = await createTestEnvironment();
   await handleDatacenter({ nc, db });
   await handleRoom({ nc, db });
   await handleRack({ nc, db });
+  await handleDevice({ nc, db });
   const createFromDefs = (entity: string, data: unknown[]) =>
     Promise.all(
       data.map(async (v) => {
@@ -40,6 +46,16 @@ Deno.test("handle entities CRUD", async () => {
   const racks = await createFromDefs("RACK", rackDefs);
   await assertRejects(async () => {
     const msg = await nc.request(`ROOM.${rooms[0].id}.REQUEST.DELETE`);
+    eventually.validateResponse(msg);
+  });
+  const deviceDefs = racks.map((v, i) => ({
+    parentType: "RACK",
+    parentId: v.id,
+    name: `Device ${i}`,
+  }));
+  const devices = await createFromDefs("DEVICE", deviceDefs);
+  await assertRejects(async () => {
+    const msg = await nc.request(`RACK.${racks[0].id}.REQUEST.DELETE`);
     eventually.validateResponse(msg);
   });
   await dispose();
