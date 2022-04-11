@@ -6,7 +6,7 @@ Deno.test("handle reading", async (t) => {
   const nc = await nats.connect({ servers: Deno.env.get("NATS_URL") });
   const mongoClient = new mongo.MongoClient();
   await mongoClient.connect(Deno.env.get("MONGO_URL") ?? "");
-  const db = mongoClient.database("test");
+  const db = mongoClient.database("TEST");
   const collection = db.collection("ENTITY");
   const codec = nats.JSONCodec();
   await handleReading({
@@ -26,7 +26,7 @@ Deno.test("handle reading", async (t) => {
       const msg = await nc.request("ENTITY.TEST.REQUEST.READ");
       const msgData = codec.decode(msg.data) as Record<string, unknown>;
       assertEquals(msgData, { id: "TEST" });
-      assertEquals(msg.headers?.get("Status"), "200");
+      assertEquals(msg.headers?.get("Status-Code"), "200");
     },
     sanitizeOps: false,
     sanitizeResources: false,
@@ -36,7 +36,7 @@ Deno.test("handle reading", async (t) => {
     fn: async () => {
       await prepareTesting();
       const msg = await nc.request("ENTITY.TEST_UNKNOWN.REQUEST.READ");
-      assertEquals(msg.headers?.get("Status"), "404");
+      assertEquals(msg.headers?.get("Status-Code"), "404");
     },
     sanitizeOps: false,
     sanitizeResources: false,

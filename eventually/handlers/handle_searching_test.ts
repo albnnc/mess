@@ -6,7 +6,7 @@ Deno.test("handle searching", async (t) => {
   const nc = await nats.connect({ servers: Deno.env.get("NATS_URL") });
   const mongoClient = new mongo.MongoClient();
   await mongoClient.connect(Deno.env.get("MONGO_URL") ?? "");
-  const db = mongoClient.database("test");
+  const db = mongoClient.database("TEST");
   const codec = nats.JSONCodec();
   const collection = db.collection("ENTITY");
   const collectionData = new Array(1000).fill(undefined).map((_, i) => ({
@@ -37,7 +37,7 @@ Deno.test("handle searching", async (t) => {
       );
       const msgData = codec.decode(msg.data) as Record<string, unknown>;
       assertEquals(msgData, collectionData.slice(10, 20));
-      assertEquals(msg.headers?.get("Status"), "200");
+      assertEquals(msg.headers?.get("Status-Code"), "200");
     },
     sanitizeOps: false,
     sanitizeResources: false,
@@ -55,7 +55,7 @@ Deno.test("handle searching", async (t) => {
       );
       const msgData = codec.decode(msg.data) as Record<string, unknown>;
       assertEquals(msgData, targetData);
-      assertEquals(msg.headers?.get("Status"), "200");
+      assertEquals(msg.headers?.get("Status-Code"), "200");
     },
     sanitizeOps: false,
     sanitizeResources: false,
