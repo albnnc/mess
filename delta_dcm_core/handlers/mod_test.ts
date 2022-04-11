@@ -2,7 +2,7 @@ import * as eventually from "../../eventually/mod.ts";
 import { assertRejects, createTestEnvironment } from "../../testing/mod.ts";
 import { handleDatacenter, handleRoom } from "./mod.ts";
 
-Deno.test("handle mutation", async (t) => {
+Deno.test("handle entities CRUD", async () => {
   const { nc, db, codec, dispose } = await createTestEnvironment();
   await handleDatacenter({ nc, db });
   await handleRoom({ nc, db });
