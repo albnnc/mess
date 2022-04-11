@@ -19,9 +19,7 @@ export async function handleDatacenter({ nc, db }: HandlerOptions) {
       const roomCollection = db.collection("ROOM");
       const childRoom = await roomCollection.findOne({ datacenterId: data.id });
       if (childRoom) {
-        throw new eventually.ConflictError(
-          "Unable to delete entity, since atleast one child exists"
-        );
+        throw new eventually.ConflictError("Child room exists");
       }
     },
   });
