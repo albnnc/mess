@@ -1,6 +1,6 @@
 import { mongo, nats, querying, scheming } from "../deps.ts";
 import { searchRequestSchema } from "../schemas/mod.ts";
-import { createResponseHeaders } from "../utils/mod.ts";
+import { createResponseHeaders, getErrorStatusCode } from "../utils/mod.ts";
 
 export interface SearchingOptions {
   nc: nats.NatsConnection;
@@ -35,7 +35,7 @@ export async function handleSearching({
         });
       } catch (e) {
         msg.respond(nats.Empty, {
-          headers: createResponseHeaders("500", e.message),
+          headers: createResponseHeaders(getErrorStatusCode(e), e.message),
         });
       }
     }

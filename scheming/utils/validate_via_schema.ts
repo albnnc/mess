@@ -1,4 +1,5 @@
 import { Ajv } from "../deps.ts";
+import { ValidationError } from "../errors/mod.ts";
 import { FromSchema, Schema } from "../types/mod.ts";
 import { adaptSchema } from "./adapt_schema.ts";
 
@@ -18,6 +19,6 @@ export function validateViaSchema<T extends Schema>(
     ? adaptSchema(schema as Record<string, unknown>, mode)
     : schema;
   if (!ajv.validate(adaptedSchema, data)) {
-    throw new Error(ajv.errorsText(ajv.errors));
+    throw new ValidationError(ajv.errorsText(ajv.errors));
   }
 }

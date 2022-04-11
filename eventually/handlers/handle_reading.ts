@@ -1,5 +1,5 @@
 import { mongo, nats } from "../deps.ts";
-import { createResponseHeaders } from "../utils/mod.ts";
+import { createResponseHeaders, getErrorStatusCode } from "../utils/mod.ts";
 
 export interface ReadingOptions {
   nc: nats.NatsConnection;
@@ -29,7 +29,7 @@ export async function handleReading({ nc, db, codec, entity }: ReadingOptions) {
         });
       } catch (e) {
         msg.respond(nats.Empty, {
-          headers: createResponseHeaders("500", e.message),
+          headers: createResponseHeaders(getErrorStatusCode(e), e.message),
         });
       }
     }
