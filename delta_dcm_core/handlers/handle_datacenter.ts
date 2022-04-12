@@ -1,6 +1,7 @@
 import { eventually, nats, scheming } from "../deps.ts";
 import { datacenterSchema } from "../schemas/mod.ts";
 import { HandlerOptions } from "../types/mod.ts";
+import { preventChildDeps } from "../utils/mod.ts";
 
 export async function handleDatacenter({ nc, db }: HandlerOptions) {
   const codec = nats.JSONCodec();
@@ -16,11 +17,18 @@ export async function handleDatacenter({ nc, db }: HandlerOptions) {
     entity,
     process: async (data) => {
       scheming.validateViaSchema(schema, data);
-      const roomCollection = db.collection("ROOM");
-      const childRoom = await roomCollection.findOne({ datacenterId: data.id });
-      if (childRoom) {
-        throw new eventually.ConflictError("Child room exists");
-      }
+      await Promise.all([
+        preventChildDeps({
+          db,
+          entity: "ROOM",
+          filter: { datacenterId: data.id },
+        }),
+        preventChildDeps({
+          db,
+          entity: "DEVICE",
+          filter: { parentType: entity, parentId: data.id },
+        }),
+      ]);
     },
   });
   await eventually.handleSearching({ nc, db, codec, entity });

@@ -1,6 +1,7 @@
 import { eventually, nats, scheming } from "../deps.ts";
 import { rackSchema } from "../schemas/mod.ts";
 import { HandlerOptions } from "../types/mod.ts";
+import { preventChildDeps } from "../utils/mod.ts";
 
 export async function handleRack({ nc, db }: HandlerOptions) {
   const codec = nats.JSONCodec();
@@ -16,14 +17,13 @@ export async function handleRack({ nc, db }: HandlerOptions) {
     entity,
     process: async (data) => {
       scheming.validateViaSchema(schema, data);
-      const deviceCollection = db.collection("DEVICE");
-      const childDevice = await deviceCollection.findOne({
-        parentType: "RACK",
-        parentId: data.id,
-      });
-      if (childDevice) {
-        throw new eventually.ConflictError("Child device exists");
-      }
+      await Promise.all([
+        preventChildDeps({
+          db,
+          entity: "DEVICE",
+          filter: { parentType: entity, parentId: data.id },
+        }),
+      ]);
     },
   });
   await eventually.handleSearching({ nc, db, codec, entity });

@@ -1,6 +1,7 @@
 import { eventually, nats, scheming } from "../deps.ts";
 import { roomSchema } from "../schemas/mod.ts";
 import { HandlerOptions } from "../types/mod.ts";
+import { preventChildDeps } from "../utils/mod.ts";
 
 export async function handleRoom({ nc, db }: HandlerOptions) {
   const codec = nats.JSONCodec();
@@ -16,11 +17,18 @@ export async function handleRoom({ nc, db }: HandlerOptions) {
     entity,
     process: async (data) => {
       scheming.validateViaSchema(schema, data);
-      const rackCollection = db.collection("RACK");
-      const childRack = await rackCollection.findOne({ roomId: data.id });
-      if (childRack) {
-        throw new eventually.ConflictError("Child rack exists");
-      }
+      await Promise.all([
+        preventChildDeps({
+          db,
+          entity: "RACK",
+          filter: { roomId: data.id },
+        }),
+        preventChildDeps({
+          db,
+          entity: "DEVICE",
+          filter: { parentType: entity, parentId: data.id },
+        }),
+      ]);
     },
   });
   await eventually.handleSearching({ nc, db, codec, entity });
