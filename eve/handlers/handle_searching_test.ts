@@ -1,13 +1,8 @@
-import { assertEquals } from "../../testing/mod.ts";
-import { mongo, nats } from "../deps.ts";
+import { assertEquals, createTestEnvironment } from "../../testing/mod.ts";
 import { handleSearching } from "./handle_searching.ts";
 
 Deno.test("handle searching", async (t) => {
-  const nc = await nats.connect({ servers: Deno.env.get("NATS_URL") });
-  const mongoClient = new mongo.MongoClient();
-  await mongoClient.connect(Deno.env.get("MONGO_URL") ?? "");
-  const db = mongoClient.database("TEST");
-  const codec = nats.JSONCodec();
+  const { nc, db, codec, dispose } = await createTestEnvironment();
   const collection = db.collection("ENTITY");
   const collectionData = new Array(1000).fill(undefined).map((_, i) => ({
     id: i,
@@ -60,6 +55,5 @@ Deno.test("handle searching", async (t) => {
     sanitizeOps: false,
     sanitizeResources: false,
   });
-  await nc.close();
-  await mongoClient.close();
+  await dispose();
 });

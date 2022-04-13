@@ -1,10 +1,12 @@
-import { assertMatch, getStreamMsgs } from "../../testing/mod.ts";
-import { nats } from "../deps.ts";
+import {
+  assertMatch,
+  createTestEnvironment,
+  getStreamMsgs,
+} from "../../testing/mod.ts";
 import { handleMutation } from "./handle_mutation.ts";
 
 Deno.test("handle mutation", async (t) => {
-  const nc = await nats.connect({ servers: Deno.env.get("NATS_URL") });
-  const codec = nats.JSONCodec();
+  const { nc, codec, dispose } = await createTestEnvironment();
   await handleMutation({
     nc,
     codec,
@@ -45,5 +47,5 @@ Deno.test("handle mutation", async (t) => {
     sanitizeOps: false,
     sanitizeResources: false,
   });
-  await nc.close();
+  await dispose();
 });
