@@ -6,22 +6,30 @@ export async function handleRoom({ nc, db }: HandlerOptions) {
   const codec = nats.JSONCodec();
   const schema = roomSchema;
   const entity = "ROOM";
+  const validateParent = async (_: string, data: Record<string, unknown>) => {
+    await eve.validateExistence({
+      db,
+      entity: "DATACENTER",
+      filter: { id: data.datacenterId },
+    });
+  };
   await eve.handleCreation({
     nc,
     db,
     codec,
     entity,
     schema,
-    process: async (_, data) => {
-      await eve.validateExistence({
-        db,
-        entity: "DATACENTER",
-        filter: { id: data.datacenterId },
-      });
-    },
+    process: validateParent,
   });
   await eve.handleReading({ nc, db, codec, entity });
-  await eve.handleUpdating({ nc, db, codec, entity, schema });
+  await eve.handleUpdating({
+    nc,
+    db,
+    codec,
+    entity,
+    schema,
+    process: validateParent,
+  });
   await eve.handleDeletion({
     nc,
     db,

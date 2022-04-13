@@ -6,9 +6,30 @@ export async function handleDeviceLog({ nc, db }: HandlerOptions) {
   const codec = nats.JSONCodec();
   const schema = deviceLogSchema;
   const entity = "DEVICE_LOG";
-  await eve.handleCreation({ nc, db, codec, entity, schema });
+  const validateParent = async (_: string, data: Record<string, unknown>) => {
+    await eve.validateExistence({
+      db,
+      entity: "DEVICE",
+      filter: { id: data.deviceId },
+    });
+  };
+  await eve.handleCreation({
+    nc,
+    db,
+    codec,
+    entity,
+    schema,
+    process: validateParent,
+  });
   await eve.handleReading({ nc, db, codec, entity });
-  await eve.handleUpdating({ nc, db, codec, entity, schema });
+  await eve.handleUpdating({
+    nc,
+    db,
+    codec,
+    entity,
+    schema,
+    process: validateParent,
+  });
   await eve.handleDeletion({ nc, db, codec, entity });
   await eve.handleSearching({ nc, db, codec, entity });
 }

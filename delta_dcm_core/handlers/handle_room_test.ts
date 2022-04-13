@@ -21,6 +21,36 @@ Deno.test("room creation", async () => {
   await dispose();
 });
 
+Deno.test("room updating", async () => {
+  const { nc, db, codec, dispose } = await testing.createTestEnvironment();
+  await db.collection("DATACENTER").insertMany([
+    { id: "a", name: "DC A" },
+    { id: "b", name: "DC B" },
+  ]);
+  await db
+    .collection("ROOM")
+    .insertOne({ id: "x", datacenterId: "a", name: "Room X" });
+  await handleRoom({ nc, db });
+  await testing.assertRejects(async () => {
+    const msg = await nc.request(
+      "ROOM.x.REQUEST.UPDATE",
+      codec.encode({ datacenterId: "c" })
+    );
+    eve.validateResponse(msg);
+  });
+  const msg = await nc.request(
+    "ROOM.x.REQUEST.UPDATE",
+    codec.encode({ datacenterId: "b" })
+  );
+  eve.validateResponse(msg);
+  testing.assertEquals(codec.decode(msg.data), {
+    id: "x",
+    datacenterId: "b",
+    name: "Room X",
+  });
+  await dispose();
+});
+
 Deno.test("room deletion", async () => {
   const { nc, db, dispose } = await testing.createTestEnvironment();
   await db.collection("ROOM").insertOne({ id: "x", name: "Test Room" });

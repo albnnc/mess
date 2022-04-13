@@ -1,4 +1,4 @@
-import { eve, nats } from "../deps.ts";
+import { eve, nats, scheming } from "../deps.ts";
 import { deviceSchema } from "../schemas/mod.ts";
 import { HandlerOptions } from "../types/mod.ts";
 
@@ -6,9 +6,33 @@ export async function handleDevice({ nc, db }: HandlerOptions) {
   const codec = nats.JSONCodec();
   const schema = deviceSchema;
   const entity = "DEVICE";
-  await eve.handleCreation({ nc, db, codec, entity, schema });
+  const validateParent = async (
+    _: string,
+    data: scheming.FromSchema<typeof schema>
+  ) => {
+    await eve.validateExistence({
+      db,
+      entity: data.parentType,
+      filter: { id: data.parentId },
+    });
+  };
+  await eve.handleCreation({
+    nc,
+    db,
+    codec,
+    entity,
+    schema,
+    process: validateParent,
+  });
   await eve.handleReading({ nc, db, codec, entity });
-  await eve.handleUpdating({ nc, db, codec, entity, schema });
+  await eve.handleUpdating({
+    nc,
+    db,
+    codec,
+    entity,
+    schema,
+    process: validateParent,
+  });
   await eve.handleDeletion({
     nc,
     db,
