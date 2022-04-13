@@ -14,8 +14,17 @@ export async function handleDevice({ nc, db }: HandlerOptions) {
     db,
     codec,
     entity,
-    process: async () => {
-      // TODO: Delete children.
+    process: async (id) => {
+      await Promise.all(
+        ["DEVICE_PART", "DEVICE_METRIC", "DEVICE_LOG"].map((entity) =>
+          eventually.deleteViaFilter({
+            nc,
+            db,
+            entity,
+            filter: { deviceId: id },
+          })
+        )
+      );
     },
   });
   await eventually.handleSearching({ nc, db, codec, entity });
