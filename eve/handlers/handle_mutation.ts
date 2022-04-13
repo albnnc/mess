@@ -51,7 +51,7 @@ export async function handleMutation({
           processed !== undefined ? codec.encode(processed) : undefined;
         await js.publish(eventSubjects.success.replace("*", id), encoded);
         msg.respond(encoded, {
-          headers: createResponseHeaders("201"),
+          headers: createResponseHeaders(pioneer ? "201" : "200"),
         });
       } catch (e) {
         await js.publish(

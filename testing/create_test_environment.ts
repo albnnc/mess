@@ -14,6 +14,11 @@ export async function createTestEnvironment({
   codec = nats.JSONCodec<unknown>(),
 }: TestEnvironmentOptions = {}) {
   const nc = await nats.connect({ servers: ncUrl });
+  const jsm = await nc.jetstreamManager();
+  const streamNames = await jsm.streams.list().next();
+  for (const v of streamNames) {
+    await jsm.streams.purge(v.config.name);
+  }
   const mongoClient = new mongo.MongoClient();
   await mongoClient.connect(dbUrl);
   const db = mongoClient.database(dbName);

@@ -1,0 +1,49 @@
+import * as testing from "../../testing/mod.ts";
+import { handleInsertion } from "./handle_insertion.ts";
+
+const schema = {
+  type: "object",
+  properties: {
+    username: { type: "string" },
+    password: { type: "string" },
+  },
+  required: ["username", "password"],
+} as const;
+
+Deno.test("generic insertion success", async () => {
+  const { nc, db, codec, dispose } = await testing.createTestEnvironment();
+  const collection = db.collection("ENTITY");
+  await handleInsertion({ nc, db, codec, entity: "ENTITY", schema });
+  const inputData = { username: "X", password: "Y" };
+  await nc.request("ENTITY.x.REQUEST.INSERT", codec.encode(inputData));
+  const msgs = await testing.getStreamMsgs(nc, "ENTITY");
+  const msgSubjects = msgs.map((v) => v.subject);
+  const msgData = msgs.map(
+    (v) => codec.decode(v.data) as Record<string, unknown>
+  );
+  const { id, ...rest } = msgData[1];
+  const dbData = await collection.findOne({ id }, { projection: { _id: 0 } });
+  testing.assertMatch(msgSubjects[0], /^ENTITY\..+\.EVENT\.INSERT\.ATTEMPT$/);
+  testing.assertMatch(msgSubjects[1], /^ENTITY\..+\.EVENT\.INSERT\.SUCCESS$/);
+  testing.assertEquals(msgData[0], inputData);
+  testing.assertEquals(id, "x");
+  testing.assertEquals(rest, inputData);
+  testing.assertEquals(msgData[1], dbData);
+  await dispose();
+});
+
+Deno.test("generic insertion error", async () => {
+  const { nc, db, codec, dispose } = await testing.createTestEnvironment();
+  await handleInsertion({ nc, db, codec, entity: "ENTITY", schema });
+  const collection = db.collection("ENTITY");
+  await collection.insertOne({ id: "x" });
+  const inputData = { username: "X", password: "Y" };
+  await nc.request("ENTITY.x.REQUEST.INSERT", codec.encode(inputData));
+  const msgs = await testing.getStreamMsgs(nc, "ENTITY");
+  const msgSubjects = msgs.map((v) => v.subject);
+  const count = await collection.countDocuments();
+  testing.assertMatch(msgSubjects[0], /^ENTITY\..+\.EVENT\.INSERT\.ATTEMPT$/);
+  testing.assertMatch(msgSubjects[1], /^ENTITY\..+\.EVENT\.INSERT\.ERROR$/);
+  testing.assertEquals(count, 1);
+  await dispose();
+});
