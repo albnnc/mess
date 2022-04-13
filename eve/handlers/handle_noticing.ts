@@ -1,4 +1,4 @@
-import { mongo, nats } from "../deps.ts";
+import { mongo, nats, scheming } from "../deps.ts";
 import {
   createResponseHeaders,
   getErrorStatusCode,
@@ -15,7 +15,7 @@ export interface NoticingOptions {
 export async function handleNoticing({
   nc,
   db,
-  codec: _,
+  codec,
   entity,
 }: NoticingOptions) {
   const sub = await nc.subscribe(`${entity}.*.REQUEST.NOTICE`);
@@ -23,30 +23,31 @@ export async function handleNoticing({
   const handleSub = async () => {
     for await (const msg of sub) {
       const id = msg.subject.split(".")[1] ?? "UNKNOWN";
+      const next = codec.decode(msg.data) as Record<string, unknown>;
       try {
         const prior = await collection.findOne(
           { id },
           { projection: { _id: 0 } }
         );
-        if (!prior) {
+        if (prior) {
+          const { id: _, ...rest } = prior;
+          const patch = scheming.createPatch(rest, next);
+          if (Object.keys(patch).length > 0) {
+            const updatingMsg = await nc.request(
+              `${entity}.${id}.REQUEST.UPDATE`,
+              codec.encode(patch)
+            );
+            validateResponse(updatingMsg);
+          }
+        } else {
           const insertingMsg = await nc.request(
             `${entity}.${id}.REQUEST.INSERT`,
             msg.data
           );
           validateResponse(insertingMsg);
-          msg.respond(nats.Empty, {
-            headers: createResponseHeaders("200"),
-          });
-          continue;
         }
-        // TODO: One has to build a patch here.
-        const updatingMsg = await nc.request(
-          `${entity}.${id}.REQUEST.UPDATE`,
-          msg.data
-        );
-        validateResponse(updatingMsg);
         msg.respond(nats.Empty, {
-          headers: createResponseHeaders("404"),
+          headers: createResponseHeaders("200"),
         });
       } catch (e) {
         msg.respond(nats.Empty, {

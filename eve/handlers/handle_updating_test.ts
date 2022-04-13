@@ -5,10 +5,10 @@ const schema = {
   type: "object",
   properties: {
     id: { type: "string", readOnly: true },
-    username: { type: "string" },
-    password: { type: "string", writeOnly: true },
+    a: { type: "string" },
+    b: { type: "string" },
   },
-  required: ["id", "username", "password"],
+  required: ["id", "a", "b"],
   additionalProperties: false,
 } as const;
 
@@ -18,10 +18,10 @@ Deno.test("generic updating success", async () => {
   const collection = db.collection("ENTITY");
   await collection.insertOne({
     id: "x",
-    username: "x",
-    password: "x",
+    a: "x",
+    b: "x",
   });
-  const update = { username: "y", password: "y" };
+  const update = { b: "y" };
   await nc.request("ENTITY.x.REQUEST.UPDATE", codec.encode(update));
   const msgs = await testing.getStreamMsgs(nc, "ENTITY");
   const msgData = msgs.map(
@@ -35,9 +35,9 @@ Deno.test("generic updating success", async () => {
     msgs.map((v) => v.subject),
     ["ENTITY.x.EVENT.UPDATE.ATTEMPT", "ENTITY.x.EVENT.UPDATE.SUCCESS"]
   );
-  testing.assertEquals(msgData[0], update);
-  testing.assertEquals(msgData[1], { id: "x", ...update });
-  testing.assertEquals(dbData, { id: "x", ...update });
+  testing.assertEquals(msgData[0], { b: "y" });
+  testing.assertEquals(msgData[1], { id: "x", a: "x", b: "y" });
+  testing.assertEquals(dbData, { id: "x", a: "x", b: "y" });
   await dispose();
 });
 
@@ -47,8 +47,8 @@ Deno.test("generic updating error", async () => {
   const collection = db.collection("ENTITY");
   await collection.insertOne({
     id: "x",
-    username: "x",
-    password: "x",
+    a: "x",
+    b: "x",
   });
   const initialData = await collection.findOne(
     { id: "x" },

@@ -1,6 +1,6 @@
 export function set(
   data: Record<PropertyKey, unknown>,
-  path: string | string[],
+  path: string | (string | number)[],
   value: unknown
 ) {
   const segments = Array.isArray(path) ? path : path.split(".");

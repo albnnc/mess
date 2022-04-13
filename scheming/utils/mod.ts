@@ -1,3 +1,4 @@
+export * from "./create_patch.ts";
 export * from "./adapt_schema.ts";
 export * from "./exclude_via_schema.ts";
 export * from "./get.ts";

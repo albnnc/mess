@@ -34,11 +34,21 @@ Deno.test("extract inaccessible", () => {
       writeOnly: true,
       additional: true,
     }),
-    {
-      role: {
-        name: "",
+    [
+      {
+        role: {
+          name: "",
+        },
+        username: "",
       },
-      username: "",
-    }
+      {
+        id: "",
+        password: "",
+        role: {
+          id: "",
+          abcd: "",
+        },
+      },
+    ]
   );
 });

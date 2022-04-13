@@ -2,7 +2,7 @@ type Accesible = Record<string | number | symbol, unknown>;
 
 export function get<T extends unknown>(
   data: unknown,
-  path: string | string[],
+  path: string | (string | number)[],
   defaultValue?: T
 ) {
   const pathArray = Array.isArray(path) ? path : path.split(".");

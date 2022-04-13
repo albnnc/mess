@@ -30,21 +30,29 @@ export async function handleUpdating<T extends scheming.Schema>({
       if (!prior) {
         throw new Error("Unable to update non-existent entity");
       }
-      const priorExceptReadOnly = scheming.excludeViaSchema(schema, prior, {
-        readOnly: true,
-      });
-      const nextExceptReadOnly = collections.deepMerge(
-        priorExceptReadOnly,
-        data as Record<PropertyKey, unknown>,
-        { arrays: "replace" }
+      const [priorExceptReadOnly, priorReadOnly] = scheming.excludeViaSchema(
+        schema,
+        prior,
+        {
+          readOnly: true,
+        }
+      );
+      // TODO: Use better way to omit null values.
+      const nextExceptReadOnly = JSON.parse(
+        JSON.stringify(
+          collections.deepMerge(
+            priorExceptReadOnly,
+            data as Record<PropertyKey, unknown>,
+            { arrays: "replace" }
+          )
+        ),
+        (_, v) => (v === null ? undefined : v)
       );
       scheming.validateViaSchema(schema, nextExceptReadOnly, { mode: "w" });
       await process?.(id, nextExceptReadOnly);
-      const next = collections.deepMerge(
-        prior as Record<PropertyKey, unknown>,
-        nextExceptReadOnly,
-        { arrays: "replace" }
-      );
+      const next = collections.deepMerge(priorReadOnly, nextExceptReadOnly, {
+        arrays: "replace",
+      });
       await collection.replaceOne({ id }, next);
       return next;
     },

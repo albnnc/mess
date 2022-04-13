@@ -17,7 +17,7 @@ Deno.test("adapt schema", async (t) => {
       },
     },
     required: ["id", "username", "password"],
-  };
+  } as const;
   const readSchema = {
     type: "object",
     properties: {
@@ -32,7 +32,7 @@ Deno.test("adapt schema", async (t) => {
       },
     },
     required: ["id", "username"],
-  };
+  } as const;
   const writeSchema = {
     type: "object",
     properties: {
@@ -46,7 +46,7 @@ Deno.test("adapt schema", async (t) => {
       },
     },
     required: ["username", "password"],
-  };
+  } as const;
   await t.step("remove read-only props in write mode", () => {
     assertEquals(adaptSchema(defaultSchema, "w"), writeSchema);
   });
