@@ -5,7 +5,7 @@ export interface UpdatingOptions<T extends scheming.Schema>
   extends Omit<MutationOptions, "mutation" | "pioneer" | "process"> {
   db: mongo.Database;
   schema: T;
-  process?: (data: scheming.FromSchema<T>) => void | Promise<void>;
+  process?: (id: string, data: scheming.FromSchema<T>) => void | Promise<void>;
 }
 
 export async function handleUpdating<T extends scheming.Schema>({
@@ -39,7 +39,7 @@ export async function handleUpdating<T extends scheming.Schema>({
         { arrays: "replace" }
       );
       scheming.validateViaSchema(schema, nextExceptReadOnly, { mode: "w" });
-      await process?.(nextExceptReadOnly);
+      await process?.(id, nextExceptReadOnly);
       const next = collections.deepMerge(
         prior as Record<PropertyKey, unknown>,
         nextExceptReadOnly,

@@ -4,7 +4,7 @@ import { handleMutation, MutationOptions } from "./handle_mutation.ts";
 export interface DeletionOptions
   extends Omit<MutationOptions, "mutation" | "pioneer" | "process"> {
   db: mongo.Database;
-  process?: (data: unknown) => void | Promise<void>;
+  process?: (id: string, data: unknown) => void | Promise<void>;
 }
 
 export async function handleDeletion({
@@ -25,7 +25,7 @@ export async function handleDeletion({
       if (!prior) {
         throw new Error("Unable to delete non-existent entity");
       }
-      await process?.(prior);
+      await process?.(id, prior);
       await collection.deleteOne({ id });
       return prior;
     },

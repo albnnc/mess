@@ -53,7 +53,7 @@ Deno.test("handle entities CRUD", async () => {
     parentId: v.id,
     name: `Device ${i}`,
   }));
-  const devices = await createFromDefs("DEVICE", deviceDefs);
+  await createFromDefs("DEVICE", deviceDefs);
   await assertRejects(async () => {
     const msg = await nc.request(`RACK.${racks[0].id}.REQUEST.DELETE`);
     eventually.validateResponse(msg);

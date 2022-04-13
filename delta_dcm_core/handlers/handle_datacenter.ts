@@ -1,7 +1,6 @@
-import { eventually, nats, scheming } from "../deps.ts";
+import { eventually, nats } from "../deps.ts";
 import { datacenterSchema } from "../schemas/mod.ts";
 import { HandlerOptions } from "../types/mod.ts";
-import { preventChildDeps } from "../utils/mod.ts";
 
 export async function handleDatacenter({ nc, db }: HandlerOptions) {
   const codec = nats.JSONCodec();
@@ -15,18 +14,17 @@ export async function handleDatacenter({ nc, db }: HandlerOptions) {
     db,
     codec,
     entity,
-    process: async (data) => {
-      scheming.validateViaSchema(schema, data);
+    process: async (id) => {
       await Promise.all([
-        preventChildDeps({
+        eventually.validateAbsence({
           db,
           entity: "ROOM",
-          filter: { datacenterId: data.id },
+          filter: { datacenterId: id },
         }),
-        preventChildDeps({
+        eventually.validateAbsence({
           db,
           entity: "DEVICE",
-          filter: { parentType: entity, parentId: data.id },
+          filter: { parentType: entity, parentId: id },
         }),
       ]);
     },
