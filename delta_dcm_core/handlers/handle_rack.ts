@@ -6,7 +6,20 @@ export async function handleRack({ nc, db }: HandlerOptions) {
   const codec = nats.JSONCodec();
   const schema = rackSchema;
   const entity = "RACK";
-  await eve.handleCreation({ nc, db, codec, entity, schema });
+  await eve.handleCreation({
+    nc,
+    db,
+    codec,
+    entity,
+    schema,
+    process: async (_, data) => {
+      await eve.validateExistence({
+        db,
+        entity: "ROOM",
+        filter: { id: data.roomId },
+      });
+    },
+  });
   await eve.handleReading({ nc, db, codec, entity });
   await eve.handleUpdating({ nc, db, codec, entity, schema });
   await eve.handleDeletion({
