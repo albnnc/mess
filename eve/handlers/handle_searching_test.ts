@@ -1,28 +1,19 @@
-import { assertEquals, createTestEnvironment } from "../../testing/mod.ts";
+import * as testing from "../../testing/mod.ts";
 import { handleSearching } from "./handle_searching.ts";
 
-Deno.test("handle searching", async (t) => {
-  const { nc, db, codec, dispose } = await createTestEnvironment();
+Deno.test("generic searching", async (t) => {
+  const { nc, db, codec, dispose } = await testing.createTestEnvironment();
+  await handleSearching({ nc, db, codec, entity: "ENTITY" });
   const collection = db.collection("ENTITY");
   const collectionData = new Array(1000).fill(undefined).map((_, i) => ({
     id: i,
     data: crypto.randomUUID(),
   }));
-  await handleSearching({
-    nc,
-    db,
-    codec,
-    entity: "ENTITY",
-  });
-  const prepareTesting = async () => {
-    await collection.drop().catch(() => undefined);
-    const collectionDataCopy = collectionData.map((v) => ({ ...v }));
-    await collection.insertMany(collectionDataCopy);
-  };
+  const collectionDataCopy = collectionData.map((v) => ({ ...v }));
+  await collection.insertMany(collectionDataCopy);
   await t.step({
     name: "offset and limit",
     fn: async () => {
-      await prepareTesting();
       const msg = await nc.request(
         "ENTITY.REQUEST.SEARCH",
         codec.encode({
@@ -31,8 +22,8 @@ Deno.test("handle searching", async (t) => {
         })
       );
       const msgData = codec.decode(msg.data) as Record<string, unknown>;
-      assertEquals(msgData, collectionData.slice(10, 20));
-      assertEquals(msg.headers?.get("Status-Code"), "200");
+      testing.assertEquals(msgData, collectionData.slice(10, 20));
+      testing.assertEquals(msg.headers?.get("Status-Code"), "200");
     },
     sanitizeOps: false,
     sanitizeResources: false,
@@ -40,7 +31,6 @@ Deno.test("handle searching", async (t) => {
   await t.step({
     name: "filter",
     fn: async () => {
-      await prepareTesting();
       const targetData = collectionData.slice(10, 20);
       const msg = await nc.request(
         "ENTITY.REQUEST.SEARCH",
@@ -49,8 +39,8 @@ Deno.test("handle searching", async (t) => {
         })
       );
       const msgData = codec.decode(msg.data) as Record<string, unknown>;
-      assertEquals(msgData, targetData);
-      assertEquals(msg.headers?.get("Status-Code"), "200");
+      testing.assertEquals(msgData, targetData);
+      testing.assertEquals(msg.headers?.get("Status-Code"), "200");
     },
     sanitizeOps: false,
     sanitizeResources: false,

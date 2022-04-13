@@ -1,51 +1,28 @@
-import {
-  assertMatch,
-  createTestEnvironment,
-  getStreamMsgs,
-} from "../../testing/mod.ts";
+import * as testing from "../../testing/mod.ts";
 import { handleMutation } from "./handle_mutation.ts";
 
-Deno.test("handle mutation", async (t) => {
-  const { nc, codec, dispose } = await createTestEnvironment();
+Deno.test("generic mutation", async () => {
+  const { nc, codec, dispose } = await testing.createTestEnvironment();
   await handleMutation({
     nc,
     codec,
     entity: "ENTITY",
     mutation: "MUTATION",
     pioneer: true,
-    process: (id, v) => {
+    process: (id: string, v: unknown) => {
       if (typeof v !== "string") {
         throw new Error("Wrong type");
       }
       return { id };
     },
   });
-  const getTestSubjects = async (input: unknown) => {
-    const jsm = await nc.jetstreamManager();
-    await jsm.streams.purge("ENTITY");
-    await nc.request("ENTITY.REQUEST.MUTATION", codec.encode(input));
-    const msgs = await getStreamMsgs(nc, "ENTITY");
-    return msgs.map((v) => v.subject);
-  };
-  await t.step({
-    name: "handle success",
-    fn: async () => {
-      const subjects = await getTestSubjects("");
-      assertMatch(subjects[0], /^ENTITY\..+\.EVENT\.MUTATION\.ATTEMPT$/);
-      assertMatch(subjects[1], /^ENTITY\..+\.EVENT\.MUTATION\.SUCCESS$/);
-    },
-    sanitizeOps: false,
-    sanitizeResources: false,
-  });
-  await t.step({
-    name: "handle error",
-    fn: async () => {
-      const subjects = await getTestSubjects(null);
-      assertMatch(subjects[0], /^ENTITY\..+\.EVENT\.MUTATION\.ATTEMPT$/);
-      assertMatch(subjects[1], /^ENTITY\..+\.EVENT\.MUTATION\.ERROR$/);
-    },
-    sanitizeOps: false,
-    sanitizeResources: false,
-  });
+  await nc.request("ENTITY.REQUEST.MUTATION", codec.encode(""));
+  await nc.request("ENTITY.REQUEST.MUTATION", codec.encode(null));
+  const msgs = await testing.getStreamMsgs(nc, "ENTITY");
+  const subjects = msgs.map((v) => v.subject);
+  testing.assertMatch(subjects[0], /^ENTITY\..+\.EVENT\.MUTATION\.ATTEMPT$/);
+  testing.assertMatch(subjects[1], /^ENTITY\..+\.EVENT\.MUTATION\.SUCCESS$/);
+  testing.assertMatch(subjects[2], /^ENTITY\..+\.EVENT\.MUTATION\.ATTEMPT$/);
+  testing.assertMatch(subjects[3], /^ENTITY\..+\.EVENT\.MUTATION\.ERROR$/);
   await dispose();
 });

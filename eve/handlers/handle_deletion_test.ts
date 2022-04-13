@@ -1,62 +1,42 @@
-import {
-  assertEquals,
-  createTestEnvironment,
-  getStreamMsgs,
-} from "../../testing/mod.ts";
+import * as testing from "../../testing/mod.ts";
 import { handleDeletion } from "./handle_deletion.ts";
 
-Deno.test("handle deletion", async (t) => {
-  const { nc, db, codec, dispose } = await createTestEnvironment();
-  const collection = db.collection("ENTITY");
+Deno.test("generic deletion success", async () => {
+  const { nc, db, codec, dispose } = await testing.createTestEnvironment();
   await handleDeletion({ nc, db, codec, entity: "ENTITY" });
-  const prepareTesting = async () => {
-    const jsm = await nc.jetstreamManager();
-    await jsm.streams.purge("ENTITY");
-    await collection.drop().catch(() => undefined);
-    await collection.insertOne({ id: "TEST" });
-  };
-  await t.step({
-    name: "handle success",
-    fn: async () => {
-      await prepareTesting();
-      await nc.request("ENTITY.TEST.REQUEST.DELETE");
-      const msgs = await getStreamMsgs(nc, "ENTITY");
-      const msgData = msgs.map((v) =>
-        v.data.length > 0
-          ? (codec.decode(v.data) as Record<string, unknown>)
-          : undefined
-      );
-      assertEquals(
-        msgs.map((v) => v.subject),
-        ["ENTITY.TEST.EVENT.DELETE.ATTEMPT", "ENTITY.TEST.EVENT.DELETE.SUCCESS"]
-      );
-      assertEquals(msgData[0], undefined);
-      assertEquals(msgData[1], { id: "TEST" });
-      const dbData = await collection.findOne(
-        { id: "TEST" },
-        { projection: { _id: 0 } }
-      );
-      assertEquals(dbData, undefined);
-    },
-    sanitizeOps: false,
-    sanitizeResources: false,
-  });
-  await t.step({
-    name: "handle error",
-    fn: async () => {
-      await prepareTesting();
-      await nc.request("ENTITY.NON_EXISTENT.REQUEST.DELETE");
-      const msgs = await getStreamMsgs(nc, "ENTITY");
-      assertEquals(
-        msgs.map((v) => v.subject),
-        [
-          "ENTITY.NON_EXISTENT.EVENT.DELETE.ATTEMPT",
-          "ENTITY.NON_EXISTENT.EVENT.DELETE.ERROR",
-        ]
-      );
-    },
-    sanitizeOps: false,
-    sanitizeResources: false,
-  });
+  const collection = db.collection("ENTITY");
+  await collection.insertOne({ id: "x" });
+  await nc.request("ENTITY.x.REQUEST.DELETE");
+  const msgs = await testing.getStreamMsgs(nc, "ENTITY");
+  const msgData = msgs.map((v) =>
+    v.data.length > 0
+      ? (codec.decode(v.data) as Record<string, unknown>)
+      : undefined
+  );
+  const dbData = await collection.findOne(
+    { id: "x" },
+    { projection: { _id: 0 } }
+  );
+  testing.assertEquals(
+    msgs.map((v) => v.subject),
+    ["ENTITY.x.EVENT.DELETE.ATTEMPT", "ENTITY.x.EVENT.DELETE.SUCCESS"]
+  );
+  testing.assertEquals(msgData[0], undefined);
+  testing.assertEquals(msgData[1], { id: "x" });
+  testing.assertEquals(dbData, undefined);
+  await dispose();
+});
+
+Deno.test("generic deletion error", async () => {
+  const { nc, db, codec, dispose } = await testing.createTestEnvironment();
+  await handleDeletion({ nc, db, codec, entity: "ENTITY" });
+  const collection = db.collection("ENTITY");
+  await collection.insertOne({ id: "x" });
+  await nc.request("ENTITY.y.REQUEST.DELETE");
+  const msgs = await testing.getStreamMsgs(nc, "ENTITY");
+  testing.assertEquals(
+    msgs.map((v) => v.subject),
+    ["ENTITY.y.EVENT.DELETE.ATTEMPT", "ENTITY.y.EVENT.DELETE.ERROR"]
+  );
   await dispose();
 });
