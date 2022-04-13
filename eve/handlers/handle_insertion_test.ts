@@ -14,7 +14,7 @@ Deno.test("generic insertion success", async () => {
   const { nc, db, codec, dispose } = await testing.createTestEnvironment();
   const collection = db.collection("ENTITY");
   await handleInsertion({ nc, db, codec, entity: "ENTITY", schema });
-  const inputData = { username: "X", password: "Y" };
+  const inputData = { username: "x", password: "y" };
   await nc.request("ENTITY.x.REQUEST.INSERT", codec.encode(inputData));
   const msgs = await testing.getStreamMsgs(nc, "ENTITY");
   const msgSubjects = msgs.map((v) => v.subject);
@@ -37,7 +37,7 @@ Deno.test("generic insertion error", async () => {
   await handleInsertion({ nc, db, codec, entity: "ENTITY", schema });
   const collection = db.collection("ENTITY");
   await collection.insertOne({ id: "x" });
-  const inputData = { username: "X", password: "Y" };
+  const inputData = { username: "x", password: "y" };
   await nc.request("ENTITY.x.REQUEST.INSERT", codec.encode(inputData));
   const msgs = await testing.getStreamMsgs(nc, "ENTITY");
   const msgSubjects = msgs.map((v) => v.subject);
