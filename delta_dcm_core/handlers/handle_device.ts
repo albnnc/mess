@@ -1,4 +1,4 @@
-import { eventually, nats } from "../deps.ts";
+import { eve, nats } from "../deps.ts";
 import { deviceSchema } from "../schemas/mod.ts";
 import { HandlerOptions } from "../types/mod.ts";
 
@@ -6,10 +6,10 @@ export async function handleDevice({ nc, db }: HandlerOptions) {
   const codec = nats.JSONCodec();
   const schema = deviceSchema;
   const entity = "DEVICE";
-  await eventually.handleCreation({ nc, db, codec, entity, schema });
-  await eventually.handleReading({ nc, db, codec, entity });
-  await eventually.handleUpdating({ nc, db, codec, entity, schema });
-  await eventually.handleDeletion({
+  await eve.handleCreation({ nc, db, codec, entity, schema });
+  await eve.handleReading({ nc, db, codec, entity });
+  await eve.handleUpdating({ nc, db, codec, entity, schema });
+  await eve.handleDeletion({
     nc,
     db,
     codec,
@@ -17,7 +17,7 @@ export async function handleDevice({ nc, db }: HandlerOptions) {
     process: async (id) => {
       await Promise.all(
         ["DEVICE_PART", "DEVICE_METRIC", "DEVICE_LOG"].map((entity) =>
-          eventually.deleteViaFilter({
+          eve.deleteViaFilter({
             nc,
             db,
             entity,
@@ -27,5 +27,5 @@ export async function handleDevice({ nc, db }: HandlerOptions) {
       );
     },
   });
-  await eventually.handleSearching({ nc, db, codec, entity });
+  await eve.handleSearching({ nc, db, codec, entity });
 }

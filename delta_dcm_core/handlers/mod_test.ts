@@ -1,4 +1,4 @@
-import * as eventually from "../../eventually/mod.ts";
+import * as eve from "../../eve/mod.ts";
 import { assertRejects, createTestEnvironment } from "../../testing/mod.ts";
 import {
   handleDatacenter,
@@ -20,7 +20,7 @@ Deno.test("handle entities CRUD", async () => {
           `${entity}.REQUEST.CREATE`,
           codec.encode(v)
         );
-        eventually.validateResponse(msg);
+        eve.validateResponse(msg);
         return codec.decode(msg.data) as Record<string, unknown>;
       })
     );
@@ -37,7 +37,7 @@ Deno.test("handle entities CRUD", async () => {
     const msg = await nc.request(
       `DATACENTER.${datacenters[0].id}.REQUEST.DELETE`
     );
-    eventually.validateResponse(msg);
+    eve.validateResponse(msg);
   });
   const rackDefs = rooms.map((v, i) => ({
     roomId: v.id,
@@ -46,7 +46,7 @@ Deno.test("handle entities CRUD", async () => {
   const racks = await createFromDefs("RACK", rackDefs);
   await assertRejects(async () => {
     const msg = await nc.request(`ROOM.${rooms[0].id}.REQUEST.DELETE`);
-    eventually.validateResponse(msg);
+    eve.validateResponse(msg);
   });
   const deviceDefs = racks.map((v, i) => ({
     parentType: "RACK",
@@ -56,7 +56,7 @@ Deno.test("handle entities CRUD", async () => {
   await createFromDefs("DEVICE", deviceDefs);
   await assertRejects(async () => {
     const msg = await nc.request(`RACK.${racks[0].id}.REQUEST.DELETE`);
-    eventually.validateResponse(msg);
+    eve.validateResponse(msg);
   });
   await dispose();
 });
