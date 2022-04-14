@@ -13,7 +13,7 @@ export async function handleRack({ nc, db }: HandlerOptions) {
       filter: { id: data.roomId },
     });
   };
-  await eve.handleCreation({
+  await eve.handleCreating({
     nc,
     db,
     codec,
@@ -30,7 +30,7 @@ export async function handleRack({ nc, db }: HandlerOptions) {
     schema,
     process: validateParent,
   });
-  await eve.handleDeletion({
+  await eve.handleDeleting({
     nc,
     db,
     codec,

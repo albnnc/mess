@@ -1,5 +1,5 @@
 import * as testing from "../../testing/mod.ts";
-import { handleCreation } from "./handle_creation.ts";
+import { handleCreating } from "./handle_creating.ts";
 
 const schema = {
   type: "object",
@@ -13,7 +13,7 @@ const schema = {
 Deno.test("generic creation success", async () => {
   const { nc, db, codec, dispose } = await testing.createTestEnvironment();
   const collection = db.collection("ENTITY");
-  await handleCreation({ nc, db, codec, entity: "ENTITY", schema });
+  await handleCreating({ nc, db, codec, entity: "ENTITY", schema });
   const inputData = { username: "x", password: "y" };
   await nc.request("ENTITY.REQUEST.CREATE", codec.encode(inputData));
   const msgs = await testing.getStreamMsgs(nc, "ENTITY");
@@ -35,7 +35,7 @@ Deno.test("generic creation success", async () => {
 Deno.test("generic creation error", async () => {
   const { nc, db, codec, dispose } = await testing.createTestEnvironment();
   const collection = db.collection("ENTITY");
-  await handleCreation({ nc, db, codec, entity: "ENTITY", schema });
+  await handleCreating({ nc, db, codec, entity: "ENTITY", schema });
   await nc.request("ENTITY.REQUEST.CREATE", codec.encode(""));
   const msgs = await testing.getStreamMsgs(nc, "ENTITY");
   const msgSubjects = msgs.map((v) => v.subject);

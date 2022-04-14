@@ -1,8 +1,8 @@
 import { collections, mongo, scheming } from "../deps.ts";
-import { handleMutation, MutationOptions } from "./handle_mutation.ts";
+import { handleMutating, MutatingOptions } from "./handle_mutating.ts";
 
 export interface UpdatingOptions<T extends scheming.Schema>
-  extends Omit<MutationOptions, "mutation" | "pioneer" | "process"> {
+  extends Omit<MutatingOptions, "mutation" | "pioneer" | "process"> {
   db: mongo.Database;
   schema: T;
   process?: (id: string, data: scheming.FromSchema<T>) => void | Promise<void>;
@@ -16,7 +16,7 @@ export async function handleUpdating<T extends scheming.Schema>({
   ...rest
 }: UpdatingOptions<T>) {
   const collection = db.collection(entity);
-  await handleMutation({
+  await handleMutating({
     entity,
     mutation: "UPDATE",
     process: async (id, data) => {

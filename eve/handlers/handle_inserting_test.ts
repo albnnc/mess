@@ -1,5 +1,5 @@
 import * as testing from "../../testing/mod.ts";
-import { handleInsertion } from "./handle_insertion.ts";
+import { handleInserting } from "./handle_inserting.ts";
 
 const schema = {
   type: "object",
@@ -13,7 +13,7 @@ const schema = {
 Deno.test("generic insertion success", async () => {
   const { nc, db, codec, dispose } = await testing.createTestEnvironment();
   const collection = db.collection("ENTITY");
-  await handleInsertion({ nc, db, codec, entity: "ENTITY", schema });
+  await handleInserting({ nc, db, codec, entity: "ENTITY", schema });
   const inputData = { username: "x", password: "y" };
   await nc.request("ENTITY.x.REQUEST.INSERT", codec.encode(inputData));
   const msgs = await testing.getStreamMsgs(nc, "ENTITY");
@@ -34,7 +34,7 @@ Deno.test("generic insertion success", async () => {
 
 Deno.test("generic insertion error", async () => {
   const { nc, db, codec, dispose } = await testing.createTestEnvironment();
-  await handleInsertion({ nc, db, codec, entity: "ENTITY", schema });
+  await handleInserting({ nc, db, codec, entity: "ENTITY", schema });
   const collection = db.collection("ENTITY");
   await collection.insertOne({ id: "x" });
   const inputData = { username: "x", password: "y" };

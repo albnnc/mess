@@ -5,7 +5,7 @@ import {
   getErrorStatusCode,
 } from "../utils/mod.ts";
 
-export interface MutationOptions {
+export interface MutatingOptions {
   nc: nats.NatsConnection;
   codec: nats.Codec<unknown>;
   entity: string;
@@ -14,14 +14,14 @@ export interface MutationOptions {
   process: (id: string, data: unknown) => unknown | Promise<unknown>;
 }
 
-export async function handleMutation({
+export async function handleMutating({
   nc,
   codec,
   entity,
   mutation,
   pioneer,
   process,
-}: MutationOptions) {
+}: MutatingOptions) {
   const requestSubject = pioneer
     ? `${entity}.REQUEST.${mutation}`
     : `${entity}.*.REQUEST.${mutation}`;

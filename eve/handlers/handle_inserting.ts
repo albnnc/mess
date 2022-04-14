@@ -1,23 +1,23 @@
 import { mongo, scheming } from "../deps.ts";
 import { ConflictError } from "../errors/mod.ts";
-import { handleMutation, MutationOptions } from "./handle_mutation.ts";
+import { handleMutating, MutatingOptions } from "./handle_mutating.ts";
 
-export interface InsertionOptions<T extends scheming.Schema>
-  extends Omit<MutationOptions, "mutation" | "pioneer" | "process"> {
+export interface InsertingOptions<T extends scheming.Schema>
+  extends Omit<MutatingOptions, "mutation" | "pioneer" | "process"> {
   db: mongo.Database;
   schema: T;
   process?: (id: string, data: scheming.FromSchema<T>) => void | Promise<void>;
 }
 
-export async function handleInsertion<T extends scheming.Schema>({
+export async function handleInserting<T extends scheming.Schema>({
   db,
   schema,
   process,
   entity,
   ...rest
-}: InsertionOptions<T>) {
+}: InsertingOptions<T>) {
   const collection = db.collection(entity);
-  await handleMutation({
+  await handleMutating({
     entity,
     mutation: "INSERT",
     process: async (id, data) => {

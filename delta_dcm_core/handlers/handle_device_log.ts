@@ -13,7 +13,7 @@ export async function handleDeviceLog({ nc, db }: HandlerOptions) {
       filter: { id: data.deviceId },
     });
   };
-  await eve.handleCreation({
+  await eve.handleCreating({
     nc,
     db,
     codec,
@@ -30,6 +30,6 @@ export async function handleDeviceLog({ nc, db }: HandlerOptions) {
     schema,
     process: validateParent,
   });
-  await eve.handleDeletion({ nc, db, codec, entity });
+  await eve.handleDeleting({ nc, db, codec, entity });
   await eve.handleSearching({ nc, db, codec, entity });
 }

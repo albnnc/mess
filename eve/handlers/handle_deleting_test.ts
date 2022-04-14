@@ -1,9 +1,9 @@
 import * as testing from "../../testing/mod.ts";
-import { handleDeletion } from "./handle_deletion.ts";
+import { handleDeleting } from "./handle_deleting.ts";
 
 Deno.test("generic deletion success", async () => {
   const { nc, db, codec, dispose } = await testing.createTestEnvironment();
-  await handleDeletion({ nc, db, codec, entity: "ENTITY" });
+  await handleDeleting({ nc, db, codec, entity: "ENTITY" });
   const collection = db.collection("ENTITY");
   await collection.insertOne({ id: "x" });
   await nc.request("ENTITY.x.REQUEST.DELETE");
@@ -29,7 +29,7 @@ Deno.test("generic deletion success", async () => {
 
 Deno.test("generic deletion error", async () => {
   const { nc, db, codec, dispose } = await testing.createTestEnvironment();
-  await handleDeletion({ nc, db, codec, entity: "ENTITY" });
+  await handleDeleting({ nc, db, codec, entity: "ENTITY" });
   const collection = db.collection("ENTITY");
   await collection.insertOne({ id: "x" });
   await nc.request("ENTITY.y.REQUEST.DELETE");

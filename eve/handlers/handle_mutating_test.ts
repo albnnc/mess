@@ -1,9 +1,9 @@
 import * as testing from "../../testing/mod.ts";
-import { handleMutation } from "./handle_mutation.ts";
+import { handleMutating } from "./handle_mutating.ts";
 
 Deno.test("generic mutation", async () => {
   const { nc, codec, dispose } = await testing.createTestEnvironment();
-  await handleMutation({
+  await handleMutating({
     nc,
     codec,
     entity: "ENTITY",

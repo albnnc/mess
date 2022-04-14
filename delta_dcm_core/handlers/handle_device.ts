@@ -16,7 +16,7 @@ export async function handleDevice({ nc, db }: HandlerOptions) {
       filter: { id: data.parentId },
     });
   };
-  await eve.handleCreation({
+  await eve.handleCreating({
     nc,
     db,
     codec,
@@ -33,7 +33,7 @@ export async function handleDevice({ nc, db }: HandlerOptions) {
     schema,
     process: validateParent,
   });
-  await eve.handleDeletion({
+  await eve.handleDeleting({
     nc,
     db,
     codec,

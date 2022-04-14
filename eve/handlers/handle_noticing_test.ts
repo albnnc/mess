@@ -1,6 +1,6 @@
 import * as testing from "../../testing/mod.ts";
 import { handleNoticing } from "./handle_noticing.ts";
-import { handleInsertion } from "./handle_insertion.ts";
+import { handleInserting } from "./handle_inserting.ts";
 import { handleUpdating } from "./handle_updating.ts";
 
 const schema = {
@@ -13,7 +13,7 @@ const schema = {
 
 Deno.test("generic noticing", async () => {
   const { nc, db, codec, dispose } = await testing.createTestEnvironment();
-  await handleInsertion({
+  await handleInserting({
     nc,
     db,
     codec,

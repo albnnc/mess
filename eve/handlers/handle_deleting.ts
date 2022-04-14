@@ -1,20 +1,20 @@
 import { mongo } from "../deps.ts";
-import { handleMutation, MutationOptions } from "./handle_mutation.ts";
+import { handleMutating, MutatingOptions } from "./handle_mutating.ts";
 
-export interface DeletionOptions
-  extends Omit<MutationOptions, "mutation" | "pioneer" | "process"> {
+export interface DeletingOptions
+  extends Omit<MutatingOptions, "mutation" | "pioneer" | "process"> {
   db: mongo.Database;
   process?: (id: string, data: unknown) => void | Promise<void>;
 }
 
-export async function handleDeletion({
+export async function handleDeleting({
   db,
   process,
   entity,
   ...rest
-}: DeletionOptions) {
+}: DeletingOptions) {
   const collection = db.collection(entity);
-  await handleMutation({
+  await handleMutating({
     entity,
     mutation: "DELETE",
     process: async (id) => {
