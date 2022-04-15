@@ -10,7 +10,7 @@ const schema = {
   required: ["username", "password"],
 } as const;
 
-Deno.test("generic creation success", async () => {
+Deno.test("generic create op success", async () => {
   const { nc, db, codec, dispose } = await testing.createTestEnvironment();
   const collection = db.collection("ENTITY");
   await handleCreateOp({ nc, db, codec, entity: "ENTITY", schema });
@@ -32,7 +32,7 @@ Deno.test("generic creation success", async () => {
   await dispose();
 });
 
-Deno.test("generic creation error", async () => {
+Deno.test("generic create op error", async () => {
   const { nc, db, codec, dispose } = await testing.createTestEnvironment();
   const collection = db.collection("ENTITY");
   await handleCreateOp({ nc, db, codec, entity: "ENTITY", schema });

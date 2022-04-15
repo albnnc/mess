@@ -2,7 +2,7 @@ import * as eve from "../../eve/mod.ts";
 import * as testing from "../../testing/mod.ts";
 import { handleRoomOps } from "./room.ts";
 
-Deno.test("room creation", async () => {
+Deno.test("room create op", async () => {
   const { nc, db, codec, dispose } = await testing.createTestEnvironment();
   await handleRoomOps({ nc, db });
   await testing.assertRejects(async () => {
@@ -21,7 +21,7 @@ Deno.test("room creation", async () => {
   await dispose();
 });
 
-Deno.test("room updating", async () => {
+Deno.test("room update op", async () => {
   const { nc, db, codec, dispose } = await testing.createTestEnvironment();
   await db.collection("DATACENTER").insertMany([
     { id: "a", name: "DC A" },
@@ -51,7 +51,7 @@ Deno.test("room updating", async () => {
   await dispose();
 });
 
-Deno.test("room deletion", async () => {
+Deno.test("room delete op", async () => {
   const { nc, db, dispose } = await testing.createTestEnvironment();
   await db.collection("ROOM").insertOne({ id: "x", name: "Test Room" });
   await handleRoomOps({ nc, db });

@@ -11,7 +11,7 @@ const schema = {
   },
 } as const;
 
-Deno.test("generic noticing", async () => {
+Deno.test("generic notice op", async () => {
   const { nc, db, codec, dispose } = await testing.createTestEnvironment();
   await handleInsertOp({
     nc,

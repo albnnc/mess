@@ -2,7 +2,7 @@ import * as eve from "../../eve/mod.ts";
 import * as testing from "../../testing/mod.ts";
 import { handleDatacenterOps } from "./datacenter.ts";
 
-Deno.test("datacenter deletion", async () => {
+Deno.test("datacenter delete op", async () => {
   const { nc, db, dispose } = await testing.createTestEnvironment();
   await db.collection("DATACENTER").insertOne({ id: "x", name: "Test DC" });
   await handleDatacenterOps({ nc, db });

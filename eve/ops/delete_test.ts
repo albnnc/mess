@@ -1,7 +1,7 @@
 import * as testing from "../../testing/mod.ts";
 import { handleDeleteOp } from "./delete.ts";
 
-Deno.test("generic deletion success", async () => {
+Deno.test("generic delete op success", async () => {
   const { nc, db, codec, dispose } = await testing.createTestEnvironment();
   await handleDeleteOp({ nc, db, codec, entity: "ENTITY" });
   const collection = db.collection("ENTITY");
@@ -27,7 +27,7 @@ Deno.test("generic deletion success", async () => {
   await dispose();
 });
 
-Deno.test("generic deletion error", async () => {
+Deno.test("generic delete op error", async () => {
   const { nc, db, codec, dispose } = await testing.createTestEnvironment();
   await handleDeleteOp({ nc, db, codec, entity: "ENTITY" });
   const collection = db.collection("ENTITY");

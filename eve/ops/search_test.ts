@@ -1,7 +1,7 @@
 import * as testing from "../../testing/mod.ts";
 import { handleSearchOp } from "./search.ts";
 
-Deno.test("generic searching", async (t) => {
+Deno.test("generic search op", async (t) => {
   const { nc, db, codec, dispose } = await testing.createTestEnvironment();
   await handleSearchOp({ nc, db, codec, entity: "ENTITY" });
   const collection = db.collection("ENTITY");

@@ -1,7 +1,7 @@
 import * as testing from "../../testing/mod.ts";
 import { handleReadOp } from "./read.ts";
 
-Deno.test("generic reading", async () => {
+Deno.test("generic read op", async () => {
   const { nc, db, codec, dispose } = await testing.createTestEnvironment();
   await handleReadOp({ nc, db, codec, entity: "ENTITY" });
   const collection = db.collection("ENTITY");

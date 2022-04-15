@@ -12,7 +12,7 @@ const schema = {
   additionalProperties: false,
 } as const;
 
-Deno.test("generic updating success", async () => {
+Deno.test("generic update op success", async () => {
   const { nc, db, codec, dispose } = await testing.createTestEnvironment();
   await handleUpdateOp({ nc, db, codec, entity: "ENTITY", schema });
   const collection = db.collection("ENTITY");
@@ -41,7 +41,7 @@ Deno.test("generic updating success", async () => {
   await dispose();
 });
 
-Deno.test("generic updating error", async () => {
+Deno.test("generic update op error", async () => {
   const { nc, db, codec, dispose } = await testing.createTestEnvironment();
   await handleUpdateOp({ nc, db, codec, entity: "ENTITY", schema });
   const collection = db.collection("ENTITY");

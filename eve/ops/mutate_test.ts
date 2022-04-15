@@ -1,7 +1,7 @@
 import * as testing from "../../testing/mod.ts";
 import { handleMutateOp } from "./mutate.ts";
 
-Deno.test("generic mutation", async () => {
+Deno.test("generic mutate op", async () => {
   const { nc, codec, dispose } = await testing.createTestEnvironment();
   await handleMutateOp({
     nc,

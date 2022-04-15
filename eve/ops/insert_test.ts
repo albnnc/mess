@@ -10,7 +10,7 @@ const schema = {
   required: ["username", "password"],
 } as const;
 
-Deno.test("generic insertion success", async () => {
+Deno.test("generic inserte op success", async () => {
   const { nc, db, codec, dispose } = await testing.createTestEnvironment();
   const collection = db.collection("ENTITY");
   await handleInsertOp({ nc, db, codec, entity: "ENTITY", schema });
@@ -32,7 +32,7 @@ Deno.test("generic insertion success", async () => {
   await dispose();
 });
 
-Deno.test("generic insertion error", async () => {
+Deno.test("generic inserte op error", async () => {
   const { nc, db, codec, dispose } = await testing.createTestEnvironment();
   await handleInsertOp({ nc, db, codec, entity: "ENTITY", schema });
   const collection = db.collection("ENTITY");

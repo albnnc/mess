@@ -2,7 +2,7 @@ import * as eve from "../../eve/mod.ts";
 import * as testing from "../../testing/mod.ts";
 import { handleRackOps } from "./rack.ts";
 
-Deno.test("rack creation", async () => {
+Deno.test("rack create op", async () => {
   const { nc, db, codec, dispose } = await testing.createTestEnvironment();
   await handleRackOps({ nc, db });
   await testing.assertRejects(async () => {
@@ -21,7 +21,7 @@ Deno.test("rack creation", async () => {
   await dispose();
 });
 
-Deno.test("rack deletion", async () => {
+Deno.test("rack delete op", async () => {
   const { nc, db, dispose } = await testing.createTestEnvironment();
   await db.collection("RACK").insertOne({ id: "x", name: "Test Rack" });
   await handleRackOps({ nc, db });
