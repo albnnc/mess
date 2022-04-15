@@ -18,8 +18,19 @@ export async function handleAdapterOps({ nc, db }: OpOptions) {
   await eve.handleSearchOp(common);
   await eve.handleDeleteOp({
     ...common,
-    process: async () => {
-      // TODO: Handle chained exploration tasks and devices.
+    process: async (id) => {
+      await Promise.all([
+        eve.validateAbsence({
+          db,
+          entity: "DEVICE",
+          filter: { adapterId: id },
+        }),
+        eve.validateAbsence({
+          db,
+          entity: "EXPLORATION_TASK",
+          filter: { adapterId: id },
+        }),
+      ]);
     },
   });
 }
