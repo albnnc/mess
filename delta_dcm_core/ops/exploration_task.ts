@@ -10,16 +10,16 @@ export async function handleExplorationTaskOps({ nc, db }: OpOptions) {
     schema: explorationTaskSchema,
     entity: "EXPLORATION_TASK",
   };
-  const validateParent = async (_: string, data: Record<string, unknown>) => {
+  const processParent = async (_: string, data: Record<string, unknown>) => {
     await eve.validateExistence({
       db,
       entity: "ADAPTER",
       filter: { id: data.adapterId },
     });
   };
-  await eve.handleCreateOp({ ...common, process: validateParent });
-  await eve.handleInsertOp({ ...common, process: validateParent });
-  await eve.handleUpdateOp({ ...common, process: validateParent });
+  await eve.handleCreateOp({ ...common, process: processParent });
+  await eve.handleInsertOp({ ...common, process: processParent });
+  await eve.handleUpdateOp({ ...common, process: processParent });
   await eve.handleNoticeOp(common);
   await eve.handleReadOp(common);
   await eve.handleSearchOp(common);

@@ -10,7 +10,7 @@ export async function handleDeviceOps({ nc, db }: OpOptions) {
     schema: deviceSchema,
     entity: "DEVICE",
   };
-  const validateParent = async (
+  const processParent = async (
     _: string,
     data: scheming.FromSchema<typeof common.schema>
   ) => {
@@ -20,9 +20,9 @@ export async function handleDeviceOps({ nc, db }: OpOptions) {
       filter: { id: data.parentId },
     });
   };
-  await eve.handleCreateOp({ ...common, process: validateParent });
-  await eve.handleInsertOp({ ...common, process: validateParent });
-  await eve.handleUpdateOp({ ...common, process: validateParent });
+  await eve.handleCreateOp({ ...common, process: processParent });
+  await eve.handleInsertOp({ ...common, process: processParent });
+  await eve.handleUpdateOp({ ...common, process: processParent });
   await eve.handleNoticeOp(common);
   await eve.handleReadOp(common);
   await eve.handleSearchOp(common);

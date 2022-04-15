@@ -10,16 +10,16 @@ export async function handleRoomOps({ nc, db }: OpOptions) {
     schema: roomSchema,
     entity: "ROOM",
   };
-  const validateParent = async (_: string, data: Record<string, unknown>) => {
+  const processParent = async (_: string, data: Record<string, unknown>) => {
     await eve.validateExistence({
       db,
       entity: "DATACENTER",
       filter: { id: data.datacenterId },
     });
   };
-  await eve.handleCreateOp({ ...common, process: validateParent });
-  await eve.handleInsertOp({ ...common, process: validateParent });
-  await eve.handleUpdateOp({ ...common, process: validateParent });
+  await eve.handleCreateOp({ ...common, process: processParent });
+  await eve.handleInsertOp({ ...common, process: processParent });
+  await eve.handleUpdateOp({ ...common, process: processParent });
   await eve.handleNoticeOp(common);
   await eve.handleReadOp(common);
   await eve.handleSearchOp(common);
