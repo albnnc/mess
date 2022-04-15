@@ -3,9 +3,13 @@ import { deviceMetricSchema } from "../schemas/mod.ts";
 import { OpOptions } from "../types/mod.ts";
 
 export async function handleDeviceMetricOps({ nc, db }: OpOptions) {
-  const codec = nats.JSONCodec();
-  const schema = deviceMetricSchema;
-  const entity = "DEVICE_METRIC";
+  const common = {
+    nc,
+    db,
+    codec: nats.JSONCodec(),
+    schema: deviceMetricSchema,
+    entity: "DEVICE_METRIC",
+  };
   const validateParent = async (_: string, data: Record<string, unknown>) => {
     await eve.validateExistence({
       db,
@@ -13,23 +17,10 @@ export async function handleDeviceMetricOps({ nc, db }: OpOptions) {
       filter: { id: data.deviceId },
     });
   };
-  await eve.handleCreateOp({
-    nc,
-    db,
-    codec,
-    entity,
-    schema,
-    process: validateParent,
-  });
-  await eve.handleReadOp({ nc, db, codec, entity });
-  await eve.handleUpdateOp({
-    nc,
-    db,
-    codec,
-    entity,
-    schema,
-    process: validateParent,
-  });
-  await eve.handleDeleteOp({ nc, db, codec, entity });
-  await eve.handleSearchOp({ nc, db, codec, entity });
+  await eve.handleCreateOp({ ...common, process: validateParent });
+  await eve.handleInsertOp({ ...common, process: validateParent });
+  await eve.handleReadOp(common);
+  await eve.handleUpdateOp({ ...common, process: validateParent });
+  await eve.handleDeleteOp(common);
+  await eve.handleSearchOp(common);
 }

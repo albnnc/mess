@@ -3,17 +3,19 @@ import { datacenterSchema } from "../schemas/mod.ts";
 import { OpOptions } from "../types/mod.ts";
 
 export async function handleDatacenterOps({ nc, db }: OpOptions) {
-  const codec = nats.JSONCodec();
-  const schema = datacenterSchema;
-  const entity = "DATACENTER";
-  await eve.handleCreateOp({ nc, db, codec, entity, schema });
-  await eve.handleReadOp({ nc, db, codec, entity });
-  await eve.handleUpdateOp({ nc, db, codec, entity, schema });
-  await eve.handleDeleteOp({
+  const common = {
     nc,
     db,
-    codec,
-    entity,
+    codec: nats.JSONCodec(),
+    schema: datacenterSchema,
+    entity: "DATACENTER",
+  };
+  await eve.handleCreateOp(common);
+  await eve.handleInsertOp(common);
+  await eve.handleReadOp(common);
+  await eve.handleUpdateOp(common);
+  await eve.handleDeleteOp({
+    ...common,
     process: async (id) => {
       await Promise.all([
         eve.validateAbsence({
@@ -24,10 +26,10 @@ export async function handleDatacenterOps({ nc, db }: OpOptions) {
         eve.validateAbsence({
           db,
           entity: "DEVICE",
-          filter: { parentType: entity, parentId: id },
+          filter: { parentType: common.entity, parentId: id },
         }),
       ]);
     },
   });
-  await eve.handleSearchOp({ nc, db, codec, entity });
+  await eve.handleSearchOp(common);
 }
