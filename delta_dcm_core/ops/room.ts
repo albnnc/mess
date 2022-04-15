@@ -19,8 +19,9 @@ export async function handleRoomOps({ nc, db }: OpOptions) {
   };
   await eve.handleCreateOp({ ...common, process: validateParent });
   await eve.handleInsertOp({ ...common, process: validateParent });
-  await eve.handleReadOp(common);
   await eve.handleUpdateOp({ ...common, process: validateParent });
+  await eve.handleReadOp(common);
+  await eve.handleSearchOp(common);
   await eve.handleDeleteOp({
     ...common,
     process: async (id) => {
@@ -38,5 +39,4 @@ export async function handleRoomOps({ nc, db }: OpOptions) {
       ]);
     },
   });
-  await eve.handleSearchOp(common);
 }

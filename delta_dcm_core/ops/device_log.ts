@@ -19,8 +19,8 @@ export async function handleDeviceLogOps({ nc, db }: OpOptions) {
   };
   await eve.handleCreateOp({ ...common, process: validateParent });
   await eve.handleInsertOp({ ...common, process: validateParent });
-  await eve.handleReadOp(common);
   await eve.handleUpdateOp({ ...common, process: validateParent });
-  await eve.handleDeleteOp(common);
+  await eve.handleReadOp(common);
   await eve.handleSearchOp(common);
+  await eve.handleDeleteOp(common);
 }

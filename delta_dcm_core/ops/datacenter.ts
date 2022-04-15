@@ -12,8 +12,9 @@ export async function handleDatacenterOps({ nc, db }: OpOptions) {
   };
   await eve.handleCreateOp(common);
   await eve.handleInsertOp(common);
-  await eve.handleReadOp(common);
   await eve.handleUpdateOp(common);
+  await eve.handleReadOp(common);
+  await eve.handleSearchOp(common);
   await eve.handleDeleteOp({
     ...common,
     process: async (id) => {
@@ -31,5 +32,4 @@ export async function handleDatacenterOps({ nc, db }: OpOptions) {
       ]);
     },
   });
-  await eve.handleSearchOp(common);
 }
