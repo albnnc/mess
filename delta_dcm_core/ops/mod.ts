@@ -1,3 +1,5 @@
+export * from "./exploration_task.ts";
+export * from "./adapter.ts";
 export * from "./datacenter.ts";
 export * from "./device_log.ts";
 export * from "./device_metric.ts";
