@@ -1,10 +1,10 @@
 # Environment
 
-The development of both frontend and backend requires dev environment, which for
-this project is backed by docker. For now docker compose is used for environment
-setup. Most likely it will be extended to docker stack later.
+The development of both frontend and backend requires dev environment, which is
+backed by docker for this project. For now, docker compose is used for
+environment setup. Most likely, it will be extended to docker stack later.
 
-The following line will start up everything you need except project related
+The following line will start up everything you need, except project related
 services:
 
 ```sh
