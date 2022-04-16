@@ -34,7 +34,7 @@ $ docker-compose run test
 
 # Backend Testing
 
-Standard [deno testing](https://deno.land/manual/testing) is widely used for
+Standard [Deno testing](https://deno.land/manual/testing) is widely used for
 backend development. The core rule is to try to write independent tests where
 possible, but not to overengineer it. This means that separate functions should
 be tested and these tests should not include other to be tested functions usage.
@@ -48,3 +48,11 @@ by dev tools.
 When committing, one should follow guidelines described in this document and
 particular module docs. Commit messages must follow
 [conventional commits](https://www.conventionalcommits.org/) rules.
+
+When writing both backend and isomorphic code, you should follow
+[Deno TypeScript guidelines](https://deno.land/manual/contributing/style_guide#typescript)
+where possible. Code must be formatted via
+[Deno formatter](https://deno.land/manual/tools/formatter).
+
+When writing frontend code, you should follow rules provided by module linter
+and formatter configs.
