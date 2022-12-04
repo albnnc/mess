@@ -14,14 +14,18 @@ export async function buildUi({
   dev,
 }: BuildUiOptions) {
   log.info("Building main UI");
-  const currentDir = path.dirname(path.fromFileUrl(import.meta.url));
   await fs.ensureDir(outputDir);
   await Deno.writeTextFile(
     path.join(outputDir, "index.html"),
     createIndexHtml({ toneDescriptions, dev })
   );
+  const entryPointUrl = import.meta.resolve("./ui/index.ts");
   await esbuild.build({
-    entryPoints: [path.join(currentDir, "ui/index.ts")],
+    entryPoints: [
+      entryPointUrl.startsWith("file://")
+        ? path.fromFileUrl(entryPointUrl)
+        : entryPointUrl,
+    ],
     outdir: outputDir,
     write: true,
     bundle: true,
